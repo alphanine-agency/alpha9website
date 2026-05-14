@@ -1,0 +1,114 @@
+const mediaContext = require.context("../assets/porfolio", false, /\.(jpg|jpeg|mp4)$/);
+
+const mediaMap = mediaContext.keys().reduce((acc, key) => {
+  acc[key.replace("./", "")] = mediaContext(key);
+  return acc;
+}, {});
+
+const portfolioGallery = [
+  {
+    id: "gelato-video",
+    file: "Gelato Bar Video Ad (1).mp4",
+    type: "video",
+    variant: "video-feature",
+    section: "ugc",
+    title: "Gelato bar motion ad",
+    tag: "Motion ad",
+    campaign: "Food & beverage",
+  },
+  {
+    id: "reel-five",
+    file: "rodking video ad.mp4",
+    type: "video",
+    variant: "video",
+    section: "ai",
+    title: "Vertical video ad",
+    tag: "Video edit",
+    campaign: "Roadking",
+  },
+  {
+    id: "reel-one",
+    file: "promotioanl video roadking.mp4",
+    type: "video",
+    variant: "video",
+    section: "ai",
+    title: "Roadking promotional reel",
+    tag: "Video edit",
+    campaign: "Roadking",
+  },
+  {
+    id: "reel-three",
+    file: "roadking ads.mp4",
+    type: "video",
+    variant: "video",
+    section: "ai",
+    title: "Roadking ad cut",
+    tag: "Video edit",
+    campaign: "Roadking",
+  },
+  {
+    id: "reel-four",
+    file: "roadking promotional ad.mp4",
+    type: "video",
+    variant: "video",
+    section: "ai",
+    title: "Promotional ad edit",
+    tag: "Video edit",
+    campaign: "Roadking",
+  },
+  {
+    id: "vibe-grid",
+    file: "GRID.jpg.jpeg",
+    type: "image",
+    variant: "feature",
+    section: "ugc",
+    title: "Editorial apparel grid",
+    tag: "Campaign grid",
+    campaign: "Fashion creative",
+  },
+  {
+    id: "eco-board",
+    file: "MoodBoard.jpg.jpeg",
+    type: "image",
+    variant: "wide",
+    section: "ugc",
+    title: "Eco mobility moodboard",
+    tag: "Moodboard",
+    campaign: "Brand direction",
+  },
+  {
+    id: "food-board",
+    file: "1 IMAGE.jpg.jpeg",
+    type: "image",
+    variant: "wide",
+    section: "ugc",
+    title: "Restaurant brand board",
+    tag: "Moodboard",
+    campaign: "Food campaign",
+  },
+  {
+    id: "vibe-post",
+    file: "post.jpg.jpeg",
+    type: "image",
+    variant: "tall",
+    section: "ugc",
+    title: "Multi-panel social post",
+    tag: "Social post",
+    campaign: "Fashion creative",
+  },
+  {
+    id: "kart-hero",
+    file: "Go Karting.jpg.jpeg",
+    type: "image",
+    variant: "tall",
+    section: "ugc",
+    title: "Go-karting key visual",
+    tag: "Hero post",
+    campaign: "Sports leisure",
+  },
+].map((item) => ({
+  ...item,
+  src: mediaMap[item.file],
+}));
+
+export default portfolioGallery;

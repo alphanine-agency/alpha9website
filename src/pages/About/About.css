@@ -1,0 +1,124 @@
+.about-page {
+  background: var(--color-white, #fff);
+}
+
+.about-hero {
+  padding: var(--space-2xl, 6rem) var(--space-md, 1.5rem);
+  border-bottom: 1px solid var(--color-line, #e8e8e8);
+}
+
+.about-hero__inner {
+  max-width: var(--max-width, 1120px);
+  margin: 0 auto;
+}
+
+.about-hero__eyebrow {
+  margin: 0 0 var(--space-sm, 1rem);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted, #6b6b6b);
+  font-weight: 600;
+}
+
+.about-hero__title {
+  margin: 0 0 var(--space-md, 1.5rem);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  font-weight: 600;
+  max-width: 14ch;
+}
+
+.about-hero__lede {
+  margin: 0;
+  max-width: 38rem;
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: var(--color-muted, #6b6b6b);
+}
+
+.about-block {
+  padding: var(--space-2xl, 6rem) var(--space-md, 1.5rem);
+}
+
+.about-block__inner {
+  max-width: var(--max-width, 1120px);
+  margin: 0 auto;
+}
+
+.about-block__inner--split {
+  display: grid;
+  gap: var(--space-xl, 4rem);
+}
+
+@media (min-width: 880px) {
+  .about-block__inner--split {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
+  }
+}
+
+.about-block--mission {
+  background: var(--color-paper, #fafafa);
+}
+
+.about-block--vision {
+  background: var(--color-white, #fff);
+}
+
+.about-block--dark {
+  background: var(--color-ink, #0a0a0a);
+  color: var(--color-white, #fff);
+}
+
+.about-block__title {
+  margin: 0 0 var(--space-md, 1.5rem);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-muted, #6b6b6b);
+}
+
+.about-block__title--on-dark {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.about-block__body {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  line-height: 1.55;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  max-width: 40rem;
+}
+
+.about-block__body--on-dark {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 400;
+}
+
+.about-aside {
+  border: 1px solid var(--color-line, #e8e8e8);
+  border-radius: var(--radius-lg, 22px);
+  padding: var(--space-lg, 2.5rem);
+  background: var(--color-paper, #fafafa);
+}
+
+.about-aside__label {
+  margin: 0 0 var(--space-sm, 1rem);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted, #6b6b6b);
+  font-weight: 600;
+}
+
+.about-aside__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-ink, #0a0a0a);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
