@@ -2,18 +2,25 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import portfolioGallery from "../../data/portfolioGallery";
+import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
 import "./Portfolio.css";
 
 function PortfolioMedia({ item }) {
-  const videoRef = useRef(null);
+  const hoverVideoRef = useRef(null);
+  const viewportVideoRef = useInViewVideoPlayback({
+    enabled: item.type === "video",
+    mobileOnly: true,
+    resetOnExit: true,
+    threshold: 0.5,
+  });
   const [hasVideoError, setHasVideoError] = useState(false);
 
   const playVideo = () => {
-    if (item.type !== "video" || !videoRef.current) {
+    if (item.type !== "video" || !hoverVideoRef.current) {
       return;
     }
 
-    const video = videoRef.current;
+    const video = hoverVideoRef.current;
     video.muted = true;
     video.loop = true;
     video.playsInline = true;
@@ -25,11 +32,11 @@ function PortfolioMedia({ item }) {
   };
 
   const stopVideo = () => {
-    if (item.type !== "video" || !videoRef.current) {
+    if (item.type !== "video" || !hoverVideoRef.current) {
       return;
     }
 
-    const video = videoRef.current;
+    const video = hoverVideoRef.current;
     video.pause();
     video.currentTime = 0;
   };
@@ -44,11 +51,12 @@ function PortfolioMedia({ item }) {
         onMouseLeave={stopVideo}
         onFocus={playVideo}
         onBlur={stopVideo}
-        onTouchStart={playVideo}
-        onTouchEnd={stopVideo}
       >
         <video
-          ref={videoRef}
+          ref={(node) => {
+            hoverVideoRef.current = node;
+            viewportVideoRef.current = node;
+          }}
           className="portfolio-tile__media"
           src={item.src}
           muted
@@ -85,20 +93,19 @@ function Portfolio() {
     document.title = "Portfolio | AlphaNineMarketing";
   }, []);
 
-  const imageCount = portfolioGallery.filter((item) => item.type === "image").length;
-  const videoCount = portfolioGallery.filter((item) => item.type === "video").length;
   const aiContent = portfolioGallery.filter((item) => item.section === "ai");
-  const ugcContent = portfolioGallery.filter((item) => item.section === "ugc");
+  const ugcContent = [
+    "vibe-post",
+    "kart-hero",
+    "vibe-grid",
+    "eco-board",
+    "food-board",
+    "gelato-video",
+  ]
+    .map((id) => portfolioGallery.find((item) => item.id === id))
+    .filter(Boolean);
 
   const sections = [
-    {
-      id: "ai",
-      eyebrow: "AI Generated Content",
-      title: "AI-crafted motion and ad creatives.",
-      description:
-        "Roadking video assets produced for faster concept generation, campaign testing, and polished promo outputs.",
-      items: aiContent,
-    },
     {
       id: "ugc",
       eyebrow: "UGC",
@@ -106,6 +113,14 @@ function Portfolio() {
       description:
         "Real social posts, creative grids, moodboards, and branded content arranged as a premium showcase.",
       items: ugcContent,
+    },
+    {
+      id: "ai",
+      eyebrow: "AI Generated Content",
+      title: "AI-crafted motion and ad creatives.",
+      description:
+        "Roadking video assets produced for faster concept generation, campaign testing, and polished promo outputs.",
+      items: aiContent,
     },
   ];
 
@@ -120,20 +135,6 @@ function Portfolio() {
             real campaign work - arranged in a mixed-size gallery for a more
             premium presentation.
           </p>
-          <ul className="portfolio-hero__stats" aria-label="Portfolio summary">
-            <li className="portfolio-hero__stat">
-              <span className="portfolio-hero__stat-value">{imageCount}</span>
-              <span className="portfolio-hero__stat-label">Image assets</span>
-            </li>
-            <li className="portfolio-hero__stat">
-              <span className="portfolio-hero__stat-value">{videoCount}</span>
-              <span className="portfolio-hero__stat-label">Video edits</span>
-            </li>
-            <li className="portfolio-hero__stat">
-              <span className="portfolio-hero__stat-value">4</span>
-              <span className="portfolio-hero__stat-label">Content styles</span>
-            </li>
-          </ul>
         </div>
       </header>
 

@@ -38,9 +38,6 @@ function Footer() {
           <Link to="/about" className="footer__link">
             About
           </Link>
-          <Link to="/team" className="footer__link">
-            Team
-          </Link>
           <Link to="/contact" className="footer__link">
             Contact
           </Link>

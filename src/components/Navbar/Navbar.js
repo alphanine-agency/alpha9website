@@ -10,7 +10,6 @@ const navItems = [
   { to: "/portfolio", label: "Portfolio" },
   { to: "/services", label: "Services" },
   { to: "/about", label: "About" },
-  { to: "/team", label: "Team" },
   { to: "/contact", label: "Contact" },
 ];
 

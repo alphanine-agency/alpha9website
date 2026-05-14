@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Hero from "../../components/Hero/Hero";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
-import portfolioProjects from "../../data/portfolioProjects";
-import ceoPortrait from "../../assets/profiles/ceo.svg";
-import automationPortrait from "../../assets/profiles/automation.svg";
-import contentPortrait from "../../assets/profiles/content.svg";
+import portfolioGallery from "../../data/portfolioGallery";
+import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
+import waqarPortrait from "../../assets/team/Waqar Ahmed Founder and CEO.PNG";
+import amirPortrait from "../../assets/team/amir jibran AI Automation & Ads Specialist.PNG";
+import abdullahPortrait from "../../assets/team/Abdullah Graphic Designer.png";
 import "./Home.css";
 
 const servicesPreview = [
@@ -75,31 +76,49 @@ const servicesPreview = [
 ];
 
 const teamPreview = [
-  { name: "Jordan Lee", role: "CEO", portrait: ceoPortrait },
+  { name: "Waqar Ahmed", role: "Founder & CEO", portrait: waqarPortrait },
   {
-    name: "Sam Rivera",
-    role: "AI Automation & Ads",
-    portrait: automationPortrait,
+    name: "Amir Jibran",
+    role: "AI Automation & Ads Specialist",
+    portrait: amirPortrait,
   },
-  { name: "Alex Kim", role: "Content Creator", portrait: contentPortrait },
+  { name: "Abdullah", role: "Creative Head", portrait: abdullahPortrait },
 ];
 
-const testimonials = [
-  {
-    quote:
-      "They replaced chaos with clarity. Our pipeline finally matches our ambition.",
-    author: "Morgan A.",
-    title: "Founder, SaaS",
-  },
-  {
-    quote:
-      "Premium craft without the agency bloat. The work speaks in the metrics.",
-    author: "Priya S.",
-    title: "CMO, Retail",
-  },
-];
+const featuredPortfolio = portfolioGallery.slice(0, 3);
 
-const featuredPortfolio = portfolioProjects.slice(0, 3);
+function HomePortfolioMedia({ item }) {
+  const videoRef = useInViewVideoPlayback({
+    enabled: item.type === "video",
+    resetOnExit: true,
+    threshold: 0.5,
+  });
+
+  if (item.type === "video") {
+    return (
+      <video
+        ref={videoRef}
+        className="home-card__visual-media"
+        src={item.src}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden
+      />
+    );
+  }
+
+  return (
+    <img
+      className="home-card__visual-media"
+      src={item.src}
+      alt={item.title}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+}
 
 function Home() {
   useEffect(() => {
@@ -122,7 +141,7 @@ function Home() {
             </p>
           </header>
           <ul className="home-services-preview__grid">
-            {servicesPreview.map((s, index) => (
+            {servicesPreview.map((s) => (
               <li key={s.title} className="home-card home-card--service">
                 <div className="home-card__service-top">
                   <div className="home-card__icon" aria-hidden>
@@ -133,19 +152,6 @@ function Home() {
                 <div className="home-card__service-copy">
                   <h3 className="home-card__title">{s.title}</h3>
                   <p className="home-card__desc">{s.desc}</p>
-                </div>
-                <div className="home-card__service-bottom" aria-hidden>
-                  <span className="home-card__service-index">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="home-card__service-arrow">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="home-card__service-arrow-svg"
-                    >
-                      <path d="M7 17L17 7M9 7h8v8" />
-                    </svg>
-                  </span>
                 </div>
               </li>
             ))}
@@ -196,15 +202,22 @@ function Home() {
             </p>
           </header>
           <ul className="home-portfolio-preview__grid">
-            {featuredPortfolio.map((project) => (
-              <li key={project.slug} className="home-card home-card--portfolio">
-                <div className="home-card__visual" aria-hidden>
-                  <span className="home-card__visual-pill">{project.accent}</span>
+            {featuredPortfolio.map((item) => (
+              <li key={item.id} className="home-card home-card--portfolio">
+                <div className="home-card__visual">
+                  <HomePortfolioMedia item={item} />
+                  <span className="home-card__visual-pill">{item.tag}</span>
                 </div>
-                <p className="home-card__meta">{project.category}</p>
-                <h3 className="home-card__title">{project.brand}</h3>
-                <p className="home-card__desc">{project.summary}</p>
-                <p className="home-card__result">{project.result}</p>
+                <p className="home-card__meta">{item.campaign}</p>
+                <h3 className="home-card__title">{item.title}</h3>
+                <p className="home-card__desc">
+                  {item.section === "ai"
+                    ? "AI-generated motion creative crafted for rapid testing and polished campaign delivery."
+                    : "Real campaign content designed to feel native, premium, and ready for social distribution."}
+                </p>
+                <p className="home-card__result">
+                  {item.type === "video" ? "Motion-led showcase" : "Static creative showcase"}
+                </p>
               </li>
             ))}
           </ul>
@@ -243,28 +256,10 @@ function Home() {
             ))}
           </ul>
           <div className="home-section__cta-row">
-            <Link to="/team" className="home-text-link">
+            <Link to="/about#team" className="home-text-link">
               Meet the full team →
             </Link>
           </div>
-        </div>
-      </ScrollSection>
-
-      <ScrollSection as="section" className="home-section home-testimonials">
-        <div className="home-section__inner">
-          <header className="home-section__head home-section__head--center">
-            <p className="home-section__eyebrow">Proof</p>
-            <h2 className="home-section__title">Trusted by operators.</h2>
-          </header>
-          <ul className="home-testimonials__grid">
-            {testimonials.map((t) => (
-              <li key={t.author} className="home-quote">
-                <p className="home-quote__text">“{t.quote}”</p>
-                <p className="home-quote__author">{t.author}</p>
-                <p className="home-quote__title">{t.title}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </ScrollSection>
 
