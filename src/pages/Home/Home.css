@@ -66,6 +66,14 @@
   background: var(--color-white, #fff);
 }
 
+.home-portfolio-preview,
+.home-team-preview,
+.home-testimonials,
+.home-final-cta {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
 .home-services-preview__grid {
   list-style: none;
   margin: 0;

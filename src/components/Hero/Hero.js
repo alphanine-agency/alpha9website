@@ -50,7 +50,10 @@ function Hero() {
                 className="hero__image"
                 src={bannerImage}
                 alt="AlphaNineMarketing digital campaign showcase"
+                width="1240"
+                height="1718"
                 loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
             </div>
