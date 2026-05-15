@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
+import teamBanner from "../../assets/team/TEAM BANNER.jpeg";
 import waqarPortrait from "../../assets/team/Waqar Ahmed Founder and CEO.PNG";
 import amirPortrait from "../../assets/team/amir jibran AI Automation & Ads Specialist.PNG";
 import abdullahPortrait from "../../assets/team/Abdullah Graphic Designer.png";
 import amnaPortrait from "../../assets/team/Amna Jabeen PR Manager.png";
 import arslanPortrait from "../../assets/team/Arslan Khalid Creative Photographer.png";
 import fahadPortrait from "../../assets/team/Fahad Ali Videographer.png";
+import "../../components/Hero/Hero.css";
 import "./About.css";
 
 const stats = [
@@ -104,13 +106,72 @@ function About({ focusSection = "about" }) {
 
   return (
     <article className="about-page">
+      <header className="about-hero-banner" aria-label="AlphaNine team">
+        <div className="about-intro">
+          <div className="hero__inner">
+            <h1 className="hero__title about-intro__title">
+              The people behind{" "}
+              <span className="hero__title-accent">Alpha Nine</span>.
+            </h1>
+          </div>
+        </div>
+        <div className="about-banner__frame">
+          <img
+            className="about-banner__image"
+            src={teamBanner}
+            alt="AlphaNineMarketing team — six specialists in formal attire"
+            width="1920"
+            height="1080"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
+      </header>
+
+      <section className="about-section about-team" id="team" ref={teamSectionRef}>
+        <ScrollSection className="about-section__inner">
+          <header className="about-team__head">
+            <p className="about-section__eyebrow">Meet our team</p>
+            <h2 className="about-section__title about-team__title">
+              A focused team of specialists behind every campaign.
+            </h2>
+            <p className="about-section__body about-team__sub">
+              Strategy, media, design, PR, photography, and video work together
+              here so the brand never feels fragmented.
+            </p>
+          </header>
+
+          <ul className="about-team__grid">
+            {members.map((member) => (
+              <li key={member.role} className="about-team__item">
+                <article className="about-team-card">
+                  <img
+                    className="about-team-card__photo"
+                    src={member.portrait}
+                    alt={`${member.name}, ${member.role}`}
+                    width="1200"
+                    height="1600"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="about-team-card__body">
+                    <p className="about-team-card__role">{member.role}</p>
+                    <h3 className="about-team-card__name">{member.name}</h3>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </ScrollSection>
+      </section>
+
       <header className="about-hero">
         <div className="about-hero__inner">
           <div className="about-hero__copy">
             <p className="about-hero__eyebrow">About us</p>
-            <h1 className="about-hero__title">
+            <h2 className="about-hero__title">
               Where strategy, automation, and creative move as one.
-            </h1>
+            </h2>
             <p className="about-hero__lede">
               AlphaNineMarketing is a modern growth studio for brands that want
               sharper systems, stronger presentation, and execution that feels
@@ -196,43 +257,6 @@ function About({ focusSection = "about" }) {
           </div>
         </div>
       </ScrollSection>
-
-      <section className="about-section about-team" id="team" ref={teamSectionRef}>
-        <ScrollSection className="about-section__inner">
-          <header className="about-team__head">
-            <p className="about-section__eyebrow">Meet our team</p>
-            <h2 className="about-section__title">
-              A focused team of specialists behind every campaign.
-            </h2>
-            <p className="about-section__body about-team__sub">
-              Strategy, media, design, PR, photography, and video work together
-              here so the brand never feels fragmented.
-            </p>
-          </header>
-
-          <ul className="about-team__grid">
-            {members.map((member) => (
-              <li key={member.role} className="about-team__item">
-                <article className="about-team-card">
-                  <img
-                    className="about-team-card__photo"
-                    src={member.portrait}
-                    alt={`${member.name}, ${member.role}`}
-                    width="1200"
-                    height="1600"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="about-team-card__body">
-                    <p className="about-team-card__role">{member.role}</p>
-                    <h3 className="about-team-card__name">{member.name}</h3>
-                  </div>
-                </article>
-              </li>
-            ))}
-          </ul>
-        </ScrollSection>
-      </section>
 
       <ScrollSection as="section" className="about-section about-cta">
         <div className="about-section__inner about-cta__inner">

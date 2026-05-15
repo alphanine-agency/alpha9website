@@ -17,8 +17,9 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === "/";
-  const brandLogo = isHome ? homeLogo : pageLogo;
+  const isHomeNav =
+    location.pathname === "/" || location.pathname === "/about";
+  const brandLogo = isHomeNav ? homeLogo : pageLogo;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -40,7 +41,7 @@ function Navbar() {
   return (
     <header
       className={`navbar ${scrolled ? "navbar--scrolled" : ""} ${
-        isHome ? "navbar--home" : ""
+        isHomeNav ? "navbar--home" : ""
       }`}
       role="banner"
     >

@@ -256,7 +256,7 @@ function Home() {
             ))}
           </ul>
           <div className="home-section__cta-row">
-            <Link to="/about#team" className="home-text-link">
+            <Link to="/about" className="home-text-link">
               Meet the full team →
             </Link>
           </div>

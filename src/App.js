@@ -30,7 +30,7 @@ function App() {
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
-              <Route path="/team" element={<Navigate to="/about#team" replace />} />
+              <Route path="/team" element={<Navigate to="/about" replace />} />
               <Route path="/contact" element={<Contact />} />
             </Routes>
           </Suspense>
