@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
-import teamBanner from "../../assets/team/TEAM BANNER.jpeg";
-import waqarPortrait from "../../assets/team/Waqar Ahmed Founder and CEO.PNG";
-import amirPortrait from "../../assets/team/amir jibran AI Automation & Ads Specialist.PNG";
-import abdullahPortrait from "../../assets/team/Abdullah Graphic Designer.png";
-import amnaPortrait from "../../assets/team/Amna Jabeen PR Manager.png";
-import arslanPortrait from "../../assets/team/Arslan Khalid Creative Photographer.png";
-import fahadPortrait from "../../assets/team/Fahad Ali Videographer.png";
-import "../../components/Hero/Hero.css";
+import LazyImage from "../../components/LazyImage/LazyImage";
+import teamBanner from "../../assets/team/optimized/team-banner.jpg";
+import waqarPortrait from "../../assets/team/optimized/waqar.jpg";
+import amirPortrait from "../../assets/team/optimized/amir.jpg";
+import abdullahPortrait from "../../assets/team/optimized/abdullah.jpg";
+import amnaPortrait from "../../assets/team/optimized/amna.jpg";
+import arslanPortrait from "../../assets/team/optimized/arslan.jpg";
+import fahadPortrait from "../../assets/team/optimized/fahad.jpg";
 import "./About.css";
 
 const stats = [
@@ -39,36 +39,12 @@ const principles = [
 ];
 
 const members = [
-  {
-    name: "Waqar Ahmed",
-    role: "Founder & CEO",
-    portrait: waqarPortrait,
-  },
-  {
-    name: "Amir Jibran",
-    role: "AI Automation & Ads Specialist",
-    portrait: amirPortrait,
-  },
-  {
-    name: "Abdullah",
-    role: "Creative Head",
-    portrait: abdullahPortrait,
-  },
-  {
-    name: "Amna Jabeen",
-    role: "PR Manager",
-    portrait: amnaPortrait,
-  },
-  {
-    name: "Arslan Khalid",
-    role: "Creative Photographer",
-    portrait: arslanPortrait,
-  },
-  {
-    name: "Fahad Ali",
-    role: "Videographer",
-    portrait: fahadPortrait,
-  },
+  { name: "Waqar Ahmed", role: "Founder & CEO", portrait: waqarPortrait },
+  { name: "Amir Jibran", role: "AI Automation & Ads Specialist", portrait: amirPortrait },
+  { name: "Abdullah", role: "Creative Head", portrait: abdullahPortrait },
+  { name: "Amna Jabeen", role: "PR Manager", portrait: amnaPortrait },
+  { name: "Arslan Khalid", role: "Creative Photographer", portrait: arslanPortrait },
+  { name: "Fahad Ali", role: "Videographer", portrait: fahadPortrait },
 ];
 
 function About({ focusSection = "about" }) {
@@ -77,10 +53,9 @@ function About({ focusSection = "about" }) {
   const shouldFocusTeam = focusSection === "team" || location.hash === "#team";
 
   useEffect(() => {
-    document.title =
-      shouldFocusTeam
-        ? "About & Team | AlphaNineMarketing"
-        : "About Us | AlphaNineMarketing";
+    document.title = shouldFocusTeam
+      ? "About & Team | AlphaNineMarketing"
+      : "About Us | AlphaNineMarketing";
   }, [shouldFocusTeam]);
 
   useEffect(() => {
@@ -108,23 +83,22 @@ function About({ focusSection = "about" }) {
     <article className="about-page">
       <header className="about-hero-banner" aria-label="AlphaNine team">
         <div className="about-intro">
-          <div className="hero__inner">
-            <h1 className="hero__title about-intro__title">
+          <div className="about-intro__inner">
+            <h1 className="about-intro__title">
               The people behind{" "}
-              <span className="hero__title-accent">Alpha Nine</span>.
+              <span className="about-intro__accent">Alpha Nine</span>.
             </h1>
           </div>
         </div>
         <div className="about-banner__frame">
-          <img
+          <LazyImage
             className="about-banner__image"
             src={teamBanner}
             alt="AlphaNineMarketing team — six specialists in formal attire"
-            width="1920"
-            height="1080"
+            width={1920}
+            height={1080}
             sizes="100vw"
             fetchPriority="high"
-            decoding="async"
           />
         </div>
       </header>
@@ -146,14 +120,12 @@ function About({ focusSection = "about" }) {
             {members.map((member) => (
               <li key={member.role} className="about-team__item">
                 <article className="about-team-card">
-                  <img
+                  <LazyImage
                     className="about-team-card__photo"
                     src={member.portrait}
                     alt={`${member.name}, ${member.role}`}
-                    width="1200"
-                    height="1600"
-                    loading="lazy"
-                    decoding="async"
+                    width={720}
+                    height={960}
                   />
                   <div className="about-team-card__body">
                     <p className="about-team-card__role">{member.role}</p>
@@ -166,7 +138,7 @@ function About({ focusSection = "about" }) {
         </ScrollSection>
       </section>
 
-      <header className="about-hero">
+      <header className="about-hero about-page__defer">
         <div className="about-hero__inner">
           <div className="about-hero__copy">
             <p className="about-hero__eyebrow">About us</p>
@@ -190,7 +162,7 @@ function About({ focusSection = "about" }) {
         </div>
       </header>
 
-      <ScrollSection as="section" className="about-section about-story">
+      <ScrollSection as="section" className="about-section about-story about-page__defer">
         <div className="about-section__inner about-story__inner">
           <div className="about-story__content">
             <p className="about-section__eyebrow">Where strategy meets creativity</p>
@@ -214,7 +186,7 @@ function About({ focusSection = "about" }) {
         </div>
       </ScrollSection>
 
-      <ScrollSection as="section" className="about-section about-history">
+      <ScrollSection as="section" className="about-section about-history about-page__defer">
         <div className="about-section__inner about-history__inner">
           <div className="about-history__lead">
             <p className="about-section__eyebrow about-section__eyebrow--dark">
@@ -240,7 +212,7 @@ function About({ focusSection = "about" }) {
         </div>
       </ScrollSection>
 
-      <ScrollSection as="section" className="about-section about-principles">
+      <ScrollSection as="section" className="about-section about-principles about-page__defer">
         <div className="about-section__inner">
           <header className="about-principles__head">
             <p className="about-section__eyebrow">Brand philosophy</p>
@@ -259,7 +231,7 @@ function About({ focusSection = "about" }) {
         </div>
       </ScrollSection>
 
-      <ScrollSection as="section" className="about-section about-cta">
+      <ScrollSection as="section" className="about-section about-cta about-page__defer">
         <div className="about-section__inner about-cta__inner">
           <p className="about-section__eyebrow about-section__eyebrow--dark">
             Let’s get creative

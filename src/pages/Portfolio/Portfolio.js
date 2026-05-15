@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import portfolioGallery from "../../data/portfolioGallery";
 import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
+import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
 import "./Portfolio.css";
 
 function PortfolioMedia({ item }) {
   const hoverVideoRef = useRef(null);
+  const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file));
   const viewportVideoRef = useInViewVideoPlayback({
-    enabled: item.type === "video",
+    enabled: item.type === "video" && Boolean(mediaSrc),
     mobileOnly: true,
     resetOnExit: true,
     threshold: 0.5,
@@ -44,6 +46,7 @@ function PortfolioMedia({ item }) {
   if (item.type === "video") {
     return (
       <div
+        ref={mediaRef}
         className="portfolio-tile__media-shell portfolio-tile__media-shell--video"
         tabIndex={0}
         aria-label={`${item.title} video preview`}
@@ -52,19 +55,26 @@ function PortfolioMedia({ item }) {
         onFocus={playVideo}
         onBlur={stopVideo}
       >
-        <video
-          ref={(node) => {
-            hoverVideoRef.current = node;
-            viewportVideoRef.current = node;
-          }}
-          className="portfolio-tile__media"
-          src={item.src}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onError={() => setHasVideoError(true)}
-        />
+        {mediaSrc ? (
+          <video
+            ref={(node) => {
+              hoverVideoRef.current = node;
+              viewportVideoRef.current = node;
+            }}
+            className="portfolio-tile__media"
+            src={mediaSrc}
+            muted
+            loop
+            playsInline
+            preload="none"
+            onError={() => setHasVideoError(true)}
+          />
+        ) : (
+          <div
+            className="portfolio-tile__media portfolio-tile__media--placeholder"
+            aria-hidden
+          />
+        )}
         <span className="portfolio-tile__play-hint">Hover to play</span>
         {hasVideoError ? (
           <span className="portfolio-tile__video-fallback">
@@ -76,14 +86,18 @@ function PortfolioMedia({ item }) {
   }
 
   return (
-    <div className="portfolio-tile__media-shell">
-      <img
-        className="portfolio-tile__media"
-        src={item.src}
-        alt={item.title}
-        loading="lazy"
-        decoding="async"
-      />
+    <div ref={mediaRef} className="portfolio-tile__media-shell">
+      {mediaSrc ? (
+        <img
+          className="portfolio-tile__media"
+          src={mediaSrc}
+          alt={item.title}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div className="portfolio-tile__media portfolio-tile__media--placeholder" aria-hidden />
+      )}
     </div>
   );
 }

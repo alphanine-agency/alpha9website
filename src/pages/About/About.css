@@ -13,13 +13,33 @@
   background: #000000;
 }
 
-.about-intro .hero__inner {
+.about-intro__inner {
+  max-width: var(--max-width, 1120px);
+  margin: 0 auto;
   padding: 0 var(--space-md, 1.5rem);
 }
 
 .about-intro__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 600;
   max-width: 20ch;
-  margin-bottom: 0;
+  color: var(--color-white, #fff);
+}
+
+.about-intro__accent {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.about-page__defer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
 }
 
 .about-banner__frame {
@@ -58,7 +78,7 @@
     padding: clamp(6.25rem, 16vw, 7.5rem) var(--space-sm, 1rem) 0.75rem;
   }
 
-  .about-intro .hero__inner {
+  .about-intro__inner {
     padding: 0 var(--space-sm, 1rem);
   }
 

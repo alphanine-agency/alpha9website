@@ -180,6 +180,11 @@
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.portfolio-tile__media--placeholder {
+  min-height: 12rem;
+  background: linear-gradient(145deg, #e8e8e8, #f4f4f4 45%, #e2e2e2);
+}
+
 .portfolio-tile:hover .portfolio-tile__media {
   transform: scale(1.03);
 }

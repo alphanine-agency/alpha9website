@@ -36,13 +36,28 @@ function Navbar() {
     return () => document.body.classList.remove("nav-open");
   }, [open]);
 
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const closeMenu = () => setOpen(false);
 
   return (
     <header
       className={`navbar ${scrolled ? "navbar--scrolled" : ""} ${
         isHomeNav ? "navbar--home" : ""
-      }`}
+      } ${open ? "navbar--menu-open" : ""}`}
       role="banner"
     >
       <div className="navbar__inner">
@@ -69,8 +84,18 @@ function Navbar() {
             className={`navbar__nav ${open ? "navbar__nav--open" : ""}`}
             aria-label="Primary"
           >
+            <div className="navbar__mobile-head">
+              <p className="navbar__mobile-label">Menu</p>
+              <button
+                type="button"
+                className="navbar__mobile-close"
+                onClick={closeMenu}
+              >
+                Close
+              </button>
+            </div>
             <ul className="navbar__list">
-              {navItems.map(({ to, label, end }) => (
+              {navItems.map(({ to, label, end }, index) => (
                 <li key={to} className="navbar__item">
                   <NavLink
                     to={to}
@@ -80,7 +105,10 @@ function Navbar() {
                     }
                     onClick={closeMenu}
                   >
-                    {label}
+                    <span className="navbar__link-index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="navbar__link-text">{label}</span>
                   </NavLink>
                 </li>
               ))}
@@ -104,17 +132,26 @@ function Navbar() {
 
           <button
             type="button"
-            className="navbar__toggle"
+            className={`navbar__toggle${open ? " navbar__toggle--open" : ""}`}
             aria-expanded={open}
             aria-controls="primary-navigation"
             onClick={() => setOpen((v) => !v)}
           >
             <span className="navbar__toggle-bar" aria-hidden />
             <span className="navbar__toggle-bar" aria-hidden />
+            <span className="navbar__toggle-bar" aria-hidden />
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
           </button>
         </div>
       </div>
+
+      <button
+        type="button"
+        className="navbar__backdrop"
+        aria-label="Close menu"
+        tabIndex={open ? 0 : -1}
+        onClick={closeMenu}
+      />
     </header>
   );
 }

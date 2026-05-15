@@ -4,9 +4,10 @@ import Hero from "../../components/Hero/Hero";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import portfolioGallery from "../../data/portfolioGallery";
 import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
-import waqarPortrait from "../../assets/team/Waqar Ahmed Founder and CEO.PNG";
-import amirPortrait from "../../assets/team/amir jibran AI Automation & Ads Specialist.PNG";
-import abdullahPortrait from "../../assets/team/Abdullah Graphic Designer.png";
+import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
+import waqarPortrait from "../../assets/team/optimized/waqar.jpg";
+import amirPortrait from "../../assets/team/optimized/amir.jpg";
+import abdullahPortrait from "../../assets/team/optimized/abdullah.jpg";
 import "./Home.css";
 
 const servicesPreview = [
@@ -88,35 +89,48 @@ const teamPreview = [
 const featuredPortfolio = portfolioGallery.slice(0, 3);
 
 function HomePortfolioMedia({ item }) {
+  const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file));
   const videoRef = useInViewVideoPlayback({
-    enabled: item.type === "video",
+    enabled: item.type === "video" && Boolean(mediaSrc),
     resetOnExit: true,
     threshold: 0.5,
   });
 
   if (item.type === "video") {
     return (
-      <video
-        ref={videoRef}
-        className="home-card__visual-media"
-        src={item.src}
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden
-      />
+      <div ref={mediaRef} className="home-card__visual-shell">
+        {mediaSrc ? (
+          <video
+            ref={videoRef}
+            className="home-card__visual-media"
+            src={mediaSrc}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden
+          />
+        ) : (
+          <div className="home-card__visual-media home-card__visual-media--placeholder" aria-hidden />
+        )}
+      </div>
     );
   }
 
   return (
-    <img
-      className="home-card__visual-media"
-      src={item.src}
-      alt={item.title}
-      loading="lazy"
-      decoding="async"
-    />
+    <div ref={mediaRef} className="home-card__visual-shell">
+      {mediaSrc ? (
+        <img
+          className="home-card__visual-media"
+          src={mediaSrc}
+          alt={item.title}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div className="home-card__visual-media home-card__visual-media--placeholder" aria-hidden />
+      )}
+    </div>
   );
 }
 

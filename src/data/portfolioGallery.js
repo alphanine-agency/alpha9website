@@ -1,11 +1,4 @@
-const mediaContext = require.context("../assets/porfolio", false, /\.(jpg|jpeg|mp4)$/);
-
-const mediaMap = mediaContext.keys().reduce((acc, key) => {
-  acc[key.replace("./", "")] = mediaContext(key);
-  return acc;
-}, {});
-
-const portfolioGallery = [
+export const portfolioGalleryMeta = [
   {
     id: "gelato-video",
     file: "Gelato Bar Video Ad (1).mp4",
@@ -106,9 +99,8 @@ const portfolioGallery = [
     tag: "Hero post",
     campaign: "Sports leisure",
   },
-].map((item) => ({
-  ...item,
-  src: mediaMap[item.file],
-}));
+];
+
+const portfolioGallery = portfolioGalleryMeta;
 
 export default portfolioGallery;
