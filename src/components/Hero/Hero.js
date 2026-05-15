@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import bannerImage from "../../assets/banner.png";
+import OptimizedPicture from "../OptimizedPicture/OptimizedPicture";
+import bannerWebp from "../../assets/optimized/banner.webp";
+import bannerJpg from "../../assets/optimized/banner.jpg";
 import "./Hero.css";
 
 function Hero() {
@@ -46,15 +48,16 @@ function Hero() {
 
           <div className="hero__visual">
             <div className="hero__image-shell">
-              <img
+              <OptimizedPicture
                 className="hero__image"
-                src={bannerImage}
+                webpSrc={bannerWebp}
+                fallbackSrc={bannerJpg}
                 alt="AlphaNineMarketing digital campaign showcase"
-                width="1240"
-                height="1718"
+                width={920}
+                height={920}
                 loading="eager"
                 fetchPriority="high"
-                decoding="async"
+                sizes="(max-width: 980px) 100vw, 520px"
               />
             </div>
           </div>

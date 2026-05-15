@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import homeLogo from "../../assets/logo2.png";
-import pageLogo from "../../assets/logo.png";
+import homeLogoWebp from "../../assets/optimized/logo-nav.webp";
+import homeLogo from "../../assets/optimized/logo-nav.png";
+import pageLogoWebp from "../../assets/optimized/logo-footer.webp";
+import pageLogo from "../../assets/optimized/logo-footer.jpg";
 import BrandMark from "../BrandMark/BrandMark";
 import "./Navbar.css";
 
@@ -19,6 +21,7 @@ function Navbar() {
   const location = useLocation();
   const isHomeNav =
     location.pathname === "/" || location.pathname === "/about";
+  const brandLogoWebp = isHomeNav ? homeLogoWebp : pageLogoWebp;
   const brandLogo = isHomeNav ? homeLogo : pageLogo;
 
   useEffect(() => {
@@ -68,14 +71,17 @@ function Navbar() {
             onClick={closeMenu}
             aria-label="AlphaNineMarketing home"
           >
-            <img
-              className="navbar__brand-icon"
-              src={brandLogo}
-              alt=""
-              width="40"
-              height="40"
-              decoding="async"
-            />
+            <picture className="navbar__brand-picture">
+              <source srcSet={brandLogoWebp} type="image/webp" />
+              <img
+                className="navbar__brand-icon"
+                src={brandLogo}
+                alt=""
+                width="40"
+                height="40"
+                decoding="async"
+              />
+            </picture>
             <BrandMark compact />
           </NavLink>
 

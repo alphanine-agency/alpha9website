@@ -80,11 +80,18 @@
   letter-spacing: -0.02em;
 }
 
+.navbar__brand-picture {
+  display: block;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
 .navbar__brand-icon {
+  display: block;
   width: 2.5rem;
   height: 2.5rem;
   object-fit: contain;
-  flex-shrink: 0;
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
 }
 

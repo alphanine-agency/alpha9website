@@ -55,11 +55,13 @@
   letter-spacing: -0.04em;
   font-weight: 600;
   max-width: 16ch;
+  min-height: 2.15em;
   color: var(--color-white, #fff);
 }
 
 .hero__title-accent {
-  font-family: var(--font-display, Georgia, serif);
+  display: inline-block;
+  font-family: var(--font-display, Georgia, "Times New Roman", serif);
   font-weight: 400;
   font-style: italic;
   letter-spacing: -0.02em;

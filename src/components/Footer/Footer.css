@@ -2,6 +2,8 @@
   border-top: 1px solid var(--color-line, #e8e8e8);
   background: var(--color-white, #fff);
   margin-top: auto;
+  contain: layout style;
+  min-height: 10rem;
 }
 
 .footer__inner {
@@ -28,13 +30,21 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-sm, 1rem);
+  min-height: 3.5rem;
+}
+
+.footer__icon-wrap {
+  display: block;
+  flex-shrink: 0;
+  width: 3.2rem;
+  height: 3.2rem;
 }
 
 .footer__icon {
+  display: block;
   width: 3.2rem;
   height: 3.2rem;
   object-fit: contain;
-  flex-shrink: 0;
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
 }
 

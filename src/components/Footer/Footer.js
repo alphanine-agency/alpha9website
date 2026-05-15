@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logoWebp from "../../assets/optimized/logo-footer.webp";
+import logo from "../../assets/optimized/logo-footer.jpg";
 import BrandMark from "../BrandMark/BrandMark";
 import "./Footer.css";
 
@@ -11,15 +12,17 @@ function Footer() {
     <footer className="footer" role="contentinfo">
       <div className="footer__inner">
         <div className="footer__brand">
-          <img
-            className="footer__icon"
-            src={logo}
-            alt=""
-            width="52"
-            height="52"
-            loading="lazy"
-            decoding="async"
-          />
+          <picture className="footer__icon-wrap">
+            <source srcSet={logoWebp} type="image/webp" />
+            <img
+              className="footer__icon"
+              src={logo}
+              alt=""
+              width="52"
+              height="52"
+              decoding="async"
+            />
+          </picture>
           <div>
             <BrandMark />
             <p className="footer__tagline">
