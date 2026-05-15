@@ -84,16 +84,6 @@ function Navbar() {
             className={`navbar__nav ${open ? "navbar__nav--open" : ""}`}
             aria-label="Primary"
           >
-            <div className="navbar__mobile-head">
-              <p className="navbar__mobile-label">Menu</p>
-              <button
-                type="button"
-                className="navbar__mobile-close"
-                onClick={closeMenu}
-              >
-                Close
-              </button>
-            </div>
             <ul className="navbar__list">
               {navItems.map(({ to, label, end }, index) => (
                 <li key={to} className="navbar__item">
