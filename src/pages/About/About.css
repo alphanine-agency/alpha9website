@@ -23,18 +23,89 @@
 }
 
 .about-banner__frame {
+  position: relative;
   width: 100%;
   overflow: hidden;
   background: #000000;
   line-height: 0;
+  aspect-ratio: 16 / 9;
+  max-height: min(70svh, 720px);
 }
 
 .about-banner__image {
   display: block;
   width: 100%;
-  height: min(72vh, 720px);
+  height: 100%;
   object-fit: cover;
-  object-position: center 42%;
+  object-position: center 40%;
+}
+
+/* Tablet: keep more of the group in frame */
+@media (max-width: 900px) {
+  .about-banner__frame {
+    aspect-ratio: 2 / 1;
+    max-height: min(52svh, 520px);
+  }
+
+  .about-banner__image {
+    object-position: center 34%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .about-intro {
+    padding: clamp(6.25rem, 16vw, 7.5rem) var(--space-sm, 1rem) 0.75rem;
+  }
+
+  .about-intro .hero__inner {
+    padding: 0 var(--space-sm, 1rem);
+  }
+
+  .about-intro__title {
+    max-width: none;
+    font-size: clamp(1.85rem, 8.2vw, 2.5rem);
+  }
+
+  .about-banner__frame {
+    aspect-ratio: 2.1 / 1;
+    max-height: none;
+    min-height: clamp(168px, 48vw, 240px);
+  }
+
+  .about-banner__image {
+    object-position: center 30%;
+  }
+}
+
+/* Small phones (iPhone SE, narrow Android) */
+@media (max-width: 390px) {
+  .about-banner__frame {
+    aspect-ratio: 16 / 9;
+    min-height: clamp(160px, 46vw, 220px);
+  }
+
+  .about-banner__image {
+    object-position: center 26%;
+  }
+}
+
+/* Landscape phones & short viewports */
+@media (max-height: 500px) and (orientation: landscape) {
+  .about-intro {
+    padding-top: 5.25rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .about-banner__frame {
+    aspect-ratio: 21 / 9;
+    max-height: min(58svh, 280px);
+    min-height: 0;
+  }
+
+  .about-banner__image {
+    object-position: center 38%;
+  }
 }
 
 .about-team__title {

@@ -122,6 +122,7 @@ function About({ focusSection = "about" }) {
             alt="AlphaNineMarketing team — six specialists in formal attire"
             width="1920"
             height="1080"
+            sizes="100vw"
             fetchPriority="high"
             decoding="async"
           />
