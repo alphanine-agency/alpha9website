@@ -1,0 +1,40 @@
+.typewriter-text {
+  position: relative;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.92em;
+  margin-left: 3px;
+  vertical-align: -0.08em;
+  border-radius: 1px;
+  background: var(--color-electric);
+  animation: typewriter-blink 0.75s step-end infinite;
+}
+
+.typewriter-text--done .typewriter-cursor--idle {
+  animation: typewriter-cursor-out 0.35s ease forwards;
+}
+
+@keyframes typewriter-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes typewriter-cursor-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor {
+    display: none;
+  }
+}

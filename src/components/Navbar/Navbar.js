@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import homeLogoWebp from "../../assets/optimized/logo-nav.webp";
 import homeLogo from "../../assets/optimized/logo-nav.png";
-import pageLogoWebp from "../../assets/optimized/logo-footer.webp";
-import pageLogo from "../../assets/optimized/logo-footer.jpg";
 import BrandMark from "../BrandMark/BrandMark";
 import "./Navbar.css";
 
@@ -20,9 +18,13 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHomeNav =
-    location.pathname === "/" || location.pathname === "/about";
-  const brandLogoWebp = isHomeNav ? homeLogoWebp : pageLogoWebp;
-  const brandLogo = isHomeNav ? homeLogo : pageLogo;
+    location.pathname === "/" ||
+    location.pathname === "/about" ||
+    location.pathname === "/services" ||
+    location.pathname === "/portfolio" ||
+    location.pathname === "/contact";
+  const brandLogoWebp = homeLogoWebp;
+  const brandLogo = homeLogo;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -111,7 +113,7 @@ function Navbar() {
             </ul>
             <NavLink
               to="/contact"
-              className="navbar__cta navbar__cta--mobile"
+              className="navbar__cta navbar__cta--mobile theme-btn-primary"
               onClick={closeMenu}
             >
               Start a project
@@ -120,7 +122,7 @@ function Navbar() {
 
           <NavLink
             to="/contact"
-            className="navbar__cta navbar__cta--desktop"
+            className="navbar__cta navbar__cta--desktop theme-btn-primary"
             onClick={closeMenu}
           >
             Start a project

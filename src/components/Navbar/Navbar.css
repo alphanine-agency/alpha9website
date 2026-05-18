@@ -261,40 +261,9 @@
 }
 
 .navbar__cta {
-  text-decoration: none;
   font-size: 0.85rem;
-  font-weight: 600;
   padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  background: var(--color-ink, #0a0a0a);
-  color: var(--color-white, #fff);
-  border: 1px solid var(--color-ink, #0a0a0a);
-  transition: background var(--transition-fast, 180ms ease),
-    color var(--transition-fast, 180ms ease),
-    border-color var(--transition-fast, 180ms ease),
-    transform var(--transition-fast, 180ms ease);
-}
-
-.navbar__cta:hover,
-.navbar__cta:focus-visible {
-  background: var(--color-white, #fff);
-  color: var(--color-ink, #0a0a0a);
-  border-color: var(--color-ink, #0a0a0a);
-  transform: translateY(-1px);
-  outline: none;
-}
-
-.navbar--home .navbar__cta {
-  background: var(--color-white, #fff);
-  color: var(--color-ink, #0a0a0a);
-  border-color: var(--color-white, #fff);
-}
-
-.navbar--home .navbar__cta:hover,
-.navbar--home .navbar__cta:focus-visible {
-  background: transparent;
-  color: var(--color-white, #fff);
-  border-color: rgba(255, 255, 255, 0.26);
+  white-space: nowrap;
 }
 
 .navbar__cta--mobile {

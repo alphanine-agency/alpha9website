@@ -1,0 +1,41 @@
+.hero-scene {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+.hero-scene__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 24px 64px rgba(0, 194, 255, 0.2));
+}
+
+.hero-scene__ring {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 1px dashed rgba(0, 194, 255, 0.22);
+  pointer-events: none;
+}
+
+.hero-scene__ring::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--color-neon);
+  box-shadow: 0 0 16px rgba(0, 194, 255, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene__ring {
+    display: none;
+  }
+}

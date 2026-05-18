@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
+import PageHero from "../../components/PageHero/PageHero";
 import portfolioGallery from "../../data/portfolioGallery";
 import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
 import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
@@ -140,27 +141,23 @@ function Portfolio() {
 
   return (
     <div className="portfolio-page">
-      <header className="portfolio-hero">
-        <div className="portfolio-hero__inner">
-          <p className="portfolio-hero__eyebrow">Portfolio</p>
-          <h1 className="portfolio-hero__title">Creative assets arranged like a real showcase.</h1>
-          <p className="portfolio-hero__lede">
-            Editorial grids, social posts, brand boards, and motion cuts from
-            real campaign work - arranged in a mixed-size gallery for a more
-            premium presentation.
-          </p>
-        </div>
-      </header>
+      <PageHero
+        baseClass="portfolio-hero"
+        eyebrow="Portfolio"
+        title="Creative assets arranged like a real showcase."
+        lede="Editorial grids, social posts, brand boards, and motion cuts from real campaign work - arranged in a mixed-size gallery for a more premium presentation."
+        typeDelay={420}
+      />
 
       <section className="portfolio-grid-section" aria-label="Portfolio gallery">
         <div className="portfolio-grid-section__inner">
           {sections.map((section) => (
             <div key={section.id} className="portfolio-section">
-              <header className="portfolio-section__head">
+              <ScrollSection as="header" className="portfolio-section__head">
                 <p className="portfolio-section__eyebrow">{section.eyebrow}</p>
                 <h2 className="portfolio-section__title">{section.title}</h2>
                 <p className="portfolio-section__desc">{section.description}</p>
-              </header>
+              </ScrollSection>
 
               <ul className="portfolio-mosaic">
                 {section.items.map((item) => (
@@ -188,14 +185,14 @@ function Portfolio() {
             </div>
           ))}
 
-          <div className="portfolio-cta">
+          <ScrollSection className="portfolio-cta theme-cta-panel">
             <p className="portfolio-cta__copy">
               Want your brand shown with the same premium content system?
             </p>
-            <Link to="/contact" className="portfolio-cta__link">
+            <Link to="/contact" className="portfolio-cta__link theme-btn-primary">
               Start a project
             </Link>
-          </div>
+          </ScrollSection>
         </div>
       </section>
     </div>

@@ -1,47 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { fadeUp } from "../../motion/presets";
 import "./ScrollSection.css";
 
-/*
-  Lightweight scroll reveal: IntersectionObserver only (no animation libraries).
-  Respects reduced motion via class toggle for instant visibility.
-*/
-function ScrollSection({ children, className = "", as: Tag = "div" }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
+const motionTags = {
+  section: motion.section,
+  div: motion.div,
+  article: motion.article,
+  header: motion.header,
+};
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
+function ScrollSection({ children, className = "", as: Tag = "motion.div", ...rest }) {
+  const reduceMotion = useReducedMotion();
+  const StaticTag = Tag;
 
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      setVisible(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+  if (reduceMotion) {
+    return (
+      <StaticTag
+        className={`scroll-section scroll-section--visible ${className}`.trim()}
+        {...rest}
+      >
+        {children}
+      </StaticTag>
     );
+  }
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const MotionTag = motionTags[Tag] || motion.div;
 
   return (
-    <Tag
-      ref={ref}
-      className={`scroll-section ${visible ? "scroll-section--visible" : ""} ${className}`.trim()}
+    <MotionTag
+      className={`scroll-section ${className}`.trim()}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -8% 0px" }}
+      {...rest}
     >
       {children}
-    </Tag>
+    </MotionTag>
   );
 }
 

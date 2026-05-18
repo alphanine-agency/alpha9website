@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
+import StaggerGroup from "../../components/StaggerGroup/StaggerGroup";
+import Timeline from "../../components/Timeline/Timeline";
 import LazyImage from "../../components/LazyImage/LazyImage";
 import teamBanner from "../../assets/team/optimized/team-banner.jpg";
 import waqarPortrait from "../../assets/team/optimized/waqar.jpg";
@@ -9,6 +11,7 @@ import abdullahPortrait from "../../assets/team/optimized/abdullah.jpg";
 import amnaPortrait from "../../assets/team/optimized/amna.jpg";
 import arslanPortrait from "../../assets/team/optimized/arslan.jpg";
 import fahadPortrait from "../../assets/team/optimized/fahad.jpg";
+import TypewriterText from "../../components/TypewriterText/TypewriterText";
 import "./About.css";
 
 const stats = [
@@ -21,6 +24,21 @@ const capabilities = [
   "Ads systems tailored to your funnel",
   "Creative production with platform-native thinking",
   "Web experiences built for speed and conversion",
+];
+
+const historySteps = [
+  {
+    id: "vision",
+    label: "Studio vision",
+    body:
+      "We built AlphaNineMarketing around a simple belief: businesses do not need disconnected vendors for ads, content, design, and web. They need one aligned team that understands how strategy and execution reinforce each other.",
+  },
+  {
+    id: "model",
+    label: "How we work",
+    body:
+      "Our work sits at the point where automation makes marketing more efficient, while strong creative keeps brands memorable and human. That mix lets us move fast without making the brand feel generic.",
+  },
 ];
 
 const principles = [
@@ -51,7 +69,6 @@ function About({ focusSection = "about" }) {
   const location = useLocation();
   const teamSectionRef = useRef(null);
   const shouldFocusTeam = focusSection === "team" || location.hash === "#team";
-
   useEffect(() => {
     document.title = shouldFocusTeam
       ? "About & Team | AlphaNineMarketing"
@@ -84,10 +101,16 @@ function About({ focusSection = "about" }) {
       <header className="about-hero-banner" aria-label="AlphaNine team">
         <div className="about-intro">
           <div className="about-intro__inner">
-            <h1 className="about-intro__title">
-              The people behind{" "}
-              <span className="about-intro__accent">Alpha Nine</span>.
-            </h1>
+            <TypewriterText
+              as="h1"
+              className="about-intro__title"
+              delay={360}
+              segments={[
+                { text: "The people behind " },
+                { text: "Alpha Nine", className: "about-intro__accent" },
+                { text: "." },
+              ]}
+            />
           </div>
         </div>
         <div className="about-banner__frame">
@@ -116,7 +139,7 @@ function About({ focusSection = "about" }) {
             </p>
           </header>
 
-          <ul className="about-team__grid">
+          <StaggerGroup as="ul" className="about-team__grid">
             {members.map((member) => (
               <li key={member.role} className="about-team__item">
                 <article className="about-team-card">
@@ -134,11 +157,11 @@ function About({ focusSection = "about" }) {
                 </article>
               </li>
             ))}
-          </ul>
+          </StaggerGroup>
         </ScrollSection>
       </section>
 
-      <header className="about-hero about-page__defer">
+      <ScrollSection as="header" className="about-hero about-page__defer">
         <div className="about-hero__inner">
           <div className="about-hero__copy">
             <p className="about-hero__eyebrow">About us</p>
@@ -160,7 +183,7 @@ function About({ focusSection = "about" }) {
             ))}
           </div>
         </div>
-      </header>
+      </ScrollSection>
 
       <ScrollSection as="section" className="about-section about-story about-page__defer">
         <div className="about-section__inner about-story__inner">
@@ -196,19 +219,7 @@ function About({ focusSection = "about" }) {
               A growth studio built for modern brands.
             </h2>
           </div>
-          <div className="about-history__copy">
-            <p className="about-section__body about-section__body--dark">
-              We built AlphaNineMarketing around a simple belief: businesses do
-              not need disconnected vendors for ads, content, design, and web.
-              They need one aligned team that understands how strategy and
-              execution reinforce each other.
-            </p>
-            <p className="about-section__body about-section__body--dark">
-              Our work sits at the point where automation makes marketing more
-              efficient, while strong creative keeps brands memorable and human.
-              That mix lets us move fast without making the brand feel generic.
-            </p>
-          </div>
+          <Timeline items={historySteps} className="about-history__timeline" />
         </div>
       </ScrollSection>
 
@@ -220,30 +231,30 @@ function About({ focusSection = "about" }) {
               Quiet confidence, measured outcomes.
             </h2>
           </header>
-          <div className="about-principles__grid">
+          <StaggerGroup as="div" className="about-principles__grid">
             {principles.map((item) => (
               <article key={item.title} className="about-principle-card">
                 <h3 className="about-principle-card__title">{item.title}</h3>
                 <p className="about-principle-card__body">{item.body}</p>
               </article>
             ))}
-          </div>
+          </StaggerGroup>
         </div>
       </ScrollSection>
 
-      <ScrollSection as="section" className="about-section about-cta about-page__defer">
+      <ScrollSection as="section" className="about-section about-cta about-page__defer theme-cta-panel">
         <div className="about-section__inner about-cta__inner">
-          <p className="about-section__eyebrow about-section__eyebrow--dark">
+          <p className="about-section__eyebrow theme-eyebrow">
             Let’s get creative
           </p>
-          <h2 className="about-section__title about-section__title--dark">
+          <h2 className="about-section__title theme-title">
             Bring the vision. We’ll build the system behind it.
           </h2>
-          <p className="about-section__body about-section__body--dark about-cta__body">
+          <p className="about-section__body theme-sub about-cta__body">
             If you need a team that can think strategically and execute with
             polish, AlphaNineMarketing is built for that overlap.
           </p>
-          <Link to="/contact" className="about-cta__button">
+          <Link to="/contact" className="about-cta__button theme-btn-primary">
             Start a project
           </Link>
         </div>
