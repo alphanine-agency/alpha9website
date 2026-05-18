@@ -117,7 +117,17 @@ function Footer() {
           <p className="footer__legal">
             © {year} AlphaNineMarketing. All rights reserved.
           </p>
-          <p className="footer__note">Built for performance and premium presentation.</p>
+          <p className="footer__credit">
+            Developed by{" "}
+            <a
+              href="https://profitsols.com"
+              className="footer__credit-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              profitsols.com
+            </a>
+          </p>
         </div>
       </div>
     </footer>

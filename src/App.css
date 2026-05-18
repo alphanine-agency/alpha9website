@@ -72,27 +72,14 @@
 
 .app-main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
   z-index: 1;
+  width: 100%;
+  min-width: 0;
 }
 
-.route-fallback {
-  min-height: 40vh;
-  display: grid;
-  place-items: center;
-  color: var(--color-muted);
-  letter-spacing: 0.12em;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-.route-fallback::after {
-  content: "";
-  width: 0.35rem;
-  height: 0.35rem;
-  margin-left: 0.35rem;
-  border-radius: 50%;
-  background: var(--color-electric);
-  box-shadow: var(--glow-blue);
-  animation: premium-pulse 1.2s ease-in-out infinite;
+.app-main > .page-loader {
+  align-self: stretch;
 }

@@ -1,0 +1,120 @@
+.page-loader {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  width: 100%;
+  min-height: min(72vh, calc(100dvh - 11rem));
+  margin: 0 auto;
+  padding: clamp(2rem, 8vw, 4rem) clamp(1.25rem, 5vw, 2rem);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.page-loader__spinner {
+  position: relative;
+  width: clamp(44px, 12vw, 56px);
+  height: clamp(44px, 12vw, 56px);
+  flex-shrink: 0;
+}
+
+.page-loader__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.page-loader__ring--outer {
+  border-top-color: var(--color-electric);
+  border-right-color: rgba(0, 194, 255, 0.2);
+  animation: page-loader-spin 1s linear infinite;
+}
+
+.page-loader__ring--inner {
+  inset: 9px;
+  border-bottom-color: var(--color-neon);
+  border-left-color: rgba(77, 235, 255, 0.15);
+  animation: page-loader-spin-reverse 0.75s linear infinite;
+}
+
+.page-loader__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--color-neon);
+  box-shadow: 0 0 20px rgba(0, 194, 255, 0.65);
+  animation: page-loader-pulse 1.4s ease-in-out infinite;
+}
+
+.page-loader__label {
+  margin: 0;
+  font-size: clamp(0.68rem, 2.5vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+@keyframes page-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes page-loader-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes page-loader-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 860px) {
+  .page-loader {
+    min-height: min(65vh, calc(100dvh - 9.5rem));
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-loader {
+    min-height: min(58vh, calc(100dvh - 8.5rem));
+    gap: 0.9rem;
+  }
+
+  .page-loader__ring--inner {
+    inset: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader__ring--outer,
+  .page-loader__ring--inner {
+    animation: none;
+    border-color: rgba(0, 194, 255, 0.35);
+    border-top-color: var(--color-electric);
+  }
+
+  .page-loader__core {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import CursorGlow from "./components/CursorGlow/CursorGlow";
+import PageLoader from "./components/PageLoader/PageLoader";
 
 /*
   Performance: code-split routes so initial bundle stays smaller (better TTI/FCP tradeoffs on inner pages).
@@ -25,9 +26,7 @@ function App() {
         </a>
         <Navbar />
         <main id="main-content" className="app-main" tabIndex={-1}>
-          <Suspense
-            fallback={<div className="route-fallback">Loading…</div>}
-          >
+          <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/portfolio" element={<Portfolio />} />
