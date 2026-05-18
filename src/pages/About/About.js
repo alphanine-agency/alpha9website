@@ -11,6 +11,7 @@ import abdullahPortrait from "../../assets/team/optimized/abdullah.jpg";
 import amnaPortrait from "../../assets/team/optimized/amna.jpg";
 import arslanPortrait from "../../assets/team/optimized/arslan.jpg";
 import fahadPortrait from "../../assets/team/optimized/fahad.jpg";
+import aliPortrait from "../../assets/team/optimized/ali-shibli.jpg";
 import TypewriterText from "../../components/TypewriterText/TypewriterText";
 import "./About.css";
 
@@ -63,6 +64,7 @@ const members = [
   { name: "Amna Jabeen", role: "PR Manager", portrait: amnaPortrait },
   { name: "Arslan Khalid", role: "Creative Photographer", portrait: arslanPortrait },
   { name: "Fahad Ali", role: "Videographer", portrait: fahadPortrait },
+  { name: "Ali Shibli", role: "Web Developer", portrait: aliPortrait, photoClass: "about-team-card__photo--ali" },
 ];
 
 function About({ focusSection = "about" }) {
@@ -117,7 +119,7 @@ function About({ focusSection = "about" }) {
           <LazyImage
             className="about-banner__image"
             src={teamBanner}
-            alt="AlphaNineMarketing team — six specialists in formal attire"
+            alt="AlphaNineMarketing team — specialists in formal attire"
             width={1920}
             height={1080}
             sizes="100vw"
@@ -141,10 +143,10 @@ function About({ focusSection = "about" }) {
 
           <StaggerGroup as="ul" className="about-team__grid">
             {members.map((member) => (
-              <li key={member.role} className="about-team__item">
+              <li key={member.name} className="about-team__item">
                 <article className="about-team-card">
                   <LazyImage
-                    className="about-team-card__photo"
+                    className={`about-team-card__photo${member.photoClass ? ` ${member.photoClass}` : ""}`}
                     src={member.portrait}
                     alt={`${member.name}, ${member.role}`}
                     width={720}

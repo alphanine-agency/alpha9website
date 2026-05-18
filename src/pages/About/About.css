@@ -431,6 +431,11 @@
   background: var(--color-surface);
 }
 
+.about-team-card__photo--ali {
+  object-position: center 12%;
+  background: #e85d04;
+}
+
 .about-team-card__body {
   display: flex;
   flex: 1;
