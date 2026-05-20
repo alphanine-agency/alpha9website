@@ -1,0 +1,177 @@
+.portfolio-phone-mockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio-phone-mockup--tile {
+  padding: clamp(0.65rem, 2vw, 1rem);
+}
+
+.portfolio-phone-mockup__device {
+  position: relative;
+  width: min(58%, 7.25rem);
+  aspect-ratio: 9 / 19.2;
+  padding: 0.4rem;
+  border-radius: 1.75rem;
+  background: linear-gradient(
+    155deg,
+    #5a5a5a 0%,
+    #2a2a2a 28%,
+    #121212 62%,
+    #050505 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 20px 40px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.45);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.portfolio-phone-mockup--tile .portfolio-phone-mockup__device {
+  width: auto;
+  height: 92%;
+  max-height: 100%;
+  max-width: min(68%, 11.5rem);
+  aspect-ratio: 9 / 19.2;
+}
+
+.portfolio-phone-mockup:hover .portfolio-phone-mockup__device,
+.portfolio-phone-mockup:focus-visible .portfolio-phone-mockup__device {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 24px 48px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0, 194, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.portfolio-phone-mockup__button {
+  position: absolute;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #3a3a3a, #1a1a1a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.portfolio-phone-mockup__button--silent {
+  left: -0.12rem;
+  top: 22%;
+  width: 0.14rem;
+  height: 1.1rem;
+}
+
+.portfolio-phone-mockup__button--vol-up {
+  left: -0.12rem;
+  top: 32%;
+  width: 0.14rem;
+  height: 1.35rem;
+}
+
+.portfolio-phone-mockup__button--vol-down {
+  left: -0.12rem;
+  top: 44%;
+  width: 0.14rem;
+  height: 1.35rem;
+}
+
+.portfolio-phone-mockup__button--power {
+  right: -0.12rem;
+  top: 30%;
+  width: 0.14rem;
+  height: 2rem;
+}
+
+.portfolio-phone-mockup__island {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  z-index: 3;
+  width: 36%;
+  height: 0.55rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #030303;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.portfolio-phone-mockup__screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.portfolio-phone-mockup__screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 42%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.portfolio-phone-mockup__shot {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.portfolio-phone-mockup__shot--placeholder {
+  min-height: 9rem;
+  background: linear-gradient(145deg, #1a1a1a, #2a2a2a 45%, #141414);
+}
+
+.portfolio-phone-mockup__home-bar {
+  position: absolute;
+  bottom: 0.42rem;
+  left: 50%;
+  z-index: 2;
+  width: 32%;
+  height: 0.2rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+.portfolio-phone-mockup__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent, #00c2ff);
+}
+
+.portfolio-phone-mockup:hover .portfolio-phone-mockup__cta,
+.portfolio-phone-mockup:focus-visible .portfolio-phone-mockup__cta {
+  text-decoration: underline;
+}

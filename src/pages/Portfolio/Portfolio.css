@@ -94,12 +94,149 @@
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
 }
 
 .portfolio-mosaic__item {
   list-style: none;
   grid-column: span 4;
+  display: flex;
+}
+
+.portfolio-mosaic__item--equal {
+  align-self: stretch;
+}
+
+.portfolio-mosaic__item--gelato-row {
+  grid-column: span 12;
+}
+
+.portfolio-gelato-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.portfolio-gelato-row__video {
+  grid-column: span 4;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-gelato-row__video .portfolio-tile {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.portfolio-gelato-row__video .portfolio-tile__media-shell {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  flex: 0 0 auto;
+}
+
+.portfolio-gelato-row__video .portfolio-tile__foot {
+  flex-shrink: 0;
+}
+
+.portfolio-gelato-row__grid {
+  grid-column: span 8;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+}
+
+.portfolio-gelato-row__cell {
+  min-height: 0;
+  min-width: 0;
+}
+
+.portfolio-gelato-row__cell .portfolio-tile--gelato-cell {
+  height: 100%;
+  border-radius: 16px;
+}
+
+.portfolio-gelato-row__cell .portfolio-tile--gelato-cell::after {
+  display: none;
+}
+
+.portfolio-gelato-row__cell .portfolio-tile__media-shell {
+  height: 100%;
+  aspect-ratio: unset;
+  min-height: 0;
+}
+
+.portfolio-gelato-row__cell .portfolio-tile__media {
+  object-fit: cover;
+  object-position: center;
+}
+
+.portfolio-mosaic__item--fashion-row {
+  grid-column: span 12;
+}
+
+.portfolio-fashion-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  width: 100%;
+}
+
+.portfolio-fashion-row__grid,
+.portfolio-fashion-row__post {
+  min-width: 0;
+}
+
+.portfolio-fashion-row__post .portfolio-tile {
+  height: auto;
+}
+
+.portfolio-fashion-row__post .portfolio-tile__media-shell {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+}
+
+.portfolio-fashion-row__grid .portfolio-tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.portfolio-fashion-row__grid .portfolio-tile__media-shell {
+  flex: 1 1 auto;
+  aspect-ratio: unset;
+  min-height: 0;
+  height: 100%;
+}
+
+.portfolio-fashion-row__grid .portfolio-tile__media {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 721px) {
+  .portfolio-fashion-row {
+    align-items: stretch;
+  }
+
+  .portfolio-fashion-row__grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .portfolio-fashion-row__grid .portfolio-tile {
+    flex: 1;
+    min-height: 100%;
+  }
 }
 
 .portfolio-mosaic__item--feature {
@@ -108,6 +245,87 @@
 
 .portfolio-mosaic__item--wide {
   grid-column: span 6;
+}
+
+.portfolio-mosaic__item--half {
+  grid-column: span 6;
+}
+
+.portfolio-mosaic__item--half .portfolio-tile__media-shell {
+  aspect-ratio: 4 / 5;
+}
+
+.portfolio-mosaic__item--half .portfolio-tile__media {
+  object-fit: contain;
+  background: #0a0a0a;
+}
+
+.portfolio-tile__media-shell--phone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 15%, rgba(0, 194, 255, 0.06), transparent 60%),
+    linear-gradient(180deg, #121212 0%, #080808 100%);
+}
+
+.portfolio-tile--stacked {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-height: 100%;
+}
+
+.portfolio-tile--stacked .portfolio-tile__media-shell {
+  flex: 1 1 auto;
+  aspect-ratio: unset;
+  min-height: 15.5rem;
+}
+
+.portfolio-tile--stacked .portfolio-tile__media-shell--video {
+  aspect-ratio: 9 / 16;
+  max-height: none;
+}
+
+.portfolio-tile--instagram {
+  position: relative;
+}
+
+.portfolio-tile--instagram::after {
+  display: none;
+}
+
+.portfolio-tile__social-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-accent, #00c2ff);
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.portfolio-tile__social-link:hover,
+.portfolio-tile__social-link:focus-visible {
+  transform: scale(1.06);
+  border-color: rgba(0, 194, 255, 0.65);
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  outline: none;
 }
 
 .portfolio-mosaic__item--tall {
@@ -129,6 +347,7 @@
 .portfolio-tile {
   position: relative;
   height: auto;
+  width: 100%;
   overflow: hidden;
   border-radius: 24px;
   background: var(--glass-bg);
@@ -238,9 +457,18 @@
 .portfolio-tile__overlay {
   position: absolute;
   inset: auto 0 0 0;
-  padding: 0.95rem;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.72) 100%);
-  color: var(--color-white, #fff);
+  z-index: 2;
+  padding: 1rem 0.95rem 0.95rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.55) 35%, rgba(0, 0, 0, 0.88) 100%);
+  color: #fff;
+}
+
+.portfolio-tile__foot {
+  flex-shrink: 0;
+  padding: 0.85rem 0.95rem 0.95rem;
+  background: rgba(8, 8, 8, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .portfolio-tile__chips {
@@ -255,17 +483,25 @@
   align-items: center;
   padding: 0.34rem 0.62rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: var(--color-white, #fff);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.96);
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.portfolio-tile__chip:first-child {
+  border-color: rgba(0, 194, 255, 0.4);
+  box-shadow: 0 0 14px rgba(0, 194, 255, 0.12);
 }
 
 .portfolio-tile__chip--ghost {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .portfolio-tile__title {
@@ -273,8 +509,17 @@
   font-size: 0.98rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.25;
-  max-width: 24ch;
+  line-height: 1.3;
+  max-width: none;
+  color: #fff;
+}
+
+.portfolio-tile__overlay .portfolio-tile__title {
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85);
+}
+
+.portfolio-tile__foot .portfolio-tile__title {
+  font-size: 0.9rem;
 }
 
 .portfolio-cta {
@@ -312,7 +557,10 @@
   }
 
   .portfolio-mosaic__item--feature,
-  .portfolio-mosaic__item--wide {
+  .portfolio-mosaic__item--wide,
+  .portfolio-mosaic__item--half,
+  .portfolio-mosaic__item--fashion-row,
+  .portfolio-mosaic__item--gelato-row {
     grid-column: span 8;
   }
 
@@ -334,16 +582,37 @@
   .portfolio-mosaic__item,
   .portfolio-mosaic__item--feature,
   .portfolio-mosaic__item--wide,
+  .portfolio-mosaic__item--half,
+  .portfolio-mosaic__item--fashion-row,
   .portfolio-mosaic__item--tall,
   .portfolio-mosaic__item--portrait,
   .portfolio-mosaic__item--video-feature,
-  .portfolio-mosaic__item--video {
+  .portfolio-mosaic__item--video,
+  .portfolio-mosaic__item--gelato-row {
     grid-column: span 2;
+  }
+
+  .portfolio-fashion-row,
+  .portfolio-gelato-row {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-gelato-row__video,
+  .portfolio-gelato-row__grid {
+    grid-column: span 1;
+  }
+
+  .portfolio-gelato-row__grid {
+    min-height: 14rem;
   }
 
   .portfolio-mosaic__item--feature .portfolio-tile__media-shell,
   .portfolio-mosaic__item--wide .portfolio-tile__media-shell {
     aspect-ratio: 16 / 10;
+  }
+
+  .portfolio-mosaic__item--half .portfolio-tile__media-shell {
+    aspect-ratio: 4 / 5;
   }
 
   .portfolio-tile__overlay {
