@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
 import "./PortfolioPhoneMockup.css";
 
@@ -13,7 +13,14 @@ const INSTAGRAM_ICON = (
 
 function PortfolioPhoneMockup({ item, className = "", showCta = true, linkable = true }) {
   const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file));
+  const [isLoaded, setIsLoaded] = useState(false);
   const classNames = `portfolio-phone-mockup ${className}`.trim();
+  const shotClass = [
+    "portfolio-phone-mockup__shot",
+    isLoaded ? "portfolio-phone-mockup__shot--loaded" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
   const content = (
     <>
       <div className="portfolio-phone-mockup__device">
@@ -25,11 +32,12 @@ function PortfolioPhoneMockup({ item, className = "", showCta = true, linkable =
         <div ref={mediaRef} className="portfolio-phone-mockup__screen">
           {mediaSrc ? (
             <img
-              className="portfolio-phone-mockup__shot"
+              className={shotClass}
               src={mediaSrc}
               alt={`${item.title} Instagram profile preview`}
               loading="lazy"
               decoding="async"
+              onLoad={() => setIsLoaded(true)}
             />
           ) : (
             <div

@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import PageHero from "../../components/PageHero/PageHero";
-import PortfolioPhoneMockup from "../../components/PortfolioPhoneMockup/PortfolioPhoneMockup";
+import PortfolioTile, { PortfolioMedia } from "../../components/PortfolioTile/PortfolioTile";
 import portfolioGallery from "../../data/portfolioGallery";
-import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
-import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
 import "./Portfolio.css";
 
 const PADEL_ROW_IDS = new Set([
@@ -17,8 +15,20 @@ const PADEL_ROW_IDS = new Set([
 const GELATO_BRAND_IDS = new Set([
   "gelato-brand-product",
   "gelato-brand-logo",
-  "gelato-brand-system",
   "gelato-brand-interior",
+]);
+
+const ROADKING_IMAGE_IDS = new Set([
+  "roadking-rk1",
+  "roadking-rk2",
+  "roadking-rk3",
+]);
+
+const ROADKING_ROW_IDS = new Set([
+  "roadking-rk1",
+  "roadking-rk2",
+  "roadking-rk3",
+  "roadking-insta",
 ]);
 
 function buildMosaicEntries(items) {
@@ -36,11 +46,11 @@ function buildMosaicEntries(items) {
         j += 1;
       }
 
-      if (brandImages.length >= 4) {
+      if (brandImages.length >= 3) {
         entries.push({
           type: "gelato-row",
           video: item,
-          images: brandImages.slice(0, 4),
+          images: brandImages.slice(0, 3),
         });
         i += brandImages.length;
         continue;
@@ -48,6 +58,39 @@ function buildMosaicEntries(items) {
     }
 
     if (GELATO_BRAND_IDS.has(item.id)) {
+      continue;
+    }
+
+    if (item.id === "roadking-rk1") {
+      const posters = [];
+      let j = i;
+      while (j < items.length && ROADKING_IMAGE_IDS.has(items[j].id)) {
+        posters.push(items[j]);
+        j += 1;
+      }
+
+      const instaItem = items[j]?.id === "roadking-insta" ? items[j] : null;
+
+      if (posters.length === 3 && instaItem) {
+        const hero = posters.find((poster) => poster.id === "roadking-rk3");
+        const stack = posters.filter(
+          (poster) => poster.id === "roadking-rk1" || poster.id === "roadking-rk2"
+        );
+
+        if (hero && stack.length === 2) {
+          entries.push({
+            type: "roadking-row",
+            hero,
+            stack,
+            insta: instaItem,
+          });
+          i = j;
+          continue;
+        }
+      }
+    }
+
+    if (ROADKING_ROW_IDS.has(item.id)) {
       continue;
     }
 
@@ -63,173 +106,6 @@ function buildMosaicEntries(items) {
   return entries;
 }
 
-function PortfolioMedia({ item }) {
-  const hoverVideoRef = useRef(null);
-  const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file));
-  const viewportVideoRef = useInViewVideoPlayback({
-    enabled: item.type === "video" && Boolean(mediaSrc),
-    mobileOnly: true,
-    resetOnExit: true,
-    threshold: 0.5,
-  });
-  const [hasVideoError, setHasVideoError] = useState(false);
-
-  const playVideo = () => {
-    if (item.type !== "video" || !hoverVideoRef.current) {
-      return;
-    }
-
-    const video = hoverVideoRef.current;
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-
-    const playAttempt = video.play();
-    if (playAttempt && typeof playAttempt.catch === "function") {
-      playAttempt.catch(() => {});
-    }
-  };
-
-  const stopVideo = () => {
-    if (item.type !== "video" || !hoverVideoRef.current) {
-      return;
-    }
-
-    const video = hoverVideoRef.current;
-    video.pause();
-    video.currentTime = 0;
-  };
-
-  if (item.type === "video") {
-    return (
-      <div
-        ref={mediaRef}
-        className="portfolio-tile__media-shell portfolio-tile__media-shell--video"
-        tabIndex={0}
-        aria-label={`${item.title} video preview`}
-        onMouseEnter={playVideo}
-        onMouseLeave={stopVideo}
-        onFocus={playVideo}
-        onBlur={stopVideo}
-      >
-        {mediaSrc ? (
-          <video
-            ref={(node) => {
-              hoverVideoRef.current = node;
-              viewportVideoRef.current = node;
-            }}
-            className="portfolio-tile__media"
-            src={mediaSrc}
-            muted
-            loop
-            playsInline
-            preload="none"
-            onError={() => setHasVideoError(true)}
-          />
-        ) : (
-          <div
-            className="portfolio-tile__media portfolio-tile__media--placeholder"
-            aria-hidden
-          />
-        )}
-        <span className="portfolio-tile__play-hint">Hover to play</span>
-        {hasVideoError ? (
-          <span className="portfolio-tile__video-fallback">
-            Video preview unavailable
-          </span>
-        ) : null}
-      </div>
-    );
-  }
-
-  return (
-    <div ref={mediaRef} className="portfolio-tile__media-shell">
-      {mediaSrc ? (
-        <img
-          className="portfolio-tile__media"
-          src={mediaSrc}
-          alt={item.title}
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <div className="portfolio-tile__media portfolio-tile__media--placeholder" aria-hidden />
-      )}
-    </div>
-  );
-}
-
-const INSTAGRAM_LINK_ICON = (
-  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
-    <path
-      fill="currentColor"
-      d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.92 4.92 0 0 1 1.75 1.14 4.92 4.92 0 0 1 1.14 1.75c.163.46.349 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.92 4.92 0 0 1-1.14 1.75 4.92 4.92 0 0 1-1.75 1.14c-.46.163-1.26.349-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.92 4.92 0 0 1-1.75-1.14 4.92 4.92 0 0 1-1.14-1.75c-.163-.46-.349-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.92 4.92 0 0 1 1.14-1.75 4.92 4.92 0 0 1 1.75-1.14c.46-.163 1.26-.349 2.43-.403C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.775.13 4.902.333 4.14.63a6.92 6.92 0 0 0-2.51 1.64A6.92 6.92 0 0 0 .63 4.14C.333 4.902.13 5.775.072 7.052.014 8.332 0 8.741 0 12s.014 3.668.072 4.948c.058 1.277.261 2.15.558 2.912a6.92 6.92 0 0 0 1.64 2.51 6.92 6.92 0 0 0 2.51 1.64c.762.297 1.635.5 2.912.558C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.277-.058 2.15-.261 2.912-.558a6.92 6.92 0 0 0 2.51-1.64 6.92 6.92 0 0 0 1.64-2.51c.297-.762.5-1.635.558-2.912.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.058-1.277-.261-2.15-.558-2.912a6.92 6.92 0 0 0-1.64-2.51 6.92 6.92 0 0 0-2.51-1.64c-.762-.297-1.635-.5-2.912-.558C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"
-    />
-  </svg>
-);
-
-function PortfolioTileMeta({ item, placement = "overlay" }) {
-  const className =
-    placement === "foot" ? "portfolio-tile__foot" : "portfolio-tile__overlay";
-
-  return (
-    <div className={className}>
-      <div className="portfolio-tile__chips">
-        <span className="portfolio-tile__chip">{item.tag}</span>
-        <span className="portfolio-tile__chip portfolio-tile__chip--ghost">
-          {item.campaign}
-        </span>
-      </div>
-      <h3 className="portfolio-tile__title">{item.title}</h3>
-    </div>
-  );
-}
-
-function PortfolioTile({ item, metaPlacement = "overlay" }) {
-  const stacked = metaPlacement === "foot";
-  const tileClass = [
-    "portfolio-tile",
-    stacked ? "portfolio-tile--stacked" : "",
-    item.type === "instagram" ? "portfolio-tile--instagram" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  if (item.type === "instagram") {
-    return (
-      <article className={tileClass}>
-        {item.externalUrl ? (
-          <a
-            href={item.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="portfolio-tile__social-link"
-            aria-label={`Visit @${item.handle || "padelchase"} on Instagram (opens in new tab)`}
-          >
-            {INSTAGRAM_LINK_ICON}
-          </a>
-        ) : null}
-        <div className="portfolio-tile__media-shell portfolio-tile__media-shell--phone">
-          <PortfolioPhoneMockup
-            item={item}
-            showCta={false}
-            linkable={false}
-            className="portfolio-phone-mockup--tile"
-          />
-        </div>
-        <PortfolioTileMeta item={item} placement="foot" />
-      </article>
-    );
-  }
-
-  return (
-    <article className={tileClass}>
-      <PortfolioMedia item={item} />
-      <PortfolioTileMeta item={item} placement={metaPlacement} />
-    </article>
-  );
-}
-
 function PortfolioGelatoRow({ videoItem, imageItems }) {
   return (
     <ScrollSection
@@ -238,16 +114,117 @@ function PortfolioGelatoRow({ videoItem, imageItems }) {
     >
       <div className="portfolio-gelato-row">
         <div className="portfolio-gelato-row__video">
-          <PortfolioTile item={videoItem} metaPlacement="foot" />
+          <PortfolioTile
+            item={videoItem}
+            metaPlacement="overlay"
+            className="portfolio-tile--gelato-video"
+          />
         </div>
         <div className="portfolio-gelato-row__grid" aria-label="Gelato Bar brand guidelines">
           {imageItems.map((item) => (
-            <div key={item.id} className="portfolio-gelato-row__cell">
+            <div
+              key={item.id}
+              className={[
+                "portfolio-gelato-row__cell",
+                item.id === "gelato-brand-interior"
+                  ? "portfolio-gelato-row__cell--wide"
+                  : "",
+                item.id === "gelato-brand-logo"
+                  ? "portfolio-gelato-row__cell--logo"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
               <article className="portfolio-tile portfolio-tile--gelato-cell">
                 <PortfolioMedia item={item} />
               </article>
             </div>
           ))}
+        </div>
+      </div>
+    </ScrollSection>
+  );
+}
+
+function PortfolioRoadkingRow({ hero, stack, insta }) {
+  const heroRef = useRef(null);
+  const [instaHeight, setInstaHeight] = useState(null);
+
+  useEffect(() => {
+    const node = heroRef.current;
+    if (!node) {
+      return undefined;
+    }
+
+    let frameId;
+
+    const syncInstaHeight = () => {
+      const stackedLayout =
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 720px)").matches;
+
+      if (stackedLayout) {
+        setInstaHeight(null);
+        return;
+      }
+
+      setInstaHeight(Math.round(node.getBoundingClientRect().height));
+    };
+
+    const scheduleSync = () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+      frameId = requestAnimationFrame(syncInstaHeight);
+    };
+
+    scheduleSync();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", scheduleSync);
+      return () => {
+        window.removeEventListener("resize", scheduleSync);
+        if (frameId) {
+          cancelAnimationFrame(frameId);
+        }
+      };
+    }
+
+    const observer = new ResizeObserver(scheduleSync);
+    observer.observe(node);
+    window.addEventListener("resize", scheduleSync);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", scheduleSync);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }, [hero.id]);
+
+  return (
+    <ScrollSection
+      as="li"
+      className="portfolio-mosaic__item portfolio-mosaic__item--roadking-row"
+    >
+      <div className="portfolio-roadking-row" aria-label="Roadking campaign showcase">
+        <div ref={heroRef} className="portfolio-roadking-row__hero">
+          <PortfolioTile item={hero} metaPlacement="overlay" />
+        </div>
+        <div className="portfolio-roadking-row__stack" aria-label="Roadking launch and lifestyle posters">
+          {stack.map((item) => (
+            <div key={item.id} className="portfolio-roadking-row__stack-cell">
+              <PortfolioTile item={item} metaPlacement="overlay" />
+            </div>
+          ))}
+        </div>
+        <div
+          className="portfolio-roadking-row__insta"
+          style={instaHeight ? { height: `${instaHeight}px` } : undefined}
+        >
+          <PortfolioTile item={insta} metaPlacement="overlay" />
         </div>
       </div>
     </ScrollSection>
@@ -288,8 +265,11 @@ function Portfolio() {
     "gelato-video",
     "gelato-brand-product",
     "gelato-brand-logo",
-    "gelato-brand-system",
     "gelato-brand-interior",
+    "roadking-rk1",
+    "roadking-rk2",
+    "roadking-rk3",
+    "roadking-insta",
     "vibe-grid",
     "vibe-post",
     "eco-board",
@@ -360,10 +340,20 @@ function Portfolio() {
                     );
                   }
 
+                  if (entry.type === "roadking-row") {
+                    return (
+                      <PortfolioRoadkingRow
+                        key="roadking-row"
+                        hero={entry.hero}
+                        stack={entry.stack}
+                        insta={entry.insta}
+                      />
+                    );
+                  }
+
                   const { item } = entry;
                   const inEqualRow =
                     section.id === "ugc" && PADEL_ROW_IDS.has(item.id);
-                  const metaPlacement = inEqualRow ? "foot" : "overlay";
 
                   return (
                     <ScrollSection
@@ -377,7 +367,7 @@ function Portfolio() {
                         .filter(Boolean)
                         .join(" ")}
                     >
-                      <PortfolioTile item={item} metaPlacement={metaPlacement} />
+                      <PortfolioTile item={item} metaPlacement="overlay" />
                     </ScrollSection>
                   );
                 })}

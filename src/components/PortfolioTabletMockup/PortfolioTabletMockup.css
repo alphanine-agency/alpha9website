@@ -1,0 +1,90 @@
+.portfolio-tablet-mockup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio-tablet-mockup--tile {
+  padding: 0.4rem 0.5rem;
+}
+
+.portfolio-tablet-mockup__device {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  padding: 0.55rem 0.65rem;
+  border-radius: 1.1rem;
+  background: linear-gradient(
+    160deg,
+    #4a4a4a 0%,
+    #2a2a2a 30%,
+    #141414 70%,
+    #080808 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.85),
+    0 18px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.portfolio-tablet-mockup:hover .portfolio-tablet-mockup__device,
+.portfolio-tablet-mockup:focus-visible .portfolio-tablet-mockup__device {
+  border-color: rgba(0, 194, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.portfolio-tablet-mockup__camera {
+  position: absolute;
+  top: 0.42rem;
+  left: 50%;
+  z-index: 3;
+  width: 0.42rem;
+  height: 0.42rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2a2a2a, #050505 70%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+.portfolio-tablet-mockup__screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.45rem;
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.portfolio-tablet-mockup__shot {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.portfolio-tablet-mockup__shot--loaded {
+  opacity: 1;
+}
+
+.portfolio-tablet-mockup__shot--placeholder {
+  min-height: 8rem;
+  background: linear-gradient(145deg, #1a1a1a, #2a2a2a 45%, #141414);
+}

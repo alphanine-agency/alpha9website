@@ -5,8 +5,8 @@ import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import StaggerGroup from "../../components/StaggerGroup/StaggerGroup";
 import AnimatedCounter from "../../components/AnimatedCounter/AnimatedCounter";
 import portfolioGallery from "../../data/portfolioGallery";
-import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
-import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
+import PortfolioTile from "../../components/PortfolioTile/PortfolioTile";
+import LazyImage from "../../components/LazyImage/LazyImage";
 import waqarPortrait from "../../assets/team/optimized/waqar.jpg";
 import amirPortrait from "../../assets/team/optimized/amir.jpg";
 import abdullahPortrait from "../../assets/team/optimized/abdullah.jpg";
@@ -24,53 +24,15 @@ const teamPreview = [
   { name: "Abdullah", role: "Creative Head", portrait: abdullahPortrait },
 ];
 
-const featuredPortfolio = portfolioGallery.slice(0, 3);
+const PADEL_PREVIEW_IDS = [
+  "padel-chase-hero",
+  "padel-chase-gs",
+  "padel-chase-insta",
+];
 
-function HomePortfolioMedia({ item }) {
-  const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file));
-  const videoRef = useInViewVideoPlayback({
-    enabled: item.type === "video" && Boolean(mediaSrc),
-    resetOnExit: true,
-    threshold: 0.5,
-  });
-
-  if (item.type === "video") {
-    return (
-      <div ref={mediaRef} className="home-card__visual-shell">
-        {mediaSrc ? (
-          <video
-            ref={videoRef}
-            className="home-card__visual-media"
-            src={mediaSrc}
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-hidden
-          />
-        ) : (
-          <div className="home-card__visual-media home-card__visual-media--placeholder" aria-hidden />
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div ref={mediaRef} className="home-card__visual-shell">
-      {mediaSrc ? (
-        <img
-          className="home-card__visual-media"
-          src={mediaSrc}
-          alt={item.title}
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <div className="home-card__visual-media home-card__visual-media--placeholder" aria-hidden />
-      )}
-    </div>
-  );
-}
+const padelPreviewItems = PADEL_PREVIEW_IDS.map((id) =>
+  portfolioGallery.find((item) => item.id === id)
+).filter(Boolean);
 
 function Home() {
   useEffect(() => {
@@ -161,22 +123,9 @@ function Home() {
             </p>
           </header>
           <StaggerGroup as="ul" className="home-portfolio-preview__grid">
-            {featuredPortfolio.map((item) => (
-              <li key={item.id} className="home-card home-card--portfolio">
-                <div className="home-card__visual">
-                  <HomePortfolioMedia item={item} />
-                  <span className="home-card__visual-pill">{item.tag}</span>
-                </div>
-                <p className="home-card__meta">{item.campaign}</p>
-                <h3 className="home-card__title">{item.title}</h3>
-                <p className="home-card__desc">
-                  {item.section === "ai"
-                    ? "AI-generated motion creative crafted for rapid testing and polished campaign delivery."
-                    : "Real campaign content designed to feel native, premium, and ready for social distribution."}
-                </p>
-                <p className="home-card__result">
-                  {item.type === "video" ? "Motion-led showcase" : "Static creative showcase"}
-                </p>
+            {padelPreviewItems.map((item) => (
+              <li key={item.id} className="home-portfolio-preview__item">
+                <PortfolioTile item={item} metaPlacement="overlay" />
               </li>
             ))}
           </StaggerGroup>
@@ -200,14 +149,12 @@ function Home() {
           <StaggerGroup as="ul" className="home-team-preview__grid">
             {teamPreview.map((m) => (
               <li key={m.name} className="home-card home-card--team">
-                <img
+                <LazyImage
                   className="home-card__avatar"
                   src={m.portrait}
                   alt={`Illustrated profile placeholder for ${m.name}`}
                   width="320"
                   height="400"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <p className="home-card__name">{m.name}</p>
                 <p className="home-card__role">{m.role}</p>

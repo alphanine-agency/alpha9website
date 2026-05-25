@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import getMediaRootMargin from "../../utils/getMediaRootMargin";
 
 function LazyImage({
   src,
@@ -8,7 +9,7 @@ function LazyImage({
   height,
   sizes,
   fetchPriority,
-  rootMargin = "280px 0px",
+  rootMargin = getMediaRootMargin(false),
 }) {
   const imgRef = useRef(null);
   const [isVisible, setIsVisible] = useState(fetchPriority === "high");

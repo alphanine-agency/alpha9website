@@ -17,6 +17,7 @@ function useInViewVideoPlayback({
   resetOnExit = true,
   threshold = 0.45,
   rootMargin = "0px 0px -10% 0px",
+  pauseAtTime = 0,
 } = {}) {
   const videoRef = useRef(null);
 
@@ -45,7 +46,11 @@ function useInViewVideoPlayback({
       video.pause();
 
       if (resetOnExit) {
-        video.currentTime = 0;
+        try {
+          video.currentTime = pauseAtTime;
+        } catch {
+          video.currentTime = 0;
+        }
       }
     };
 
@@ -67,11 +72,20 @@ function useInViewVideoPlayback({
 
     observer.observe(video);
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stopVideo();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
       observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       stopVideo();
     };
-  }, [enabled, mobileOnly, resetOnExit, rootMargin, threshold]);
+  }, [enabled, mobileOnly, pauseAtTime, resetOnExit, rootMargin, threshold]);
 
   return videoRef;
 }

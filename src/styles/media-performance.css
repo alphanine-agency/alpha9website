@@ -1,0 +1,30 @@
+/*
+  Sitewide media rendering: smoother scroll, less main-thread decode jank.
+*/
+
+img,
+video {
+  max-width: 100%;
+}
+
+video {
+  content-visibility: auto;
+}
+
+.portfolio-mosaic__item,
+.home-portfolio-preview__item,
+.team-card-wrap,
+.portfolio-roadking-row__stack-cell {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+.portfolio-tile__media-shell,
+.lazy-media__shell {
+  contain: layout paint;
+}
+
+.lazy-media__img,
+.portfolio-tile__media {
+  content-visibility: auto;
+}
