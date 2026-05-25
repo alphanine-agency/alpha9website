@@ -14,9 +14,17 @@ video {
 .portfolio-mosaic__item,
 .home-portfolio-preview__item,
 .team-card-wrap,
-.portfolio-roadking-row__stack-cell {
+.portfolio-roadking-row__stack-cell,
+.home-card--team {
   content-visibility: auto;
   contain-intrinsic-size: auto 320px;
+}
+
+.home-card--team img,
+.team-card-wrap img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
 }
 
 .portfolio-tile__media-shell,

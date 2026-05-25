@@ -20,23 +20,32 @@
       type="image/webp"
       fetchpriority="high"
     />
-    <!-- Performance: DNS + connection to font hosts before first paint -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <!-- Suggested fonts: DM Sans (UI), Instrument Serif (display accents), Michroma (brand wordmark) -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
+    <!-- Fonts load after first paint (removes render-blocking + 3rd-party from critical path) -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("fonts-loading");
+        var href =
+          "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap";
+        function loadFonts() {
+          var link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          link.media = "print";
+          link.onload = function () {
+            link.media = "all";
+            root.classList.remove("fonts-loading");
+            root.classList.add("fonts-loaded");
+          };
+          document.head.appendChild(link);
+        }
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(loadFonts, { timeout: 2800 });
+        } else {
+          window.addEventListener("load", loadFonts, { once: true });
+        }
+      })();
+    </script>
     <noscript>
       <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap"

@@ -8,7 +8,7 @@ import "./Hero.css";
 
 const HeroScene = lazy(() => import("./HeroScene"));
 
-const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 10 }, (_, i) => ({
   id: i,
   left: `${(i * 17 + 11) % 94}%`,
   top: `${(i * 23 + 7) % 88}%`,
@@ -26,7 +26,7 @@ function HeroScenePlaceholder() {
 
 function Hero() {
   const reduceMotion = useReducedMotion();
-  const showScene = useDeferredMount({ timeout: 2200, enabled: !reduceMotion });
+  const showScene = useDeferredMount({ enabled: !reduceMotion });
 
   return (
     <section className="hero" aria-labelledby="hero-heading">
@@ -53,7 +53,7 @@ function Hero() {
           <m.div
             className="hero__content"
             variants={heroStagger}
-            initial="hidden"
+            initial={false}
             animate="visible"
           >
             <m.p className="hero__eyebrow" variants={heroItem}>
@@ -110,9 +110,8 @@ function Hero() {
 
           <m.div
             className="hero__visual"
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            initial={false}
+            animate={{ opacity: 1 }}
           >
             <div className="hero__scene-shell">
               <div className="hero__scene-glow" aria-hidden />

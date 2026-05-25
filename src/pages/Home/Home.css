@@ -1,5 +1,12 @@
 .home-section {
   padding: var(--space-2xl, 6rem) var(--space-md, 1.5rem);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+.home .hero {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
 }
 
 .home-section__inner {
@@ -355,6 +362,7 @@
   gap: 1rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
+  min-height: clamp(16rem, 28vw, 22rem);
 }
 
 .home-portfolio-preview__item {
@@ -411,6 +419,7 @@
   display: grid;
   gap: var(--space-md, 1.5rem);
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  min-height: clamp(14rem, 22vw, 18rem);
 }
 
 .home-card--team {

@@ -1,4 +1,4 @@
-import React, { useCallback, useId, useState } from "react";
+import React, { useCallback, useId, useRef, useState } from "react";
 import {
   m,
   useMotionValue,
@@ -100,25 +100,48 @@ function HeroScene() {
   const parallaxY = useSpring(pointerY, { stiffness: 140, damping: 22 });
 
   const activate = useCallback((id) => setActive(id), []);
+  const pointerFrameRef = useRef(null);
+  const pointerEventRef = useRef(null);
 
   const onPointerMove = useCallback(
     (event) => {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width - 0.5;
-      const py = (event.clientY - rect.top) / rect.height - 0.5;
-      if (!reduceMotion) {
-        pointerX.set(px * 22);
-        pointerY.set(py * 18);
+      pointerEventRef.current = event;
+
+      if (pointerFrameRef.current !== null) {
+        return;
       }
-      setSpot({
-        x: ((event.clientX - rect.left) / rect.width) * 100,
-        y: ((event.clientY - rect.top) / rect.height) * 100,
+
+      pointerFrameRef.current = window.requestAnimationFrame(() => {
+        pointerFrameRef.current = null;
+        const latest = pointerEventRef.current;
+        if (!latest) {
+          return;
+        }
+
+        const rect = latest.currentTarget.getBoundingClientRect();
+        const px = (latest.clientX - rect.left) / rect.width - 0.5;
+        const py = (latest.clientY - rect.top) / rect.height - 0.5;
+
+        if (!reduceMotion) {
+          pointerX.set(px * 22);
+          pointerY.set(py * 18);
+        }
+
+        setSpot({
+          x: ((latest.clientX - rect.left) / rect.width) * 100,
+          y: ((latest.clientY - rect.top) / rect.height) * 100,
+        });
       });
     },
     [pointerX, pointerY, reduceMotion]
   );
 
   const onPointerLeave = useCallback(() => {
+    if (pointerFrameRef.current !== null) {
+      window.cancelAnimationFrame(pointerFrameRef.current);
+      pointerFrameRef.current = null;
+    }
+    pointerEventRef.current = null;
     setActive(null);
     pointerX.set(0);
     pointerY.set(0);
