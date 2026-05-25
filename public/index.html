@@ -12,6 +12,14 @@
       name="description"
       content="AlphaNineMarketing — premium digital marketing, AI automation, ads, content, and web design for brands that want to scale."
     />
+    <!-- LCP: navbar logo is discoverable in HTML before JS -->
+    <link
+      rel="preload"
+      href="%PUBLIC_URL%/logo-nav.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
     <!-- Performance: DNS + connection to font hosts before first paint -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

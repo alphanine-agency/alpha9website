@@ -1,13 +1,14 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { fadeUp } from "../../motion/presets";
 import "./ScrollSection.css";
 
 const motionTags = {
-  section: motion.section,
-  div: motion.div,
-  article: motion.article,
-  header: motion.header,
+  section: m.section,
+  div: m.div,
+  article: m.article,
+  header: m.header,
+  li: m.li,
 };
 
 function ScrollSection({ children, className = "", as: Tag = "motion.div", ...rest }) {
@@ -25,7 +26,7 @@ function ScrollSection({ children, className = "", as: Tag = "motion.div", ...re
     );
   }
 
-  const MotionTag = motionTags[Tag] || motion.div;
+  const MotionTag = motionTags[Tag] || m.div;
 
   return (
     <MotionTag

@@ -1,6 +1,6 @@
 import React, { useCallback, useId, useState } from "react";
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -43,7 +43,7 @@ function ScenePanel({
   const dimmed = active && !isActive;
 
   return (
-    <motion.g
+    <m.g
       className={`hero-scene__panel${isActive ? " is-active" : ""}${dimmed ? " is-dimmed" : ""}`}
       {...float(reduceMotion, floatDelay, 7)}
       style={{
@@ -83,7 +83,7 @@ function ScenePanel({
         />
       ) : null}
       {children}
-    </motion.g>
+    </m.g>
   );
 }
 
@@ -138,7 +138,7 @@ function HeroScene() {
   };
 
   return (
-    <motion.div
+    <m.div
       className={`hero-scene${active ? " hero-scene--has-active" : ""}`}
       initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -148,7 +148,7 @@ function HeroScene() {
       role="group"
       aria-label="Interactive view of Alpha Nine marketing capabilities"
     >
-      <motion.div
+      <m.div
         className="hero-scene__spotlight"
         aria-hidden
         animate={
@@ -212,12 +212,12 @@ function HeroScene() {
           filter={`url(#${uid}-blur)`}
         />
 
-        <motion.g style={{ x: parallaxX, y: parallaxY }}>
+        <m.g style={{ x: parallaxX, y: parallaxY }}>
           {/* Connectors */}
           {Object.keys(PANELS).map((panelId) => {
             const lit = !active || active === panelId;
             return (
-              <motion.path
+              <m.path
                 key={panelId}
                 d={connectorPath(panelId)}
                 stroke={g("grad")}
@@ -231,7 +231,7 @@ function HeroScene() {
           })}
 
           {Object.entries(PANELS).map(([panelId, { node }], i) => (
-            <motion.circle
+            <m.circle
               key={panelId}
               cx={node[0]}
               cy={node[1]}
@@ -259,7 +259,7 @@ function HeroScene() {
           ))}
 
           {/* Central hub */}
-          <motion.g
+          <m.g
             className={`hero-scene__panel hero-scene__panel--hub${active === "hub" ? " is-active" : ""}${active && active !== "hub" ? " is-dimmed" : ""}`}
             {...float(reduceMotion, 0, 6)}
             style={{ cursor: reduceMotion ? "default" : "pointer", transformOrigin: "260px 252px" }}
@@ -303,9 +303,9 @@ function HeroScene() {
               fill="none"
               strokeLinecap="round"
             />
-            <motion.circle cx="304" cy="196" r="5" fill="#4DEBFF" {...pulse} />
+            <m.circle cx="304" cy="196" r="5" fill="#4DEBFF" {...pulse} />
             <rect x="184" y="272" width="148" height="8" rx="2" fill="rgba(77,235,255,0.18)" />
-            <motion.rect
+            <m.rect
               x="184"
               y="272"
               width={active === "hub" ? 148 : 92}
@@ -329,7 +329,7 @@ function HeroScene() {
             >
               9
             </text>
-          </motion.g>
+          </m.g>
 
           <ScenePanel
             id="meta"
@@ -481,7 +481,7 @@ function HeroScene() {
             <path d="M98 384l22 14-22 14z" fill={g("grad")} opacity="0.85" />
             <rect x="154" y="378" width="10" height="32" rx="2" fill="#101820" stroke="#00C2FF" strokeWidth="1" />
             <rect x="76" y="422" width="72" height="6" rx="3" fill="#141c22" />
-            <motion.rect
+            <m.rect
               x="76"
               y="422"
               width={active === "creative" ? 72 : 34}
@@ -504,7 +504,7 @@ function HeroScene() {
           {!reduceMotion &&
             (active === "leads" || active === "hub") &&
             [0, 1, 2].map((i) => (
-              <motion.circle
+              <m.circle
                 key={`flow-${i}`}
                 r="3"
                 fill="#4DEBFF"
@@ -521,16 +521,16 @@ function HeroScene() {
                 }}
               />
             ))}
-        </motion.g>
+        </m.g>
       </svg>
 
-      <motion.div
+      <m.div
         className="hero-scene__ring"
         aria-hidden
         animate={reduceMotion ? false : { rotate: 360 }}
         transition={{ duration: 52, repeat: Infinity, ease: "linear" }}
       />
-    </motion.div>
+    </m.div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import TypewriterText from "../TypewriterText/TypewriterText";
 import { heroItem, heroStagger } from "../../motion/presets";
 
@@ -29,16 +29,16 @@ function PageHero({ baseClass, eyebrow, title, lede, children, typeDelay = 380 }
 
   return (
     <header className={baseClass}>
-      <motion.div
+      <m.div
         className={innerClass}
         variants={heroStagger}
         initial="hidden"
         animate="visible"
       >
         {eyebrow ? (
-          <motion.p className={`${baseClass}__eyebrow`} variants={heroItem}>
+          <m.p className={`${baseClass}__eyebrow`} variants={heroItem}>
             {eyebrow}
-          </motion.p>
+          </m.p>
         ) : null}
         <TypewriterText
           as="h1"
@@ -47,10 +47,10 @@ function PageHero({ baseClass, eyebrow, title, lede, children, typeDelay = 380 }
           delay={typeDelay}
         />
         {lede ? (
-          <motion.p
+          <m.p
             className={`${baseClass}__lede`}
-            initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               delay: ledeDelay / 1000,
               duration: 0.55,
@@ -58,12 +58,10 @@ function PageHero({ baseClass, eyebrow, title, lede, children, typeDelay = 380 }
             }}
           >
             {lede}
-          </motion.p>
+          </m.p>
         ) : null}
-        {children ? (
-          <motion.div variants={heroItem}>{children}</motion.div>
-        ) : null}
-      </motion.div>
+        {children ? <m.div variants={heroItem}>{children}</m.div> : null}
+      </m.div>
     </header>
   );
 }

@@ -6,8 +6,9 @@
     radial-gradient(ellipse 90% 60% at 50% 0%, rgba(0, 194, 255, 0.08), transparent 55%),
     linear-gradient(180deg, #0e0e0e 0%, var(--color-matte) 100%);
   color: var(--color-text);
-  contain: layout style;
+  contain: layout style paint;
   overflow: hidden;
+  min-height: 22rem;
 }
 
 .footer__glow {
@@ -55,8 +56,8 @@
   display: block;
   flex-shrink: 0;
   width: 3.5rem;
-  height: auto;
-  max-height: 4.5rem;
+  height: 4.5rem;
+  aspect-ratio: 56 / 72;
   object-fit: contain;
   filter: drop-shadow(0 0 16px rgba(0, 194, 255, 0.35));
 }

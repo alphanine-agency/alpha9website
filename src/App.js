@@ -3,8 +3,9 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
-import CursorGlow from "./components/CursorGlow/CursorGlow";
 import PageLoader from "./components/PageLoader/PageLoader";
+
+const CursorGlow = lazy(() => import("./components/CursorGlow/CursorGlow"));
 
 /*
   Performance: code-split routes so initial bundle stays smaller (better TTI/FCP tradeoffs on inner pages).
@@ -20,7 +21,9 @@ function App() {
     <BrowserRouter>
       <div className="app">
         <div className="app__ambient" aria-hidden />
-        <CursorGlow />
+        <Suspense fallback={null}>
+          <CursorGlow />
+        </Suspense>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>

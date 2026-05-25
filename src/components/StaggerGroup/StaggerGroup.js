@@ -1,12 +1,12 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { staggerContainer, staggerItem } from "../../motion/presets";
 
 const motionTags = {
-  ul: motion.ul,
-  ol: motion.ol,
-  div: motion.div,
-  section: motion.section,
+  ul: m.ul,
+  ol: m.ol,
+  div: m.div,
+  section: m.section,
 };
 
 function isIntrinsicElement(child) {
@@ -23,13 +23,13 @@ function StaggerGroup({
   const reduceMotion = useReducedMotion();
   const StaticTag = as;
   const isList = as === "ul" || as === "ol";
-  const defaultItem = isList ? motion.li : motion.div;
+  const defaultItem = isList ? m.li : m.div;
 
   if (reduceMotion) {
     return <StaticTag className={className}>{children}</StaticTag>;
   }
 
-  const Tag = motionTags[as] || motion.div;
+  const Tag = motionTags[as] || m.div;
 
   return (
     <Tag
@@ -44,12 +44,12 @@ function StaggerGroup({
 
         if (!isIntrinsicElement(child)) {
           return React.cloneElement(child, {
-            as: isList ? motion.li : defaultItem,
+            as: isList ? m.li : defaultItem,
             variants: staggerItem,
           });
         }
 
-        const ItemTag = motion[child.type] || defaultItem;
+        const ItemTag = m[child.type] || defaultItem;
 
         return (
           <ItemTag

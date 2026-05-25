@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import footerLogo from "../../assets/logo2.png";
+import footerLogoWebp from "../../assets/optimized/logo-footer.webp";
 import BrandMark from "../BrandMark/BrandMark";
 import { servicesList } from "../../data/services";
 import { socialLinks } from "../../data/socialLinks";
@@ -27,11 +27,12 @@ function Footer() {
             <div className="footer__brand">
               <img
                 className="footer__icon"
-                src={footerLogo}
+                src={footerLogoWebp}
                 alt="Alpha Nine Marketing"
                 width="56"
                 height="72"
                 decoding="async"
+                loading="lazy"
               />
               <div>
                 <BrandMark />

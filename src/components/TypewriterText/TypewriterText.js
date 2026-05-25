@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 import "./TypewriterText.css";
 
 function buildFullText(text, segments) {
@@ -47,21 +47,23 @@ function TypewriterText({
   delay = 320,
   showCursor = true,
   startOnMount = true,
+  priority = false,
   id,
   ...rest
 }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const fullText = useMemo(
     () => buildFullText(text, segments),
     [text, segments]
   );
+  const instantReveal = priority || reduceMotion;
   const [charCount, setCharCount] = useState(() =>
-    reduceMotion ? fullText.length : 0
+    instantReveal ? fullText.length : 0
   );
-  const [done, setDone] = useState(reduceMotion);
+  const [done, setDone] = useState(instantReveal);
 
   useEffect(() => {
-    if (!startOnMount || reduceMotion) {
+    if (!startOnMount || instantReveal) {
       setCharCount(fullText.length);
       setDone(true);
       return undefined;
@@ -88,7 +90,7 @@ function TypewriterText({
       window.clearTimeout(delayId);
       if (intervalId) window.clearInterval(intervalId);
     };
-  }, [fullText, reduceMotion, speed, delay, startOnMount]);
+  }, [fullText, instantReveal, speed, delay, startOnMount]);
 
   const isTyping = !done && charCount < fullText.length;
 
@@ -107,7 +109,7 @@ function TypewriterText({
       {...rest}
     >
       {renderTyped(segments, text, charCount)}
-      {showCursor && !reduceMotion ? (
+      {showCursor && !instantReveal ? (
         <span
           className={`typewriter-cursor${isTyping ? "" : " typewriter-cursor--idle"}`}
           aria-hidden

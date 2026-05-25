@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 import "./AnimatedCounter.css";
 
 function AnimatedCounter({ value, suffix = "", duration = 1600, label }) {
   const ref = useRef(null);
   const [display, setDisplay] = useState(0);
   const [started, setStarted] = useState(false);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;

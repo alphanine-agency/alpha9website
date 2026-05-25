@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { staggerContainer, staggerItem } from "../../motion/presets";
 import "./Timeline.css";
 
@@ -27,7 +27,7 @@ function Timeline({ items, className = "" }) {
   }
 
   return (
-    <motion.ol
+    <m.ol
       className={`timeline ${className}`.trim()}
       variants={staggerContainer}
       initial="hidden"
@@ -35,7 +35,7 @@ function Timeline({ items, className = "" }) {
       viewport={{ once: true, amount: 0.2 }}
     >
       {items.map((item, index) => (
-        <motion.li
+        <m.li
           key={item.id}
           className="timeline__step"
           variants={staggerItem}
@@ -52,9 +52,9 @@ function Timeline({ items, className = "" }) {
             ) : null}
             <p className="timeline__body">{item.body}</p>
           </div>
-        </motion.li>
+        </m.li>
       ))}
-    </motion.ol>
+    </m.ol>
   );
 }
 

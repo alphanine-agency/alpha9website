@@ -1,11 +1,10 @@
 export const easePremium = [0.22, 1, 0.36, 1];
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 28, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.7, ease: easePremium },
   },
 };
@@ -26,12 +25,11 @@ export const staggerContainer = {
 };
 
 export const staggerItem = {
-  hidden: { opacity: 0, y: 22, scale: 0.98, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 22, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: "blur(0px)",
     transition: { duration: 0.55, ease: easePremium },
   },
 };
@@ -44,11 +42,10 @@ export const heroStagger = {
 };
 
 export const heroItem = {
-  hidden: { opacity: 0, y: 24, filter: "blur(12px)" },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: { duration: 0.75, ease: easePremium },
   },
 };

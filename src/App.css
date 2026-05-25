@@ -78,6 +78,8 @@
   z-index: 1;
   width: 100%;
   min-width: 0;
+  /* Reserve space so lazy routes / media do not shove the footer (CLS). */
+  min-height: min(72vh, calc(100dvh - 12rem));
 }
 
 .app-main > .page-loader {

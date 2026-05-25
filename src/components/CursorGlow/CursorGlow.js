@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -61,7 +61,7 @@ function CursorGlow() {
   }
 
   return (
-    <motion.div
+    <m.div
       className="cursor-glow"
       aria-hidden
       style={{ x: smoothX, y: smoothY }}
@@ -70,7 +70,7 @@ function CursorGlow() {
     >
       <span className="cursor-glow__core" />
       <span className="cursor-glow__ring" />
-    </motion.div>
+    </m.div>
   );
 }
 

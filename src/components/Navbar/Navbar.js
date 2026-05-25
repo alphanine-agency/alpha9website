@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import homeLogoWebp from "../../assets/optimized/logo-nav.webp";
-import homeLogo from "../../assets/optimized/logo-nav.png";
 import BrandMark from "../BrandMark/BrandMark";
 import "./Navbar.css";
+
+const NAV_LOGO_WEBP = `${process.env.PUBLIC_URL}/logo-nav.webp`;
 
 const navItems = [
   { to: "/", label: "Home", end: true },
@@ -23,9 +23,6 @@ function Navbar() {
     location.pathname === "/services" ||
     location.pathname === "/portfolio" ||
     location.pathname === "/contact";
-  const brandLogoWebp = homeLogoWebp;
-  const brandLogo = homeLogo;
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -73,17 +70,15 @@ function Navbar() {
             onClick={closeMenu}
             aria-label="AlphaNineMarketing home"
           >
-            <picture className="navbar__brand-picture">
-              <source srcSet={brandLogoWebp} type="image/webp" />
-              <img
-                className="navbar__brand-icon"
-                src={brandLogo}
-                alt=""
-                width="40"
-                height="40"
-                decoding="async"
-              />
-            </picture>
+            <img
+              className="navbar__brand-icon"
+              src={NAV_LOGO_WEBP}
+              alt=""
+              width="40"
+              height="40"
+              decoding="async"
+              fetchPriority="high"
+            />
             <BrandMark compact />
           </NavLink>
 
