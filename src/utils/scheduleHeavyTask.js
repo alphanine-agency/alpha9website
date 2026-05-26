@@ -1,9 +1,16 @@
-const MAX_CONCURRENT = 2;
+import { isMobileLiteMode } from "../hooks/useMobileLite";
+
+function getMaxConcurrent() {
+  return isMobileLiteMode() ? 1 : 2;
+}
+
+let maxConcurrent = getMaxConcurrent();
 let activeCount = 0;
 const queue = [];
 
 function drainQueue() {
-  while (activeCount < MAX_CONCURRENT && queue.length > 0) {
+  maxConcurrent = getMaxConcurrent();
+  while (activeCount < maxConcurrent && queue.length > 0) {
     const start = queue.shift();
     start();
   }
@@ -23,7 +30,8 @@ function scheduleHeavyTask(task) {
         });
     };
 
-    if (activeCount < MAX_CONCURRENT) {
+    maxConcurrent = getMaxConcurrent();
+    if (activeCount < maxConcurrent) {
       run();
     } else {
       queue.push(run);

@@ -1,18 +1,20 @@
 import React, { useCallback, useRef, useState } from "react";
 import useInViewVideoPlayback from "../../hooks/useInViewVideoPlayback";
 import useLazyMediaSrc from "../../hooks/useLazyMediaSrc";
+import useMobileLite from "../../hooks/useMobileLite";
 import { getPortfolioMedia } from "../../utils/getPortfolioMedia";
 
 const POSTER_SEEK_TIME = 0.05;
 
 function PortfolioVideoMedia({ item }) {
+  const mobileLite = useMobileLite();
   const hoverVideoRef = useRef(null);
   const [mediaRef, mediaSrc] = useLazyMediaSrc(item.file, Boolean(item.file), {
     isVideo: true,
   });
   const viewportVideoRef = useInViewVideoPlayback({
-    enabled: Boolean(mediaSrc),
-    mobileOnly: true,
+    enabled: Boolean(mediaSrc) && !mobileLite,
+    mobileOnly: false,
     resetOnExit: true,
     threshold: 0.5,
     pauseAtTime: POSTER_SEEK_TIME,
@@ -93,8 +95,17 @@ function PortfolioVideoMedia({ item }) {
 
   const handlePlay = () => setIsPlaying(true);
   const handlePause = () => {
-    if (!isHovered) {
+    if (mobileLite || !isHovered) {
       setIsPlaying(false);
+    }
+  };
+
+  const togglePlayback = (event) => {
+    event.stopPropagation();
+    if (isPlaying) {
+      stopVideo();
+    } else {
+      playVideo();
     }
   };
 
@@ -106,10 +117,10 @@ function PortfolioVideoMedia({ item }) {
       className="portfolio-tile__media-shell portfolio-tile__media-shell--video"
       tabIndex={0}
       aria-label={`${item.title} video preview`}
-      onMouseEnter={playVideo}
-      onMouseLeave={stopVideo}
-      onFocus={playVideo}
-      onBlur={stopVideo}
+      onMouseEnter={mobileLite ? undefined : playVideo}
+      onMouseLeave={mobileLite ? undefined : stopVideo}
+      onFocus={mobileLite ? undefined : playVideo}
+      onBlur={mobileLite ? undefined : stopVideo}
     >
       {!videoVisible ? (
         <div className="portfolio-tile__video-poster-placeholder" aria-hidden />
@@ -159,16 +170,43 @@ function PortfolioVideoMedia({ item }) {
         />
       )}
 
-      <span
-        className={[
-          "portfolio-tile__play-hint",
-          isPlaying ? "portfolio-tile__play-hint--hidden" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        Hover to play
-      </span>
+      {mobileLite && mediaSrc && !hasVideoError ? (
+        <button
+          type="button"
+          className={[
+            "portfolio-tile__reels-control",
+            isPlaying ? "portfolio-tile__reels-control--playing" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          onClick={togglePlayback}
+          aria-label={isPlaying ? `Pause ${item.title} video` : `Play ${item.title} video`}
+          aria-pressed={isPlaying}
+        >
+          <span className="portfolio-tile__reels-control-ring" aria-hidden />
+          {isPlaying ? (
+            <span className="portfolio-tile__reels-icon portfolio-tile__reels-icon--pause" aria-hidden>
+              <span className="portfolio-tile__reels-bar" />
+              <span className="portfolio-tile__reels-bar" />
+            </span>
+          ) : (
+            <span className="portfolio-tile__reels-icon portfolio-tile__reels-icon--play" aria-hidden />
+          )}
+        </button>
+      ) : null}
+
+      {!mobileLite ? (
+        <span
+          className={[
+            "portfolio-tile__play-hint",
+            isPlaying ? "portfolio-tile__play-hint--hidden" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          Hover to play
+        </span>
+      ) : null}
       {hasVideoError ? (
         <span className="portfolio-tile__video-fallback">Video preview unavailable</span>
       ) : null}

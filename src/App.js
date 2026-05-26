@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import PageLoader from "./components/PageLoader/PageLoader";
+import MobileLiteRoot from "./components/MobileLiteRoot/MobileLiteRoot";
 
 const CursorGlow = lazy(() => import("./components/CursorGlow/CursorGlow"));
 
@@ -19,6 +20,7 @@ const Contact = lazy(() => import("./pages/Contact/Contact"));
 function App() {
   return (
     <BrowserRouter>
+      <MobileLiteRoot>
       <div className="app">
         <div className="app__ambient" aria-hidden />
         <Suspense fallback={null}>
@@ -42,6 +44,7 @@ function App() {
         </main>
         <Footer />
       </div>
+      </MobileLiteRoot>
     </BrowserRouter>
   );
 }

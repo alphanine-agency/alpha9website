@@ -1,13 +1,15 @@
 import React from "react";
 import { m, useReducedMotion } from "framer-motion";
+import useMobileLite from "../../hooks/useMobileLite";
 import TypewriterText from "../TypewriterText/TypewriterText";
 import { heroItem, heroStagger } from "../../motion/presets";
 
 function PageHero({ baseClass, eyebrow, title, lede, children, typeDelay = 380 }) {
   const reduceMotion = useReducedMotion();
+  const mobileLite = useMobileLite();
   const innerClass = `${baseClass}__inner`;
 
-  if (reduceMotion) {
+  if (reduceMotion || mobileLite) {
     return (
       <header className={baseClass}>
         <div className={innerClass}>

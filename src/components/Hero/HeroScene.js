@@ -100,12 +100,16 @@ function HeroScene() {
   const parallaxY = useSpring(pointerY, { stiffness: 140, damping: 22 });
 
   const activate = useCallback((id) => setActive(id), []);
+  const sceneRef = useRef(null);
   const pointerFrameRef = useRef(null);
-  const pointerEventRef = useRef(null);
+  const pointerCoordsRef = useRef(null);
 
   const onPointerMove = useCallback(
     (event) => {
-      pointerEventRef.current = event;
+      pointerCoordsRef.current = {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      };
 
       if (pointerFrameRef.current !== null) {
         return;
@@ -113,14 +117,19 @@ function HeroScene() {
 
       pointerFrameRef.current = window.requestAnimationFrame(() => {
         pointerFrameRef.current = null;
-        const latest = pointerEventRef.current;
-        if (!latest) {
+        const node = sceneRef.current;
+        const coords = pointerCoordsRef.current;
+        if (!node || !coords) {
           return;
         }
 
-        const rect = latest.currentTarget.getBoundingClientRect();
-        const px = (latest.clientX - rect.left) / rect.width - 0.5;
-        const py = (latest.clientY - rect.top) / rect.height - 0.5;
+        const rect = node.getBoundingClientRect();
+        if (!rect.width || !rect.height) {
+          return;
+        }
+
+        const px = (coords.clientX - rect.left) / rect.width - 0.5;
+        const py = (coords.clientY - rect.top) / rect.height - 0.5;
 
         if (!reduceMotion) {
           pointerX.set(px * 22);
@@ -128,8 +137,8 @@ function HeroScene() {
         }
 
         setSpot({
-          x: ((latest.clientX - rect.left) / rect.width) * 100,
-          y: ((latest.clientY - rect.top) / rect.height) * 100,
+          x: ((coords.clientX - rect.left) / rect.width) * 100,
+          y: ((coords.clientY - rect.top) / rect.height) * 100,
         });
       });
     },
@@ -141,7 +150,7 @@ function HeroScene() {
       window.cancelAnimationFrame(pointerFrameRef.current);
       pointerFrameRef.current = null;
     }
-    pointerEventRef.current = null;
+    pointerCoordsRef.current = null;
     setActive(null);
     pointerX.set(0);
     pointerY.set(0);
@@ -162,6 +171,7 @@ function HeroScene() {
 
   return (
     <m.div
+      ref={sceneRef}
       className={`hero-scene${active ? " hero-scene--has-active" : ""}`}
       initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}

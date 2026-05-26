@@ -1,0 +1,102 @@
+/*
+  Mobile / touch: cut scroll jank from blur, infinite animations, and motion observers.
+*/
+
+@media (max-width: 820px), (hover: none), (pointer: coarse) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .app__ambient::before,
+  .app__ambient::after,
+  .hero__mesh--animated,
+  .hero__mesh--animated-slow,
+  .hero__particle,
+  .portfolio-tile__play-hint,
+  .lazy-media__shell::after,
+  .portfolio-tile__video-poster-placeholder,
+  .hero-scene__panel-glow,
+  .svc-art__pulse {
+    animation: none !important;
+  }
+
+  .hero__particles {
+    display: none;
+  }
+
+  .glass-card,
+  .navbar__shell,
+  .navbar__nav,
+  .home-card,
+  .services-card,
+  .portfolio-tile,
+  .portfolio-tile__overlay,
+  .portfolio-tile__play-hint,
+  .portfolio-tile__social-link,
+  .about-team-card,
+  .about-principle-card,
+  .contact-form,
+  .contact-social__link,
+  .hero__scene-shell,
+  .hero__stat,
+  .timeline__content,
+  .service-card,
+  .footer {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .hero__scene-glow,
+  .cursor-glow {
+    display: none !important;
+  }
+
+  .scroll-section {
+    will-change: auto;
+  }
+
+  .home-section {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  .portfolio-mosaic__item,
+  .home-portfolio-preview__item,
+  .team-card-wrap,
+  .portfolio-roadking-row__stack-cell,
+  .home-card--team {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
+  .home-card,
+  .services-card,
+  .portfolio-tile,
+  .about-team-card,
+  .about-principle-card,
+  .contact-social__link,
+  .contact-form__submit,
+  .btn-premium,
+  .text-link-premium {
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      background var(--transition-fast);
+  }
+
+  .glass-card:hover,
+  .home-card:hover,
+  .services-card:hover,
+  .portfolio-tile:hover {
+    transform: none;
+  }
+}
+
+html.mobile-lite .app__ambient::before,
+html.mobile-lite .hero__particle {
+  animation: none !important;
+}
+
+html.mobile-lite .hero__particles {
+  display: none;
+}

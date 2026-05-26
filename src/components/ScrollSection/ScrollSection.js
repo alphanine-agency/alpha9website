@@ -1,5 +1,6 @@
 import React from "react";
 import { m, useReducedMotion } from "framer-motion";
+import useMobileLite from "../../hooks/useMobileLite";
 import { fadeUp } from "../../motion/presets";
 import "./ScrollSection.css";
 
@@ -13,9 +14,10 @@ const motionTags = {
 
 function ScrollSection({ children, className = "", as: Tag = "motion.div", ...rest }) {
   const reduceMotion = useReducedMotion();
+  const mobileLite = useMobileLite();
   const StaticTag = Tag;
 
-  if (reduceMotion) {
+  if (reduceMotion || mobileLite) {
     return (
       <StaticTag
         className={`scroll-section scroll-section--visible ${className}`.trim()}

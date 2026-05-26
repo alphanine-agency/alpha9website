@@ -1,5 +1,6 @@
 import React from "react";
 import { m, useReducedMotion } from "framer-motion";
+import useMobileLite from "../../hooks/useMobileLite";
 import { staggerContainer, staggerItem } from "../../motion/presets";
 
 const motionTags = {
@@ -21,11 +22,12 @@ function StaggerGroup({
   amount = 0.06,
 }) {
   const reduceMotion = useReducedMotion();
+  const mobileLite = useMobileLite();
   const StaticTag = as;
   const isList = as === "ul" || as === "ol";
   const defaultItem = isList ? m.li : m.div;
 
-  if (reduceMotion) {
+  if (reduceMotion || mobileLite) {
     return <StaticTag className={className}>{children}</StaticTag>;
   }
 

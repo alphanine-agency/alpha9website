@@ -1,12 +1,14 @@
 import React from "react";
 import { m, useReducedMotion } from "framer-motion";
+import useMobileLite from "../../hooks/useMobileLite";
 import { staggerContainer, staggerItem } from "../../motion/presets";
 import "./Timeline.css";
 
 function Timeline({ items, className = "" }) {
   const reduceMotion = useReducedMotion();
+  const mobileLite = useMobileLite();
 
-  if (reduceMotion) {
+  if (reduceMotion || mobileLite) {
     return (
       <ol className={`timeline ${className}`.trim()}>
         {items.map((item) => (

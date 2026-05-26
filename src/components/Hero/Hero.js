@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { m, useReducedMotion } from "framer-motion";
 import TypewriterText from "../TypewriterText/TypewriterText";
 import useDeferredMount from "../../hooks/useDeferredMount";
+import useMobileLite from "../../hooks/useMobileLite";
 import { heroItem, heroStagger } from "../../motion/presets";
 import "./Hero.css";
 
@@ -26,12 +27,23 @@ function HeroScenePlaceholder() {
 
 function Hero() {
   const reduceMotion = useReducedMotion();
-  const showScene = useDeferredMount({ enabled: !reduceMotion });
+  const mobileLite = useMobileLite();
+  const motionEnabled = !reduceMotion && !mobileLite;
+  const showScene = useDeferredMount({ enabled: motionEnabled });
 
   return (
     <section className="hero" aria-labelledby="hero-heading">
-      <div className="hero__mesh hero__mesh--animated" aria-hidden />
-      <div className="hero__mesh hero__mesh--secondary hero__mesh--animated-slow" aria-hidden />
+      <div
+        className={`hero__mesh${motionEnabled ? " hero__mesh--animated" : ""}`}
+        aria-hidden
+      />
+      <div
+        className={`hero__mesh hero__mesh--secondary${
+          motionEnabled ? " hero__mesh--animated-slow" : ""
+        }`}
+        aria-hidden
+      />
+      {motionEnabled ? (
       <div className="hero__particles" aria-hidden>
         {PARTICLES.map((p) => (
           <span
@@ -47,6 +59,7 @@ function Hero() {
           />
         ))}
       </div>
+      ) : null}
 
       <div className="hero__inner">
         <div className="hero__layout">
