@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "express": "^4.22.2",
     "framer-motion": "^11.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -12,9 +13,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && node scripts/apply-cache-headers.js",
+    "serve": "node server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:prod": "serve -s build -l 3000 --config serve.json"
+    "start:prod": "node server.js"
   },
   "devDependencies": {
     "serve": "^14.2.4"
