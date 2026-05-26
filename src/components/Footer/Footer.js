@@ -35,7 +35,7 @@ function Footer() {
                 decoding="async"
                 fetchPriority="low"
               />
-              <div>
+              <div className="footer__brand-text">
                 <BrandMark />
                 <p className="footer__tagline">
                   AI-powered growth for ambitious brands — strategy, creative,

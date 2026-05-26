@@ -1,0 +1,11 @@
+/*
+  Single matte base under the whole app (including before React + ambient glow).
+  Page/section gradients from component CSS sit on top — do not override those here.
+*/
+html,
+body,
+#root,
+.app,
+.app-main {
+  background-color: var(--color-matte);
+}

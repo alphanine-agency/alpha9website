@@ -13,14 +13,16 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node scripts/apply-cache-headers.js && node scripts/inject-asset-preloads.js",
+    "build": "react-scripts build && node scripts/apply-cache-headers.js && node scripts/inject-asset-preloads.js && node scripts/verify-perf-config.js",
+    "optimize-logos": "node scripts/optimize-logos.js",
     "serve": "node server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:prod": "node server.js"
   },
   "devDependencies": {
-    "serve": "^14.2.4"
+    "serve": "^14.2.4",
+    "sharp": "^0.34.5"
   },
   "eslintConfig": {
     "extends": [

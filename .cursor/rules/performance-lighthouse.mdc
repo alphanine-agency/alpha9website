@@ -1,0 +1,64 @@
+---
+description: Alpha9 Lighthouse 100% performance config — preserve LCP, CLS, caching, and build pipeline
+alwaysApply: true
+---
+
+# Alpha9 performance configuration (Lighthouse 100%)
+
+Do **not** regress this setup without explicit user approval. Target: alphaninemarketing.com on Railway via `npm run serve` / `server.js`.
+
+## Build & deploy
+
+- `npm run build` = CRA build + `scripts/apply-cache-headers.js` + `scripts/inject-asset-preloads.js`
+- Production: `server.js` (Express + compression + long-cache `/static/**`)
+- Do not remove post-build scripts from `package.json` `build` script
+
+## `public/index.html` (critical path)
+
+- **Inline critical CSS** (`#critical-css`): hero, navbar shell, footer, brand-mark, logo dimensions; `html/body/#root` matte base (no shell `min-height: 220vh`)
+- **Static LCP shell** inside `#root` (`#lcp-shell`): must mirror `.app` grid children in order:
+  1. `<header class="navbar navbar--home">` (logo `logo-nav.webp`, 40×40)
+  2. `<main>` → `.home` → hero eyebrow + `#hero-heading`
+  3. `<footer class="footer">` (same tagline text, `logo-footer.webp` 56×72, brand-mark)
+- Preloads: `logo-nav.webp` (high), `logo-footer.webp`
+- Fonts: load via `requestIdleCallback` + `media="print"` onload; `display=optional`; `fonts-loading` class on `<html>`
+
+## Post-build (`scripts/inject-asset-preloads.js`)
+
+- Convert blocking `main.*.css` to non-blocking: `media="print" onload="this.media='all'"` + `<noscript>` fallback
+- Preload only `main.*.js` with `fetchpriority="high"` (dedupe paths with leading `/`)
+- Do not re-add CSS preload that blocks render
+
+## React routing & bundles
+
+- **`Home` is eager** in `App.js` (LCP hero); other pages stay `lazy()`
+- Hero **`h1` + eyebrow are plain HTML** (not `m.*`); motion only on below-fold hero blocks
+- `LazyMotion` + `domAnimation` via `MotionProvider`; defer `HeroScene`, `CursorGlow`
+- Below-fold home sections: `DeferredSection` + lazy `HomeServicesSection` / `HomePortfolioSection` / `HomeTeamSection`
+
+## CLS guards
+
+- `.app` uses `grid-template-rows: auto 1fr auto` — static shell **must** include navbar + main + footer (never main-only)
+- `.home { min-height: 220vh }` (280vh mobile) prevents footer jump when chunks load
+- `.footer { min-height: 22rem }` (42rem ≤767px); `.footer__tagline { min-height: 2.88em }`; `.brand-mark { min-height: 2.75rem }`
+- Footer logo: `PUBLIC_URL/logo-footer.webp`, explicit `width`/`height`, no `loading="lazy"`
+
+## Images & LCP
+
+- Nav/footer logos: transparent WebP in `public/` (`logo-nav.webp`, `logo-footer.webp`); regenerate via `npm run optimize-logos` from `logo.png` / `logo2.png` (trim + alpha, no black box)
+- Portfolio videos: mobile tap-to-play; no in-view autoplay on mobile lite
+- Use `useMobileLite` / `mobile-performance.css` for reduced motion/blur on mobile
+
+## Site background
+
+- Base layer: `src/styles/site-background.css` sets `html`, `body`, `#root`, `.app`, `.app-main` to `--color-matte`
+- `.app__ambient` also uses `background-color: var(--color-matte)` under mesh gradients
+- Keep original page/section gradients and `--glass-bg` tokens — do not flatten to one solid fill
+- LCP shell: no `#lcp-shell .home { min-height: 220vh }` in critical CSS (causes empty matte bands)
+
+## When adding features
+
+- New above-fold UI: extend critical CSS + static shell if it affects first paint
+- New global CSS: stays in main bundle; do not make `main.css` render-blocking again
+- New routes: keep code-split; do not lazy-load Home
+- Test with Lighthouse mobile after deploy before claiming perf is unchanged

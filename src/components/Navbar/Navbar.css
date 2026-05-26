@@ -74,6 +74,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  min-height: 2.75rem;
   text-decoration: none;
   color: var(--color-ink, #0a0a0a);
   font-weight: 600;
@@ -92,10 +93,19 @@
   width: 2.5rem;
   height: 2.5rem;
   object-fit: contain;
+  background: transparent;
+  border: none;
+  flex-shrink: 0;
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
 }
 
+.navbar--home .navbar__brand-icon {
+  filter: brightness(0) invert(1) drop-shadow(0 8px 20px rgba(0, 194, 255, 0.2));
+}
+
 .navbar__brand .brand-mark {
+  display: inline-flex;
+  justify-content: center;
   color: var(--color-ink, #0a0a0a);
   transform-origin: left center;
 }

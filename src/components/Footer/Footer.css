@@ -54,8 +54,15 @@
 
 .footer__brand {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-sm);
+}
+
+.footer__brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 4.5rem;
 }
 
 .footer__icon {
@@ -65,12 +72,15 @@
   height: 4.5rem;
   aspect-ratio: 56 / 72;
   object-fit: contain;
+  background: transparent;
+  border: none;
   filter: drop-shadow(0 0 16px rgba(0, 194, 255, 0.35));
 }
 
 .footer__brand .brand-mark {
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.4rem;
   min-height: 2.75rem;
+  justify-content: center;
 }
 
 .footer__brand .brand-mark__top,
