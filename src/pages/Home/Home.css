@@ -27,6 +27,18 @@
 
 .home {
   background: var(--color-matte);
+  /* Stable document height so footer does not jump when below-fold chunks load. */
+  min-height: 220vh;
+}
+
+@media (max-width: 820px) {
+  .home {
+    min-height: 280vh;
+  }
+}
+
+.home-deferred {
+  width: 100%;
 }
 
 .home-section__eyebrow {

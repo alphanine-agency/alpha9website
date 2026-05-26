@@ -135,6 +135,8 @@
   max-width: 14ch;
   min-height: 2.15em;
   color: var(--color-text);
+  font-family: var(--font-sans);
+  contain: layout style;
 }
 
 .hero__title-accent {

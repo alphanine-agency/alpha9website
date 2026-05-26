@@ -12,21 +12,44 @@
       name="description"
       content="AlphaNineMarketing — premium digital marketing, AI automation, ads, content, and web design for brands that want to scale."
     />
-    <!-- LCP: navbar logo is discoverable in HTML before JS -->
-    <link
-      rel="preload"
-      href="%PUBLIC_URL%/logo-nav.webp"
-      as="image"
-      type="image/webp"
-      fetchpriority="high"
-    />
-    <!-- Fonts load after first paint (removes render-blocking + 3rd-party from critical path) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- asset-preloads -->
+    <link rel="preload" href="%PUBLIC_URL%/logo-nav.webp" as="image" type="image/webp" fetchpriority="high" />
+  <!-- /asset-preloads -->
+    <style id="critical-css">
+      :root {
+        --color-matte: #0a0a0a;
+        --color-text: #f5f5f5;
+        --color-electric: #00c2ff;
+        --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-display: Georgia, "Times New Roman", serif;
+      }
+      body {
+        margin: 0;
+        background: var(--color-matte);
+        color: var(--color-text);
+        font-family: var(--font-sans);
+      }
+      #hero-heading {
+        margin: 0;
+        font-size: clamp(2.35rem, 5.2vw, 3.65rem);
+        line-height: 1.04;
+        font-weight: 600;
+        max-width: 14ch;
+        min-height: 2.15em;
+      }
+      .hero__title-accent {
+        font-family: var(--font-display);
+        font-style: italic;
+      }
+    </style>
     <script>
       (function () {
         var root = document.documentElement;
         root.classList.add("fonts-loading");
         var href =
-          "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap";
+          "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=optional";
         function loadFonts() {
           var link = document.createElement("link");
           link.rel = "stylesheet";
@@ -40,7 +63,7 @@
           document.head.appendChild(link);
         }
         if ("requestIdleCallback" in window) {
-          requestIdleCallback(loadFonts, { timeout: 2800 });
+          requestIdleCallback(loadFonts, { timeout: 1500 });
         } else {
           window.addEventListener("load", loadFonts, { once: true });
         }
@@ -48,7 +71,7 @@
     </script>
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Michroma&display=optional"
         rel="stylesheet"
       />
     </noscript>

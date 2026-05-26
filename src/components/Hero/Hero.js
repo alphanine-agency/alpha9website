@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import { m, useReducedMotion } from "framer-motion";
-import TypewriterText from "../TypewriterText/TypewriterText";
 import useDeferredMount from "../../hooks/useDeferredMount";
 import useMobileLite from "../../hooks/useMobileLite";
 import { heroItem, heroStagger } from "../../motion/presets";
@@ -72,18 +71,10 @@ function Hero() {
             <m.p className="hero__eyebrow" variants={heroItem}>
               Premium digital marketing · AI-first
             </m.p>
-            <TypewriterText
-              as="h1"
-              id="hero-heading"
-              className="hero__title"
-              priority
-              delay={120}
-              segments={[
-                { text: "Scale smarter with " },
-                { text: "AI-powered", className: "hero__title-accent" },
-                { text: " growth." },
-              ]}
-            />
+            <h1 id="hero-heading" className="hero__title">
+              Scale smarter with{" "}
+              <span className="hero__title-accent">AI-powered</span> growth.
+            </h1>
             <m.p className="hero__lede" variants={heroItem}>
               Alpha Nine Marketing pairs precision media, automation, and craft
               creative so your brand moves faster - without the noise.
