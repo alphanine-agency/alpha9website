@@ -15,7 +15,7 @@ Do **not** regress this setup without explicit user approval. Target: alphaninem
 
 ## `public/index.html` (critical path)
 
-- **Inline critical CSS** (`#critical-css`): hero, navbar shell, footer, brand-mark, logo dimensions; `html/body/#root` matte base (no shell `min-height: 220vh`)
+- **Inline critical CSS** (`#critical-css`): hero, navbar shell, footer, `.home` min-height (`220vh` / `280vh` ≤820px), brand-mark, logo dimensions
 - **Static LCP shell** inside `#root` (`#lcp-shell`): must mirror `.app` grid children in order:
   1. `<header class="navbar navbar--home">` (logo `logo-nav.webp`, 40×40)
   2. `<main>` → `.home` → hero eyebrow + `#hero-heading`
@@ -48,13 +48,6 @@ Do **not** regress this setup without explicit user approval. Target: alphaninem
 - Nav/footer logos: transparent WebP in `public/` (`logo-nav.webp`, `logo-footer.webp`); regenerate via `npm run optimize-logos` from `logo.png` / `logo2.png` (trim + alpha, no black box)
 - Portfolio videos: mobile tap-to-play; no in-view autoplay on mobile lite
 - Use `useMobileLite` / `mobile-performance.css` for reduced motion/blur on mobile
-
-## Site background
-
-- Base layer: `src/styles/site-background.css` sets `html`, `body`, `#root`, `.app`, `.app-main` to `--color-matte`
-- `.app__ambient` also uses `background-color: var(--color-matte)` under mesh gradients
-- Keep original page/section gradients and `--glass-bg` tokens — do not flatten to one solid fill
-- LCP shell: no `#lcp-shell .home { min-height: 220vh }` in critical CSS (causes empty matte bands)
 
 ## When adding features
 
