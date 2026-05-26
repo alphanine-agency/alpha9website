@@ -11,6 +11,12 @@
   min-height: 22rem;
 }
 
+@media (max-width: 767px) {
+  .footer {
+    min-height: 42rem;
+  }
+}
+
 .footer__glow {
   pointer-events: none;
   position: absolute;
@@ -64,6 +70,7 @@
 
 .footer__brand .brand-mark {
   margin-bottom: 0.55rem;
+  min-height: 2.75rem;
 }
 
 .footer__brand .brand-mark__top,
@@ -81,6 +88,7 @@
   font-size: 0.9rem;
   max-width: 22rem;
   line-height: 1.6;
+  min-height: 2.88em;
 }
 
 .footer__cta {

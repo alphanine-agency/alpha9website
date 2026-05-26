@@ -5,13 +5,13 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import PageLoader from "./components/PageLoader/PageLoader";
 import MobileLiteRoot from "./components/MobileLiteRoot/MobileLiteRoot";
+import Home from "./pages/Home/Home";
 
 const CursorGlow = lazy(() => import("./components/CursorGlow/CursorGlow"));
 
 /*
-  Performance: code-split routes so initial bundle stays smaller (better TTI/FCP tradeoffs on inner pages).
+  Performance: Home is eager (LCP hero); other routes stay code-split.
 */
-const Home = lazy(() => import("./pages/Home/Home"));
 const Portfolio = lazy(() => import("./pages/Portfolio/Portfolio"));
 const Services = lazy(() => import("./pages/Services/Services"));
 const About = lazy(() => import("./pages/About/About"));

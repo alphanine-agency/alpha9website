@@ -58,7 +58,7 @@ entrypoints.forEach((href) => {
 const preloadTags = [...jsPreloads]
   .map(
     (href) =>
-      `    <link rel="preload" href="${href}" as="script" crossorigin />`
+      `    <link rel="preload" href="${href}" as="script" crossorigin fetchpriority="high" />`
   )
   .join("\n");
 

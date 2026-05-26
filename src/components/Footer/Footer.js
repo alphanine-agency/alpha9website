@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import footerLogoWebp from "../../assets/optimized/logo-footer.webp";
 import BrandMark from "../BrandMark/BrandMark";
 import { servicesList } from "../../data/services";
 import { socialLinks } from "../../data/socialLinks";
 import SocialIcon from "../SocialIcon/SocialIcon";
 import "../SocialIcon/SocialIcon.css";
 import "./Footer.css";
+
+const FOOTER_LOGO_WEBP = `${process.env.PUBLIC_URL}/logo-footer.webp`;
 
 const exploreLinks = [
   { to: "/", label: "Home" },
@@ -27,12 +28,12 @@ function Footer() {
             <div className="footer__brand">
               <img
                 className="footer__icon"
-                src={footerLogoWebp}
+                src={FOOTER_LOGO_WEBP}
                 alt="Alpha Nine Marketing"
                 width="56"
                 height="72"
                 decoding="async"
-                loading="lazy"
+                fetchPriority="low"
               />
               <div>
                 <BrandMark />

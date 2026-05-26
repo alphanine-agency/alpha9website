@@ -62,19 +62,20 @@ function Hero() {
 
       <div className="hero__inner">
         <div className="hero__layout">
-          <m.div
-            className="hero__content"
-            variants={heroStagger}
-            initial={false}
-            animate="visible"
-          >
-            <m.p className="hero__eyebrow" variants={heroItem}>
+          <div className="hero__content">
+            <p className="hero__eyebrow">
               Premium digital marketing · AI-first
-            </m.p>
+            </p>
             <h1 id="hero-heading" className="hero__title">
               Scale smarter with{" "}
               <span className="hero__title-accent">AI-powered</span> growth.
             </h1>
+            <m.div
+              className="hero__below-fold"
+              variants={heroStagger}
+              initial={false}
+              animate="visible"
+            >
             <m.p className="hero__lede" variants={heroItem}>
               Alpha Nine Marketing pairs precision media, automation, and craft
               creative so your brand moves faster - without the noise.
@@ -110,7 +111,8 @@ function Hero() {
                 <dd className="hero__stat-value">Performance-led</dd>
               </m.div>
             </m.dl>
-          </m.div>
+            </m.div>
+          </div>
 
           <m.div
             className="hero__visual"
