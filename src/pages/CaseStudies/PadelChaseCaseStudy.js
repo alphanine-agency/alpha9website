@@ -302,40 +302,94 @@ function InquiryRoutingTree() {
 function SmartBookingJourney() {
   return (
     <div className="pc-booking" aria-label="Smart booking journey">
-      <div className="pc-booking__court-wrap">
-        <svg className="pc-booking__court" viewBox="0 0 480 280" role="img">
-          <title>Perspective padel court with booking flow</title>
+      <div className="pc-booking__stage">
+        <p className="pc-booking__eyebrow">Courts live · booking-first</p>
+        <svg className="pc-booking__court" viewBox="0 0 560 340" role="img">
+          <title>Realistic padel court with live booking markers</title>
           <defs>
-            <linearGradient id="pcCourtFloor" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2a1808" />
-              <stop offset="100%" stopColor="#120c06" />
+            <linearGradient id="pcArenaFloor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1a2330" />
+              <stop offset="100%" stopColor="#0b1018" />
             </linearGradient>
-            <linearGradient id="pcCourtSide" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#FF6B00" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#FF6B00" stopOpacity="0.02" />
+            <linearGradient id="pcTurf" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1f6b4a" />
+              <stop offset="55%" stopColor="#165538" />
+              <stop offset="100%" stopColor="#0f3d28" />
             </linearGradient>
-            <filter id="pcBallGlow">
-              <feGaussianBlur stdDeviation="2.5" result="b" />
+            <linearGradient id="pcGlass" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#9ec9ff" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#9ec9ff" stopOpacity="0.04" />
+            </linearGradient>
+            <linearGradient id="pcNetGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f5f5f5" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="#f5f5f5" stopOpacity="0.25" />
+            </linearGradient>
+            <filter id="pcSoftGlow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="3.2" result="b" />
               <feMerge>
                 <feMergeNode in="b" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            <pattern id="pcTurfGrain" width="8" height="8" patternUnits="userSpaceOnUse">
+              <path d="M0 8 L8 0" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
+            </pattern>
           </defs>
-          <path className="pc-booking__wall" d="M40 70 L80 40 H400 L440 70 V230 L400 250 H80 L40 230 Z" fill="url(#pcCourtSide)" />
-          <path className="pc-booking__floor" d="M80 90 H400 L430 220 H50 Z" fill="url(#pcCourtFloor)" />
-          <path className="pc-booking__line" d="M240 90 V220" />
-          <path className="pc-booking__net" d="M70 155 H410" />
-          <path className="pc-booking__service" d="M120 115 H360 V185 H120 Z" />
-          <circle className="pc-booking__pulse" cx="150" cy="130" r="8" />
-          <circle className="pc-booking__pulse pc-booking__pulse--delay" cx="330" cy="180" r="8" />
-          <circle r="6" className="pc-booking__ball" filter="url(#pcBallGlow)">
-            <animateMotion dur="3.6s" repeatCount="indefinite" path="M150 130 Q240 90 330 180 Q240 210 150 130" />
+
+          {/* Arena base */}
+          <rect x="24" y="28" width="512" height="284" rx="22" fill="url(#pcArenaFloor)" />
+          <rect x="24" y="28" width="512" height="284" rx="22" fill="none" stroke="rgba(255,107,0,0.18)" />
+
+          {/* Ambient light */}
+          <ellipse cx="280" cy="88" rx="170" ry="36" fill="rgba(255,140,0,0.08)" />
+
+          {/* Glass cage back wall */}
+          <path d="M96 78 H464 L492 118 V246 L464 278 H96 L68 246 V118 Z" fill="url(#pcGlass)" stroke="rgba(180,210,255,0.28)" strokeWidth="1.2" />
+
+          {/* Turf court (perspective) */}
+          <path d="M118 108 H442 L468 252 H92 Z" fill="url(#pcTurf)" />
+          <path d="M118 108 H442 L468 252 H92 Z" fill="url(#pcTurfGrain)" />
+          <path d="M118 108 H442 L468 252 H92 Z" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.6" />
+
+          {/* Center line */}
+          <path d="M280 108 V252" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" />
+          {/* Service boxes */}
+          <path d="M154 140 H406 V210 H154 Z" fill="none" stroke="rgba(255,255,255,0.42)" strokeWidth="1.2" />
+          <path d="M280 140 V210" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.1" />
+
+          {/* Net */}
+          <path d="M102 178 H458" stroke="url(#pcNetGrad)" strokeWidth="2.4" />
+          <path d="M102 178 H458" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="8" strokeDasharray="2 5" />
+          <circle cx="102" cy="178" r="3.5" fill="#c8c8c8" />
+          <circle cx="458" cy="178" r="3.5" fill="#c8c8c8" />
+
+          {/* Side glass frames */}
+          <path d="M96 78 L68 118 V246 L96 278" fill="none" stroke="rgba(200,220,255,0.35)" strokeWidth="1.4" />
+          <path d="M464 78 L492 118 V246 L464 278" fill="none" stroke="rgba(200,220,255,0.35)" strokeWidth="1.4" />
+          <path d="M96 118 H464" fill="none" stroke="rgba(200,220,255,0.2)" strokeWidth="1" />
+          <path d="M96 210 H464" fill="none" stroke="rgba(200,220,255,0.16)" strokeWidth="1" />
+
+          {/* Live booking markers */}
+          <g filter="url(#pcSoftGlow)">
+            <circle cx="196" cy="156" r="9" fill="#FF6B00" opacity="0.95">
+              <animate attributeName="opacity" values="0.95;0.45;0.95" dur="2.2s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="360" cy="200" r="9" fill="#FFB347" opacity="0.85">
+              <animate attributeName="opacity" values="0.85;0.35;0.85" dur="2.2s" begin="0.7s" repeatCount="indefinite" />
+            </circle>
+          </g>
+          <text x="196" y="176" className="pc-booking__slot">Slot A · open</text>
+          <text x="360" y="220" className="pc-booking__slot">Slot B · hold</text>
+
+          {/* Ball in play */}
+          <circle r="5.5" fill="#FF6B00" stroke="#fff" strokeWidth="1.2" filter="url(#pcSoftGlow)">
+            <animateMotion dur="4s" repeatCount="indefinite" path="M196 156 Q280 120 360 200 Q280 236 196 156" />
           </circle>
-          <circle r="3.5" className="pc-booking__ball-ghost">
-            <animateMotion dur="3.6s" repeatCount="indefinite" begin="0.35s" path="M150 130 Q240 90 330 180 Q240 210 150 130" />
-          </circle>
-          <text x="240" y="42" className="pc-booking__label">Courts live · booking-first</text>
+
+          {/* Status chip */}
+          <rect x="198" y="292" width="164" height="22" rx="11" fill="rgba(255,107,0,0.14)" stroke="rgba(255,107,0,0.35)" />
+          <circle cx="216" cy="303" r="4" fill="#39FF14" />
+          <text x="228" y="307" className="pc-booking__live">4 courts · live availability</text>
         </svg>
       </div>
       <PathRail

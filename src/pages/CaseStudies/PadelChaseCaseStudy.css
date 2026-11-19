@@ -2382,57 +2382,59 @@ html.mobile-lite .pc-dash__flow-dot {
   color: var(--pc);
   flex-shrink: 0;
 }
-.pc-booking__wall {
-  stroke: rgba(255, 107, 0, 0.35);
+.pc-booking {
+  display: grid;
+  gap: 1.15rem;
 }
-.pc-booking__floor {
-  stroke: rgba(255, 255, 255, 0.25);
-}
-.pc-booking__line,
-.pc-booking__net,
-.pc-booking__service {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.7);
-  stroke-width: 1.5;
-}
-.pc-booking__pulse {
-  fill: #ff6b00;
-  animation: pc-pulse 2.2s ease-out infinite;
-}
-.pc-booking__pulse--delay {
-  animation-delay: 0.7s;
-}
-.pc-booking__ball {
-  fill: #fff;
-  stroke: #ff6b00;
-  stroke-width: 1.5;
-}
-.pc-booking__ball-ghost {
-  fill: rgba(255, 179, 71, 0.55);
-}
-.pc-booking__label {
-  fill: rgba(255, 180, 100, 0.9);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-anchor: middle;
-}
-.pc-booking__court-wrap {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 1.3rem;
+
+.pc-booking__stage {
+  position: relative;
+  z-index: 0;
+  margin: 0;
+  padding: 1rem 1rem 0.75rem;
+  border-radius: 1.25rem;
   border: 1px solid var(--pc-line);
   background:
-    radial-gradient(ellipse 50% 40% at 50% 30%, rgba(255, 107, 0, 0.12), transparent 60%),
-    #0a0806;
-  transform: perspective(900px) rotateX(8deg);
-  transform-origin: center top;
+    radial-gradient(ellipse 55% 45% at 50% 18%, rgba(255, 107, 0, 0.12), transparent 62%),
+    #080a0e;
+  overflow: hidden;
 }
+
+.pc-booking__eyebrow {
+  margin: 0 0 0.65rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pc-hot);
+}
+
 .pc-booking__court {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.pc-booking__slot {
+  fill: rgba(245, 245, 245, 0.72);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+}
+
+.pc-booking__live {
+  fill: rgba(245, 245, 245, 0.88);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.pc-booking .pc-rail {
+  position: relative;
+  z-index: 1;
+  margin: 0;
 }
 .pc-cta {
   position: relative;
@@ -2536,11 +2538,8 @@ html.mobile-lite .pc-dash__flow-dot {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pc-booking__court-wrap {
-    transform: none;
+  .pc-booking__court animate,
+  .pc-booking__court animateMotion {
+    display: none;
   }
-}
-
-html.mobile-lite .pc-booking__court-wrap {
-  transform: none;
 }
