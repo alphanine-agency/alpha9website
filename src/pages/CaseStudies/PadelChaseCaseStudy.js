@@ -300,108 +300,156 @@ function InquiryRoutingTree() {
 }
 
 function SmartBookingJourney() {
+  const steps = [
+    { n: "01", label: "Guest", detail: "Player lands from social", Icon: IconUser },
+    { n: "02", label: "Date", detail: "Picks a session day", Icon: IconCalendar },
+    { n: "03", label: "Time", detail: "Chooses an open slot", Icon: IconClock },
+    { n: "04", label: "Court", detail: "Sees live availability", Icon: IconCourt },
+    { n: "05", label: "Booked", detail: "Confirmed in-system", Icon: IconCheck },
+  ];
+  const times = [
+    { t: "6:00 PM", state: "open" },
+    { t: "7:00 PM", state: "selected" },
+    { t: "8:00 PM", state: "open" },
+    { t: "9:00 PM", state: "busy" },
+  ];
+  const courts = [
+    { id: "01", name: "Court 01", state: "open" },
+    { id: "02", name: "Court 02", state: "selected" },
+    { id: "03", name: "Court 03", state: "busy" },
+    { id: "04", name: "Court 04", state: "open" },
+  ];
+
   return (
     <div className="pc-booking" aria-label="Smart booking journey">
-      <div className="pc-booking__stage">
-        <p className="pc-booking__eyebrow">Courts live · booking-first</p>
-        <svg className="pc-booking__court" viewBox="0 0 560 340" role="img">
-          <title>Realistic padel court with live booking markers</title>
-          <defs>
-            <linearGradient id="pcArenaFloor" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1a2330" />
-              <stop offset="100%" stopColor="#0b1018" />
-            </linearGradient>
-            <linearGradient id="pcTurf" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1f6b4a" />
-              <stop offset="55%" stopColor="#165538" />
-              <stop offset="100%" stopColor="#0f3d28" />
-            </linearGradient>
-            <linearGradient id="pcGlass" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#9ec9ff" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#9ec9ff" stopOpacity="0.04" />
-            </linearGradient>
-            <linearGradient id="pcNetGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f5f5f5" stopOpacity="0.85" />
-              <stop offset="100%" stopColor="#f5f5f5" stopOpacity="0.25" />
-            </linearGradient>
-            <filter id="pcSoftGlow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="3.2" result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <pattern id="pcTurfGrain" width="8" height="8" patternUnits="userSpaceOnUse">
-              <path d="M0 8 L8 0" stroke="rgba(255,255,255,0.035)" strokeWidth="1" />
-            </pattern>
-          </defs>
+      <div className="pc-booking__panel">
+        <div className="pc-booking__app">
+          <div className="pc-booking__app-top">
+            <div>
+              <p className="pc-booking__app-kicker">Padel Chase Inn</p>
+              <h3>Book a court</h3>
+            </div>
+            <span className="pc-booking__live-pill">
+              <i /> Live
+            </span>
+          </div>
 
-          {/* Arena base */}
-          <rect x="24" y="28" width="512" height="284" rx="22" fill="url(#pcArenaFloor)" />
-          <rect x="24" y="28" width="512" height="284" rx="22" fill="none" stroke="rgba(255,107,0,0.18)" />
+          <div className="pc-booking__block">
+            <p className="pc-booking__block-label">Date</p>
+            <div className="pc-booking__chips">
+              <span>Today</span>
+              <span className="is-active">Tomorrow</span>
+              <span>Sat</span>
+              <span>Sun</span>
+            </div>
+          </div>
 
-          {/* Ambient light */}
-          <ellipse cx="280" cy="88" rx="170" ry="36" fill="rgba(255,140,0,0.08)" />
+          <div className="pc-booking__block">
+            <p className="pc-booking__block-label">Time</p>
+            <div className="pc-booking__times">
+              {times.map((slot) => (
+                <span key={slot.t} className={`pc-booking__time is-${slot.state}`}>
+                  {slot.t}
+                </span>
+              ))}
+            </div>
+          </div>
 
-          {/* Glass cage back wall */}
-          <path d="M96 78 H464 L492 118 V246 L464 278 H96 L68 246 V118 Z" fill="url(#pcGlass)" stroke="rgba(180,210,255,0.28)" strokeWidth="1.2" />
+          <div className="pc-booking__block">
+            <p className="pc-booking__block-label">Court</p>
+            <div className="pc-booking__courts">
+              {courts.map((court) => (
+                <span key={court.id} className={`pc-booking__court-chip is-${court.state}`}>
+                  <strong>{court.name}</strong>
+                  <em>{court.state === "busy" ? "Full" : court.state === "selected" ? "Selected" : "Open"}</em>
+                </span>
+              ))}
+            </div>
+          </div>
 
-          {/* Turf court (perspective) */}
-          <path d="M118 108 H442 L468 252 H92 Z" fill="url(#pcTurf)" />
-          <path d="M118 108 H442 L468 252 H92 Z" fill="url(#pcTurfGrain)" />
-          <path d="M118 108 H442 L468 252 H92 Z" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.6" />
+          <div className="pc-booking__confirm">
+            <div>
+              <p>Tomorrow · 7:00 PM</p>
+              <span>Court 02 · 90 min</span>
+            </div>
+            <button type="button" tabIndex={-1} aria-hidden>
+              Confirm booking
+            </button>
+          </div>
+        </div>
 
-          {/* Center line */}
-          <path d="M280 108 V252" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" />
-          {/* Service boxes */}
-          <path d="M154 140 H406 V210 H154 Z" fill="none" stroke="rgba(255,255,255,0.42)" strokeWidth="1.2" />
-          <path d="M280 140 V210" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.1" />
-
-          {/* Net */}
-          <path d="M102 178 H458" stroke="url(#pcNetGrad)" strokeWidth="2.4" />
-          <path d="M102 178 H458" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="8" strokeDasharray="2 5" />
-          <circle cx="102" cy="178" r="3.5" fill="#c8c8c8" />
-          <circle cx="458" cy="178" r="3.5" fill="#c8c8c8" />
-
-          {/* Side glass frames */}
-          <path d="M96 78 L68 118 V246 L96 278" fill="none" stroke="rgba(200,220,255,0.35)" strokeWidth="1.4" />
-          <path d="M464 78 L492 118 V246 L464 278" fill="none" stroke="rgba(200,220,255,0.35)" strokeWidth="1.4" />
-          <path d="M96 118 H464" fill="none" stroke="rgba(200,220,255,0.2)" strokeWidth="1" />
-          <path d="M96 210 H464" fill="none" stroke="rgba(200,220,255,0.16)" strokeWidth="1" />
-
-          {/* Live booking markers */}
-          <g filter="url(#pcSoftGlow)">
-            <circle cx="196" cy="156" r="9" fill="#FF6B00" opacity="0.95">
-              <animate attributeName="opacity" values="0.95;0.45;0.95" dur="2.2s" repeatCount="indefinite" />
+        <div className="pc-booking__visual">
+          <div className="pc-booking__visual-head">
+            <p>Live court board</p>
+            <span>4 courts synced</span>
+          </div>
+          <svg className="pc-booking__court-svg" viewBox="0 0 420 300" role="img">
+            <title>Padel court with live booking overlay</title>
+            <defs>
+              <linearGradient id="pcBoardBg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#12161c" />
+                <stop offset="100%" stopColor="#080a0e" />
+              </linearGradient>
+              <linearGradient id="pcTurfB" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#248a58" />
+                <stop offset="100%" stopColor="#0f3d28" />
+              </linearGradient>
+              <filter id="pcGlowB" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <rect x="8" y="8" width="404" height="284" rx="20" fill="url(#pcBoardBg)" />
+            <path d="M70 52 H350 L382 248 H38 Z" fill="url(#pcTurfB)" />
+            <path d="M70 52 H350 L382 248 H38 Z" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" />
+            <path d="M210 52 V248" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.4" />
+            <path d="M100 96 H320 V196 H100 Z" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" />
+            <path d="M48 148 H372" stroke="rgba(245,245,245,0.75)" strokeWidth="2.2" />
+            <path d="M48 148 H372" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="7" strokeDasharray="2 4" />
+            {/* Glass sides */}
+            <path d="M70 52 L38 248" fill="none" stroke="rgba(170,205,255,0.35)" strokeWidth="1.4" />
+            <path d="M350 52 L382 248" fill="none" stroke="rgba(170,205,255,0.35)" strokeWidth="1.4" />
+            <path d="M70 52 H350" fill="none" stroke="rgba(170,205,255,0.28)" strokeWidth="1.2" />
+            {/* Selected court glow */}
+            <ellipse cx="250" cy="168" rx="42" ry="28" fill="rgba(255,107,0,0.22)" filter="url(#pcGlowB)" />
+            <circle cx="250" cy="168" r="8" fill="#FF6B00" filter="url(#pcGlowB)">
+              <animate attributeName="r" values="7;9;7" dur="2s" repeatCount="indefinite" />
             </circle>
-            <circle cx="360" cy="200" r="9" fill="#FFB347" opacity="0.85">
-              <animate attributeName="opacity" values="0.85;0.35;0.85" dur="2.2s" begin="0.7s" repeatCount="indefinite" />
+            <text x="250" y="198" textAnchor="middle" fill="#ffb347" fontSize="11" fontWeight="700">
+              Court 02 reserved
+            </text>
+            <circle r="5" fill="#fff" stroke="#FF6B00" strokeWidth="1.4" filter="url(#pcGlowB)">
+              <animateMotion dur="3.8s" repeatCount="indefinite" path="M140 120 Q210 90 280 180 Q210 210 140 120" />
             </circle>
-          </g>
-          <text x="196" y="176" className="pc-booking__slot">Slot A · open</text>
-          <text x="360" y="220" className="pc-booking__slot">Slot B · hold</text>
-
-          {/* Ball in play */}
-          <circle r="5.5" fill="#FF6B00" stroke="#fff" strokeWidth="1.2" filter="url(#pcSoftGlow)">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M196 156 Q280 120 360 200 Q280 236 196 156" />
-          </circle>
-
-          {/* Status chip */}
-          <rect x="198" y="292" width="164" height="22" rx="11" fill="rgba(255,107,0,0.14)" stroke="rgba(255,107,0,0.35)" />
-          <circle cx="216" cy="303" r="4" fill="#39FF14" />
-          <text x="228" y="307" className="pc-booking__live">4 courts · live availability</text>
-        </svg>
+          </svg>
+          <ul className="pc-booking__legend">
+            <li><i className="is-open" /> Open</li>
+            <li><i className="is-selected" /> Selected</li>
+            <li><i className="is-busy" /> Full</li>
+          </ul>
+        </div>
       </div>
-      <PathRail
-        steps={[
-          { label: "Guest", Icon: IconUser, auto: true },
-          { label: "Date", Icon: IconCalendar, auto: true },
-          { label: "Time", Icon: IconClock, auto: true },
-          { label: "Court", Icon: IconCourt, auto: true },
-          { label: "Booked", Icon: IconCheck, auto: true },
-        ]}
-        tone="player"
-      />
+
+      <ol className="pc-booking__steps">
+        {steps.map((step, index) => {
+          const Icon = step.Icon;
+          return (
+            <li key={step.label} className="pc-booking__step">
+              <span className="pc-booking__step-n">{step.n}</span>
+              <span className="pc-booking__step-icon">
+                <Icon />
+              </span>
+              <p>{step.label}</p>
+              <span>{step.detail}</span>
+              {index < steps.length - 1 ? <i className="pc-booking__step-line" aria-hidden /> : null}
+            </li>
+          );
+        })}
+      </ol>
+
       <p className="pc-note">
         Padel Chase Inn already offers online court availability — Alpha Nine amplifies demand into that booking system.
       </p>
