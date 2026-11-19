@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollSection from "../../components/ScrollSection/ScrollSection";
 import PageHero from "../../components/PageHero/PageHero";
 import PortfolioTile, { PortfolioMedia } from "../../components/PortfolioTile/PortfolioTile";
 import portfolioGallery from "../../data/portfolioGallery";
+import {
+  portfolioFilters,
+  automationCaseStudies,
+} from "../../data/caseStudies";
 import "./Portfolio.css";
 
 const PADEL_ROW_IDS = new Set([
@@ -249,54 +253,137 @@ function PortfolioFashionRow({ gridItem, postItem }) {
   );
 }
 
+function PortfolioAiAutomationCard({ study }) {
+  const isPadel = study.slug === "padel-chase";
+  const isRoadKing = study.slug === "roadking";
+  return (
+    <ScrollSection
+      as="article"
+      className={`portfolio-case-card${
+        isPadel ? " portfolio-case-card--padel" : ""
+      }${isRoadKing ? " portfolio-case-card--roadking" : ""}`}
+    >
+      <div className="portfolio-case-card__media">
+        <img
+          className="portfolio-case-card__poster"
+          src={study.poster}
+          alt=""
+          width="640"
+          height="800"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="portfolio-case-card__media-veil" aria-hidden />
+        <img
+          className={`portfolio-case-card__logo${
+            isPadel ? " portfolio-case-card__logo--padel" : ""
+          }${isRoadKing ? " portfolio-case-card__logo--roadking" : ""}`}
+          src={study.logo}
+          alt={`${study.client} logo`}
+          width={isRoadKing ? 120 : 240}
+          height={isRoadKing ? 120 : 82}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div className="portfolio-case-card__body">
+        <p className="portfolio-case-card__eyebrow">{study.tagline}</p>
+        <h3 className="portfolio-case-card__title">
+          {study.client}
+        </h3>
+        <p className="portfolio-case-card__copy">{study.subheadline}</p>
+        <div className="portfolio-case-card__meta">
+          <span>{study.industry}</span>
+          <span>{study.result.label}</span>
+        </div>
+        <Link
+          to={`/portfolio/${study.slug}`}
+          className="portfolio-case-card__cta theme-btn-primary"
+        >
+          View case study
+        </Link>
+      </div>
+    </ScrollSection>
+  );
+}
+
 function Portfolio() {
+  const [activeFilter, setActiveFilter] = useState("all");
+
   useEffect(() => {
     document.title = "Portfolio | AlphaNineMarketing";
   }, []);
 
-  const aiContent = ["reel-five", "reel-one", "reel-three", "reel-four"]
-    .map((id) => portfolioGallery.find((item) => item.id === id))
-    .filter(Boolean);
+  const aiContent = useMemo(
+    () =>
+      ["reel-five", "reel-one", "reel-three", "reel-four"]
+        .map((id) => portfolioGallery.find((item) => item.id === id))
+        .filter(Boolean),
+    []
+  );
 
-  const ugcContent = [
-    "padel-chase-hero",
-    "padel-chase-gs",
-    "padel-chase-insta",
-    "gelato-video",
-    "gelato-brand-product",
-    "gelato-brand-logo",
-    "gelato-brand-interior",
-    "roadking-rk1",
-    "roadking-rk2",
-    "roadking-rk3",
-    "roadking-insta",
-    "vibe-grid",
-    "vibe-post",
-    "eco-board",
-    "food-board",
-    "kart-hero",
-  ]
-    .map((id) => portfolioGallery.find((item) => item.id === id))
-    .filter(Boolean);
+  const ugcContent = useMemo(
+    () =>
+      [
+        "padel-chase-hero",
+        "padel-chase-gs",
+        "padel-chase-insta",
+        "gelato-video",
+        "gelato-brand-product",
+        "gelato-brand-logo",
+        "gelato-brand-interior",
+        "roadking-rk1",
+        "roadking-rk2",
+        "roadking-rk3",
+        "roadking-insta",
+        "vibe-grid",
+        "vibe-post",
+        "eco-board",
+        "food-board",
+        "kart-hero",
+      ]
+        .map((id) => portfolioGallery.find((item) => item.id === id))
+        .filter(Boolean),
+    []
+  );
 
-  const sections = [
-    {
-      id: "ugc",
-      eyebrow: "UGC",
-      title: "User-generated and campaign-led visual work.",
-      description:
-        "Real social posts, creative grids, moodboards, and branded content arranged as a premium showcase.",
-      items: ugcContent,
-    },
-    {
-      id: "ai",
-      eyebrow: "AI Generated Content",
-      title: "AI-crafted motion and ad creatives.",
-      description:
-        "AI-assisted motion ads and promo cuts for Roadking and campaign testing.",
-      items: aiContent,
-    },
-  ];
+  const sections = useMemo(
+    () => [
+      {
+        id: "ugc",
+        eyebrow: "UGC",
+        title: "User-generated and campaign-led visual work.",
+        description:
+          "Real social posts, creative grids, moodboards, and branded content arranged as a premium showcase.",
+        items: ugcContent,
+      },
+      {
+        id: "ai",
+        eyebrow: "AI Generated Content",
+        title: "AI-crafted motion and ad creatives.",
+        description:
+          "AI-assisted motion ads and promo cuts for Roadking and campaign testing.",
+        items: aiContent,
+      },
+      {
+        id: "ai-automation",
+        eyebrow: "AI Automation",
+        title: "Intelligent systems that turn attention into opportunity.",
+        description:
+          "Case studies on lead systems, booking-led sports growth, and operational storytelling — not just creatives.",
+        items: [],
+        caseStudy: true,
+      },
+    ],
+    [aiContent, ugcContent]
+  );
+
+  const visibleSections = useMemo(() => {
+    if (activeFilter === "all") {
+      return sections;
+    }
+    return sections.filter((section) => section.id === activeFilter);
+  }, [activeFilter, sections]);
 
   return (
     <div className="portfolio-page">
@@ -304,13 +391,37 @@ function Portfolio() {
         baseClass="portfolio-hero"
         eyebrow="Portfolio"
         title="Creative assets arranged like a real showcase."
-        lede="Editorial grids, social posts, brand boards, and motion cuts from real campaign work - arranged in a mixed-size gallery for a more premium presentation."
+        lede="Editorial grids, social posts, brand boards, motion cuts, and AI automation systems from real campaign work."
         typeDelay={420}
       />
 
       <section className="portfolio-grid-section" aria-label="Portfolio gallery">
         <div className="portfolio-grid-section__inner">
-          {sections.map((section) => (
+          <div
+            className="portfolio-filters"
+            role="tablist"
+            aria-label="Filter portfolio work"
+          >
+            {portfolioFilters.map((filter) => {
+              const isActive = activeFilter === filter.id;
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  className={`portfolio-filters__btn${
+                    isActive ? " portfolio-filters__btn--active" : ""
+                  }`}
+                  onClick={() => setActiveFilter(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {visibleSections.map((section) => (
             <div key={section.id} className="portfolio-section">
               <ScrollSection as="header" className="portfolio-section__head">
                 <p className="portfolio-section__eyebrow">{section.eyebrow}</p>
@@ -318,60 +429,68 @@ function Portfolio() {
                 <p className="portfolio-section__desc">{section.description}</p>
               </ScrollSection>
 
-              <ul className="portfolio-mosaic">
-                {buildMosaicEntries(section.items).map((entry) => {
-                  if (entry.type === "gelato-row") {
+              {section.caseStudy ? (
+                <div className="portfolio-case-grid">
+                  {automationCaseStudies.map((study) => (
+                    <PortfolioAiAutomationCard key={study.slug} study={study} />
+                  ))}
+                </div>
+              ) : (
+                <ul className="portfolio-mosaic">
+                  {buildMosaicEntries(section.items).map((entry) => {
+                    if (entry.type === "gelato-row") {
+                      return (
+                        <PortfolioGelatoRow
+                          key="gelato-row"
+                          videoItem={entry.video}
+                          imageItems={entry.images}
+                        />
+                      );
+                    }
+
+                    if (entry.type === "fashion-row") {
+                      return (
+                        <PortfolioFashionRow
+                          key="fashion-row"
+                          gridItem={entry.grid}
+                          postItem={entry.post}
+                        />
+                      );
+                    }
+
+                    if (entry.type === "roadking-row") {
+                      return (
+                        <PortfolioRoadkingRow
+                          key="roadking-row"
+                          hero={entry.hero}
+                          stack={entry.stack}
+                          insta={entry.insta}
+                        />
+                      );
+                    }
+
+                    const { item } = entry;
+                    const inEqualRow =
+                      section.id === "ugc" && PADEL_ROW_IDS.has(item.id);
+
                     return (
-                      <PortfolioGelatoRow
-                        key="gelato-row"
-                        videoItem={entry.video}
-                        imageItems={entry.images}
-                      />
+                      <ScrollSection
+                        as="li"
+                        key={item.id}
+                        className={[
+                          "portfolio-mosaic__item",
+                          `portfolio-mosaic__item--${item.variant}`,
+                          inEqualRow ? "portfolio-mosaic__item--equal" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        <PortfolioTile item={item} metaPlacement="overlay" />
+                      </ScrollSection>
                     );
-                  }
-
-                  if (entry.type === "fashion-row") {
-                    return (
-                      <PortfolioFashionRow
-                        key="fashion-row"
-                        gridItem={entry.grid}
-                        postItem={entry.post}
-                      />
-                    );
-                  }
-
-                  if (entry.type === "roadking-row") {
-                    return (
-                      <PortfolioRoadkingRow
-                        key="roadking-row"
-                        hero={entry.hero}
-                        stack={entry.stack}
-                        insta={entry.insta}
-                      />
-                    );
-                  }
-
-                  const { item } = entry;
-                  const inEqualRow =
-                    section.id === "ugc" && PADEL_ROW_IDS.has(item.id);
-
-                  return (
-                    <ScrollSection
-                      as="li"
-                      key={item.id}
-                      className={[
-                        "portfolio-mosaic__item",
-                        `portfolio-mosaic__item--${item.variant}`,
-                        inEqualRow ? "portfolio-mosaic__item--equal" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      <PortfolioTile item={item} metaPlacement="overlay" />
-                    </ScrollSection>
-                  );
-                })}
-              </ul>
+                  })}
+                </ul>
+              )}
             </div>
           ))}
 

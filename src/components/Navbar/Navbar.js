@@ -22,6 +22,7 @@ function Navbar() {
     location.pathname === "/about" ||
     location.pathname === "/services" ||
     location.pathname === "/portfolio" ||
+    location.pathname.startsWith("/portfolio/") ||
     location.pathname === "/contact";
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);

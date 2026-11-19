@@ -13,6 +13,12 @@ const CursorGlow = lazy(() => import("./components/CursorGlow/CursorGlow"));
   Performance: Home is eager (LCP hero); other routes stay code-split.
 */
 const Portfolio = lazy(() => import("./pages/Portfolio/Portfolio"));
+const RoadKingCaseStudy = lazy(() =>
+  import("./pages/CaseStudies/RoadKingCaseStudy")
+);
+const PadelChaseCaseStudy = lazy(() =>
+  import("./pages/CaseStudies/PadelChaseCaseStudy")
+);
 const Services = lazy(() => import("./pages/Services/Services"));
 const About = lazy(() => import("./pages/About/About"));
 const Contact = lazy(() => import("./pages/Contact/Contact"));
@@ -35,6 +41,14 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/portfolio" element={<Portfolio />} />
+              <Route
+                path="/portfolio/roadking"
+                element={<RoadKingCaseStudy />}
+              />
+              <Route
+                path="/portfolio/padel-chase"
+                element={<PadelChaseCaseStudy />}
+              />
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/team" element={<Navigate to="/about" replace />} />
