@@ -2812,8 +2812,8 @@ html.mobile-lite .pc-dash__flow-dot {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pc-booking__court animate,
-  .pc-booking__court animateMotion {
+  .pc-booking__court-svg animate,
+  .pc-booking__court-svg animateMotion {
     display: none;
   }
 }
