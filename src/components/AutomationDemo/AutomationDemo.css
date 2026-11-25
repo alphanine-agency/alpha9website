@@ -512,6 +512,11 @@
   outline: none;
 }
 
+.auto-demo__prompts .auto-demo__prompt--restart {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(245, 245, 245, 0.9);
+}
+
 .auto-demo__composer {
   display: grid;
   grid-template-columns: 1fr auto;

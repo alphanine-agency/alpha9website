@@ -278,7 +278,11 @@ export function matchChoice(text, options) {
 export function detectRoadKingFlow(text) {
   const q = text.toLowerCase();
   if (/dealer|dealership|franchise|partner|showroom|distributor|invest/.test(q)) return "dealer";
-  if (/test ride|buy|price|scooter|bike|panther|muso|raptor|ibra|r99|gen beta|customer/.test(q)) {
+  if (
+    /test\s*ride|book\s*a\s*ride|buy|price|scooty|scooter|bike|ev\b|panther|muso|raptor|ibra|r99|gen\s*beta|customer/.test(
+      q
+    )
+  ) {
     return "customer";
   }
   return null;

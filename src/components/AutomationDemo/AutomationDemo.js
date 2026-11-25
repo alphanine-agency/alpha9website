@@ -13,8 +13,13 @@ import {
 import "./AutomationDemo.css";
 
 const QUICK_PROMPTS = {
-  roadking: ["I want a dealership", "I want to buy a Panther", "Book a test ride in Lahore"],
+  roadking: ["I want a dealership", "I want to buy a scooty", "I want a test ride"],
   padel: ["Book a court tomorrow evening", "What times are open?", "We want to sponsor an event"],
+};
+
+const FLOW_PROMPTS = {
+  roadking: ["Restart"],
+  padel: ["Restart"],
 };
 
 function detectPadelRole(text, persona) {
@@ -448,11 +453,20 @@ function AutomationDemo({ study }) {
   const choiceOptions = currentStep?.type === "choice" ? currentStep.options : null;
 
   const prompts = useMemo(() => {
-    if (theme === "roadking" && choiceOptions?.length) {
-      return choiceOptions.map((o) => o.label);
+    if (theme === "roadking" && rkFlow && choiceOptions?.length) {
+      return [...choiceOptions.map((o) => o.label), "Restart"];
+    }
+    if (theme === "roadking" && (rkFlow || rkVerdict)) {
+      return FLOW_PROMPTS.roadking;
+    }
+    if (theme === "padel" && screen !== "inbox" && screen !== "done") {
+      return FLOW_PROMPTS.padel;
+    }
+    if (theme === "padel" && screen === "done") {
+      return FLOW_PROMPTS.padel;
     }
     return QUICK_PROMPTS[theme] || [];
-  }, [theme, choiceOptions]);
+  }, [theme, choiceOptions, rkFlow, rkVerdict, screen]);
 
   const chatTitle =
     theme === "roadking"
@@ -560,14 +574,6 @@ function AutomationDemo({ study }) {
   const handleRkMessage = (text) => {
     const q = text.toLowerCase().trim();
 
-    if (/^(restart|reset|start over)$/i.test(text.trim())) {
-      resetAll();
-      pushBot(
-        "No problem — starting fresh. Are you looking to buy / test ride a Road King EV, or apply for a dealership?"
-      );
-      return;
-    }
-
     // Already in a qualification interview
     if (rkFlow && currentStep) {
       let value = null;
@@ -601,13 +607,13 @@ function AutomationDemo({ study }) {
       beginRkFlow("dealer");
       return;
     }
-    if (/panther|muso|raptor|ibra|r99|gen beta|test ride|price|buy/.test(q)) {
+    if (/scooty|scooter|panther|muso|raptor|ibra|r99|gen beta|test ride|price|buy|ev\b/.test(q)) {
       beginRkFlow("customer");
       return;
     }
 
     pushBot(
-      "I can help with two things:\n1) Customer purchase / test ride / pricing\n2) Dealership partnership application\n\nWhich one should we start?"
+      "I can help with two things:\n1) Buy a scooty / test ride / pricing\n2) Dealership partnership application\n\nWhich one should we start?"
     );
   };
 
@@ -648,6 +654,16 @@ function AutomationDemo({ study }) {
     if (!text || typing) return;
     setDraft("");
     setMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: "user", text }]);
+
+    if (/^(restart|reset|start over)$/i.test(text.trim())) {
+      resetAll();
+      pushBot(
+        theme === "roadking"
+          ? "No problem — starting fresh. Want to buy a scooty / book a test ride, or apply for a dealership?"
+          : "No problem — starting fresh. Want to book a court or ask about sponsorships?"
+      );
+      return;
+    }
 
     if (theme === "roadking") {
       handleRkMessage(text);
@@ -732,7 +748,13 @@ function AutomationDemo({ study }) {
 
           <div className="auto-demo__prompts">
             {prompts.map((p) => (
-              <button key={p} type="button" onClick={() => sendChat(p)} disabled={typing}>
+              <button
+                key={p}
+                type="button"
+                className={p === "Restart" ? "auto-demo__prompt--restart" : undefined}
+                onClick={() => sendChat(p)}
+                disabled={typing}
+              >
                 {p}
               </button>
             ))}
