@@ -1,17 +1,21 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  CUSTOMER_STEPS,
+  DEALER_STEPS,
+  completeCustomer,
+  completeDealer,
+  detectRoadKingFlow,
+  matchChoice,
+  resolveRsm,
+  startCustomerMessage,
+  startDealerMessage,
+} from "./roadKingFlows";
 import "./AutomationDemo.css";
 
 const QUICK_PROMPTS = {
-  roadking: ["I want a test ride in Lahore", "What is the price?", "We want a dealership"],
+  roadking: ["I want a dealership", "I want to buy a Panther", "Book a test ride in Lahore"],
   padel: ["Book a court tomorrow evening", "What times are open?", "We want to sponsor an event"],
 };
-
-function detectRoadKingRole(text, persona) {
-  const q = text.toLowerCase();
-  if (/dealer|dealership|franchise|partner|showroom|distributor/.test(q)) return "dealer";
-  if (/test ride|buy|price|scooter|bike|customer|lahore|karachi|islamabad/.test(q)) return "customer";
-  return persona || "customer";
-}
 
 function detectPadelRole(text, persona) {
   const q = text.toLowerCase();
@@ -20,112 +24,8 @@ function detectPadelRole(text, persona) {
   return persona || "player";
 }
 
-function botReply({ theme, text, persona, slot, court }) {
+function padelReply({ text, persona, slot, court }) {
   const q = text.toLowerCase().trim();
-
-  if (theme === "roadking") {
-    const role = detectRoadKingRole(text, persona);
-
-    if (/thank|thanks|shukriya|great|perfect/.test(q)) {
-      return {
-        reply:
-          role === "dealer"
-            ? "You’re welcome. Our partnerships team will keep you updated on next steps."
-            : "You’re welcome. Looking forward to getting you on a Road King EV soon.",
-        persona: role,
-      };
-    }
-
-    if (role === "dealer") {
-      if (/dealer|dealership|franchise|partner|showroom|distributor|invest|apply/.test(q)) {
-        return {
-          reply:
-            "Thanks for your interest in a Road King dealership. Please share your city, showroom status (ready / planning), and investment range — I’ll connect you with our partnerships team.",
-          persona: "dealer",
-          selectionHint: "dealer",
-          advance: "qualify",
-        };
-      }
-      if (/karachi|lahore|islamabad|city|rawalpindi|multan|faisalabad/.test(q)) {
-        return {
-          reply:
-            "Noted. We review dealer applications by city coverage and readiness. A partnerships specialist will call you within 1 business day with territory details and requirements.",
-          persona: "dealer",
-          selectionHint: "dealer",
-          advance: "followup",
-        };
-      }
-      if (/invest|budget|capital|requirement|margin|stock/.test(q)) {
-        return {
-          reply:
-            "Dealer requirements cover showroom standards, initial stock, and service setup. I’ll have partnerships send the official checklist and commercial sheet on WhatsApp.",
-          persona: "dealer",
-          selectionHint: "dealer",
-          advance: "done",
-        };
-      }
-      return {
-        reply:
-          "I can help with dealership partnership queries. Share your city and whether you already have a showroom, and I’ll take it from there.",
-        persona: "dealer",
-        selectionHint: "dealer",
-      };
-    }
-
-    // Customer support / sales agent
-    if (/price|cost|pkr|how much|kitna|rate/.test(q)) {
-      return {
-        reply:
-          "Happy to help with pricing. Road King EV scooter packages vary by model and city. Which city are you in, and do you prefer a scooter or bike? I’ll share the latest offer.",
-        persona: "customer",
-        selectionHint: "ahmed",
-        advance: "qualify",
-      };
-    }
-    if (/test ride|demo|ride|try|book.*ride/.test(q)) {
-      return {
-        reply:
-          "Absolutely — we can arrange a test ride. Please share your preferred city and a day that works (e.g. tomorrow evening). A sales specialist will confirm the slot with you.",
-        persona: "customer",
-        selectionHint: "ahmed",
-        advance: "qualify",
-      };
-    }
-    if (/lahore|karachi|islamabad|rawalpindi|multan|faisalabad/.test(q)) {
-      return {
-        reply:
-          "Perfect, I’ve noted your city. A Road King sales agent will follow up shortly with model options, pricing, and test-ride availability near you.",
-        persona: "customer",
-        selectionHint: "ahmed",
-        advance: "followup",
-      };
-    }
-    if (/buy|purchase|order|interested|scooter|bike|ev/.test(q)) {
-      return {
-        reply:
-          "Great to hear you’re interested in Road King EV. Are you looking for personal use pricing, or should I connect you for a dealership partnership instead?",
-        persona: "customer",
-        selectionHint: "ahmed",
-        advance: "qualify",
-      };
-    }
-    if (/whatsapp|call|contact|number|follow/.test(q)) {
-      return {
-        reply:
-          "Done — I’ve logged a follow-up. You’ll get a WhatsApp message from our sales team with pricing and next steps. Anything else I can help with meanwhile?",
-        persona: "customer",
-        selectionHint: "ahmed",
-        advance: "done",
-      };
-    }
-    return {
-      reply:
-        "Hi — I’m with Road King EV support. I can help with models, pricing, test rides, or dealership partnership. What do you need today?",
-      persona: role,
-    };
-  }
-
-  // Padel Chase Inn — booking / events support
   const role = detectPadelRole(text, persona);
 
   if (/thank|thanks|shukriya|great|perfect/.test(q)) {
@@ -148,18 +48,9 @@ function botReply({ theme, text, persona, slot, court }) {
         advance: "qualify",
       };
     }
-    if (/budget|brand|americano|grand slam|date|package/.test(q)) {
-      return {
-        reply:
-          "Noted. Our sponsorship packages include court branding, social coverage, and on-site visibility. An events coordinator will WhatsApp you the options within a day.",
-        persona: "event",
-        selectionHint: "event",
-        advance: "done",
-      };
-    }
     return {
       reply:
-        "I can help with event sponsorships and brand collaborations at Padel Chase Inn. Tell me a bit about your brand and which tournament you’re interested in.",
+        "I can help with event sponsorships and brand collaborations at Padel Chase Inn. Tell me about your brand and which tournament you’re interested in.",
       persona: "event",
       selectionHint: "event",
     };
@@ -233,13 +124,6 @@ function botReply({ theme, text, persona, slot, court }) {
       advance: "slots",
     };
   }
-  if (/location|where|address|islamabad/.test(q)) {
-    return {
-      reply:
-        "We’re at Padel Chase Inn in Islamabad. Once your booking is confirmed, I’ll share the exact pin on WhatsApp with your slot details.",
-      persona: "player",
-    };
-  }
   return {
     reply:
       "Hi — welcome to Padel Chase Inn. I can help you book a court or connect you for event sponsorships. What would you like to do?",
@@ -247,7 +131,10 @@ function botReply({ theme, text, persona, slot, court }) {
   };
 }
 
-function RoadKingScreen({ screen, selection, onSelect, onAction }) {
+function RoadKingScreen({ screen, lead, answers, verdict }) {
+  const isDealer = lead?.type === "dealer";
+  const filled = Object.keys(answers || {}).length;
+
   if (screen === "inbox") {
     return (
       <div className="auto-demo__ui">
@@ -255,142 +142,84 @@ function RoadKingScreen({ screen, selection, onSelect, onAction }) {
           <span>Lead Inbox</span>
           <em>AI live</em>
         </header>
-        <button
-          type="button"
-          className={`auto-demo__card auto-demo__tap${
-            selection?.id === "ahmed" ? " is-selected" : " auto-demo__card--pulse"
-          }`}
-          onClick={() => onSelect({ id: "ahmed", type: "customer", name: "Ahmed R." })}
-        >
-          <p className="auto-demo__badge">Meta · New</p>
-          <h4>Ahmed R. · Lahore</h4>
-          <p>Interested in Road King EV scooter pricing & test ride.</p>
-        </button>
-        <button
-          type="button"
-          className={`auto-demo__card auto-demo__tap${
-            selection?.id === "dealer" ? " is-selected" : ""
-          }`}
-          onClick={() => onSelect({ id: "dealer", type: "dealer", name: "City Motors" })}
-        >
-          <p className="auto-demo__badge">Dealer</p>
-          <h4>City Motors</h4>
-          <p>Partnership inquiry — Karachi.</p>
-        </button>
-        {selection ? (
-          <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("qualify")}>
-            Run AI Qualify
-          </button>
-        ) : (
-          <p className="auto-demo__hint">Tap a lead to continue</p>
-        )}
+        <article className={`auto-demo__card${lead?.type === "customer" ? " is-selected auto-demo__card--pulse" : ""}`}>
+          <p className="auto-demo__badge">Customer</p>
+          <h4>{lead?.type === "customer" ? answers.name || "New customer" : "Waiting…"}</h4>
+          <p>Models · test ride · pricing</p>
+        </article>
+        <article className={`auto-demo__card${isDealer ? " is-selected auto-demo__card--pulse" : ""}`}>
+          <p className="auto-demo__badge">Dealership</p>
+          <h4>{isDealer ? answers.name || "New dealer lead" : "Waiting…"}</h4>
+          <p>Investment · location · RSM route</p>
+        </article>
+        <p className="auto-demo__hint">Chat starts qualification · desk updates live</p>
       </div>
     );
   }
 
-  if (screen === "qualify") {
-    const score = selection?.type === "dealer" ? 78 : 92;
+  if (screen === "qualify" || screen === "route" || screen === "followup") {
+    const rows = isDealer
+      ? [
+          ["City", answers.city],
+          ["Investment", answers.investment_range?.replace(/_/g, " ")],
+          ["Funding", answers.funding_source?.replace(/_/g, " ")],
+          ["Location", answers.dealership_location?.replace(/_/g, " ")],
+          ["Start", answers.when_can_you_start?.replace(/_/g, " ")],
+          ["Role", answers.decision_role?.replace(/_/g, " ")],
+        ]
+      : [
+          ["City", answers.city],
+          ["Model", answers.model?.replace(/_/g, " ")],
+          ["Intent", answers.intent?.replace(/_/g, " ")],
+          ["Payment", answers.payment?.replace(/_/g, " ")],
+          ["Timeline", answers.timeline?.replace(/_/g, " ")],
+          ["Phone", answers.phone],
+        ];
+
     return (
       <div className="auto-demo__ui">
         <header className="auto-demo__ui-bar">
-          <span>AI Qualify</span>
-          <em>{score}%</em>
+          <span>{isDealer ? "Dealer qualify" : "Buyer qualify"}</span>
+          <em>{filled} fields</em>
         </header>
         <div className="auto-demo__score">
-          <strong>{score}</strong>
-          <span>Intent score</span>
+          <strong>{verdict?.score ?? "—"}</strong>
+          <span>{isDealer ? "Dealer fit" : "Buyer intent"}</span>
         </div>
         <ul className="auto-demo__list">
-          <li>
-            <span>Lead</span>
-            <b>{selection?.name || "—"}</b>
-          </li>
-          <li>
-            <span>Type</span>
-            <b>{selection?.type === "dealer" ? "Dealer" : "Customer"}</b>
-          </li>
-          <li>
-            <span>Signal</span>
-            <b>{selection?.type === "dealer" ? "Partner" : "High buy intent"}</b>
-          </li>
+          {rows
+            .filter(([, v]) => v)
+            .slice(0, 5)
+            .map(([k, v]) => (
+              <li key={k}>
+                <span>{k}</span>
+                <b>{v}</b>
+              </li>
+            ))}
         </ul>
-        <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("route")}>
-          Route lead
-        </button>
+        {!filled ? <p className="auto-demo__hint">Collecting answers in chat…</p> : null}
       </div>
     );
   }
 
-  if (screen === "route") {
-    const sales = selection?.type !== "dealer";
-    return (
-      <div className="auto-demo__ui">
-        <header className="auto-demo__ui-bar">
-          <span>Route</span>
-          <em>Choose</em>
-        </header>
-        <button
-          type="button"
-          className={`auto-demo__route auto-demo__tap${sales ? " is-active" : ""}`}
-          onClick={() => onAction("followup", { path: "sales" })}
-          disabled={!sales}
-        >
-          <p>Sales team</p>
-          <span>Customer purchase path</span>
-        </button>
-        <button
-          type="button"
-          className={`auto-demo__route auto-demo__tap${!sales ? " is-active" : ""}`}
-          onClick={() => onAction("followup", { path: "dealer" })}
-          disabled={sales}
-        >
-          <p>Dealership desk</p>
-          <span>Partner acquisition path</span>
-        </button>
-        <p className="auto-demo__hint">Tap the highlighted path</p>
-      </div>
-    );
-  }
-
-  if (screen === "followup") {
-    return (
-      <div className="auto-demo__ui">
-        <header className="auto-demo__ui-bar">
-          <span>Follow-up</span>
-          <em>Ready</em>
-        </header>
-        <div className="auto-demo__msg">
-          <p>Hi {selection?.name?.split(" ")[0] || "there"} — thanks for reaching Road King EV.</p>
-          <p>A specialist will follow up with next steps shortly.</p>
-        </div>
-        <div className="auto-demo__actions">
-          <button type="button" className="auto-demo__tap" onClick={() => onAction("done", { channel: "whatsapp" })}>
-            WhatsApp
-          </button>
-          <button type="button" className="auto-demo__tap" onClick={() => onAction("done", { channel: "call" })}>
-            Call task
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+  const rsm = verdict?.rsm || resolveRsm(answers.city);
   return (
     <div className="auto-demo__ui auto-demo__ui--done">
       <header className="auto-demo__ui-bar">
-        <span>Pipeline</span>
-        <em>Synced</em>
+        <span>{verdict?.serious ? "Sent to RSM" : "Nurture queue"}</span>
+        <em>{verdict?.score ?? "—"}</em>
       </header>
       <div className="auto-demo__done-mark" aria-hidden>
-        ✓
+        {verdict?.serious ? "✓" : "·"}
       </div>
-      <h4>Opportunity tracked</h4>
+      <h4>{answers.name || lead?.name || "Lead"}</h4>
       <p>
-        {selection?.name || "Lead"} · {selection?.type === "dealer" ? "Dealer desk" : "Sales"} · Follow-up sent
+        {answers.city || "—"} · {isDealer ? "Dealership" : answers.model || "Customer"}
       </p>
-      <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("reset")}>
-        Run again
-      </button>
+      <div className="auto-demo__confirm-box" style={{ marginTop: "0.45rem", textAlign: "left" }}>
+        <p style={{ fontSize: "0.62rem" }}>{rsm.name}</p>
+        <span>{rsm.region}</span>
+      </div>
     </div>
   );
 }
@@ -430,7 +259,7 @@ function PadelScreen({ screen, selection, slot, court, onSelect, onAction, onPic
             AI Classify
           </button>
         ) : (
-          <p className="auto-demo__hint">Tap an inquiry to continue</p>
+          <p className="auto-demo__hint">Tap an inquiry or chat to continue</p>
         )}
       </div>
     );
@@ -457,12 +286,9 @@ function PadelScreen({ screen, selection, slot, court, onSelect, onAction, onPic
             Show live slots
           </button>
         ) : (
-          <>
-            <p className="auto-demo__hint">Event path handed to venue team</p>
-            <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("done")}>
-              Mark handled
-            </button>
-          </>
+          <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("done")}>
+            Mark handled
+          </button>
         )}
       </div>
     );
@@ -488,9 +314,7 @@ function PadelScreen({ screen, selection, slot, court, onSelect, onAction, onPic
               key={t}
               type="button"
               disabled={t === "9:00 PM"}
-              className={`auto-demo__tap${t === "9:00 PM" ? " is-busy" : ""}${
-                slot === t ? " is-active" : ""
-              }`}
+              className={`auto-demo__tap${t === "9:00 PM" ? " is-busy" : ""}${slot === t ? " is-active" : ""}`}
               onClick={() => onPickSlot(t)}
             >
               {t}
@@ -503,9 +327,7 @@ function PadelScreen({ screen, selection, slot, court, onSelect, onAction, onPic
               key={c.id}
               type="button"
               disabled={c.busy}
-              className={`auto-demo__tap${c.busy ? " is-busy" : ""}${
-                court === c.id ? " is-active" : ""
-              }`}
+              className={`auto-demo__tap${c.busy ? " is-busy" : ""}${court === c.id ? " is-active" : ""}`}
               onClick={() => onPickCourt(c.id)}
             >
               {c.label}
@@ -533,7 +355,9 @@ function PadelScreen({ screen, selection, slot, court, onSelect, onAction, onPic
         </header>
         <div className="auto-demo__confirm-box">
           <p>Tomorrow · {slot}</p>
-          <span>Court {court} · 90 min · {selection?.name}</span>
+          <span>
+            Court {court} · 90 min · {selection?.name}
+          </span>
         </div>
         <button type="button" className="auto-demo__cta-fake auto-demo__tap" onClick={() => onAction("done")}>
           Confirm booking
@@ -567,139 +391,222 @@ function AutomationDemo({ study }) {
   const theme = study.theme || (study.slug === "roadking" ? "roadking" : "padel");
   const chatId = useId();
   const listRef = useRef(null);
-  const inputRef = useRef(null);
 
   const [screen, setScreen] = useState("inbox");
   const [selection, setSelection] = useState(null);
   const [slot, setSlot] = useState(null);
   const [court, setCourt] = useState(null);
   const [persona, setPersona] = useState(theme === "roadking" ? "customer" : "player");
+  const [rkFlow, setRkFlow] = useState(null);
+  const [rkStep, setRkStep] = useState(0);
+  const [rkAnswers, setRkAnswers] = useState({});
+  const [rkVerdict, setRkVerdict] = useState(null);
   const [draft, setDraft] = useState("");
   const [typing, setTyping] = useState(false);
+
   const welcome =
     theme === "roadking"
-      ? "Hi — Road King EV support here. I can help with pricing, test rides, or dealership partnership. How can I help you today?"
+      ? "Hi — I’m with Road King EV support. I can help with models, pricing, test rides, or dealership partnership. What do you need today?"
       : "Hi — welcome to Padel Chase Inn. I can book a court for you or help with event sponsorships. What do you need?";
-  const [messages, setMessages] = useState(() => [
-    { id: "welcome", role: "bot", text: welcome },
-  ]);
 
-  const prompts = useMemo(() => QUICK_PROMPTS[theme] || [], [theme]);
+  const [messages, setMessages] = useState(() => [{ id: "welcome", role: "bot", text: welcome }]);
+
+  const steps = rkFlow === "dealer" ? DEALER_STEPS : rkFlow === "customer" ? CUSTOMER_STEPS : [];
+  const currentStep = steps[rkStep] || null;
+  const choiceOptions = currentStep?.type === "choice" ? currentStep.options : null;
+
+  const prompts = useMemo(() => {
+    if (theme === "roadking" && choiceOptions?.length) {
+      return choiceOptions.map((o) => o.label);
+    }
+    return QUICK_PROMPTS[theme] || [];
+  }, [theme, choiceOptions]);
+
   const chatTitle =
-    theme === "roadking" ? "Road King EV support" : "Padel Chase Inn bookings";
+    theme === "roadking"
+      ? rkFlow === "dealer"
+        ? "Dealership qualification"
+        : rkFlow === "customer"
+          ? "Customer sales support"
+          : "Road King EV support"
+      : "Padel Chase Inn bookings";
 
   const pushBot = (text) => {
     setTyping(true);
     window.setTimeout(() => {
       setMessages((prev) => [...prev, { id: `b-${Date.now()}`, role: "bot", text }]);
       setTyping(false);
-    }, 380 + Math.random() * 260);
+    }, 320 + Math.random() * 240);
   };
 
-  const resetFlow = () => {
+  const resetAll = () => {
     setScreen("inbox");
     setSelection(null);
     setSlot(null);
     setCourt(null);
     setPersona(theme === "roadking" ? "customer" : "player");
+    setRkFlow(null);
+    setRkStep(0);
+    setRkAnswers({});
+    setRkVerdict(null);
   };
 
   useEffect(() => {
-    resetFlow();
+    resetAll();
     setDraft("");
-    const text =
-      theme === "roadking"
-        ? "Hi — Road King EV support here. I can help with pricing, test rides, or dealership partnership. How can I help you today?"
-        : "Hi — welcome to Padel Chase Inn. I can book a court for you or help with event sponsorships. What do you need?";
-    setMessages([{ id: "welcome", role: "bot", text }]);
+    setMessages([
+      {
+        id: "welcome",
+        role: "bot",
+        text:
+          theme === "roadking"
+            ? "Hi — I’m with Road King EV support. I can help with models, pricing, test rides, or dealership partnership. What do you need today?"
+            : "Hi — welcome to Padel Chase Inn. I can book a court for you or help with event sponsorships. What do you need?",
+      },
+    ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [study.slug, theme]);
 
   useEffect(() => {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, typing]);
+  }, [messages, typing, prompts]);
 
-  const applySelectionHint = (hint) => {
-    if (hint === "ahmed") {
-      setSelection({ id: "ahmed", type: "customer", name: "Ahmed R." });
-      setPersona("customer");
-    } else if (hint === "dealer") {
-      setSelection({ id: "dealer", type: "dealer", name: "City Motors" });
-      setPersona("dealer");
-    } else if (hint === "sara") {
-      setSelection({ id: "sara", type: "player", name: "Sara K." });
-      setPersona("player");
-    } else if (hint === "event") {
-      setSelection({ id: "event", type: "event", name: "Brand collab" });
-      setPersona("event");
-    }
+  const beginRkFlow = (flow) => {
+    setRkFlow(flow);
+    setRkStep(0);
+    setRkAnswers({});
+    setRkVerdict(null);
+    setPersona(flow === "dealer" ? "dealer" : "customer");
+    setSelection(
+      flow === "dealer"
+        ? { id: "dealer", type: "dealer", name: "Dealer lead" }
+        : { id: "customer", type: "customer", name: "Customer lead" }
+    );
+    setScreen("qualify");
+    const intro = flow === "dealer" ? startDealerMessage() : startCustomerMessage();
+    const first = flow === "dealer" ? DEALER_STEPS[0].ask : CUSTOMER_STEPS[0].ask;
+    pushBot(`${intro}\n\n${first}`);
   };
 
-  const syncPhoneFromChat = ({ advance, selectionHint, slot: nextSlot, court: nextCourt, persona: nextPersona }) => {
-    if (nextPersona) setPersona(nextPersona);
-    if (selectionHint) applySelectionHint(selectionHint);
-    if (nextSlot) setSlot(nextSlot);
-    if (nextCourt) setCourt(nextCourt);
+  const finishRkFlow = (flow, answers) => {
+    const result = flow === "dealer" ? completeDealer(answers) : completeCustomer(answers);
+    setRkVerdict(result);
+    setSelection((prev) => ({
+      ...prev,
+      name: answers.name || prev?.name,
+      type: flow === "dealer" ? "dealer" : "customer",
+    }));
+    setScreen("done");
+    pushBot(result.reply);
+    setRkFlow(null);
+    setRkStep(0);
+  };
 
-    if (!advance) return;
-    if (advance === "qualify") setScreen("qualify");
-    else if (advance === "route") setScreen("route");
-    else if (advance === "followup") setScreen("followup");
-    else if (advance === "slots") setScreen("slots");
-    else if (advance === "confirm") setScreen("confirm");
-    else if (advance === "done") setScreen("done");
-    else if (advance === "inbox") setScreen("inbox");
+  const advanceRkAnswer = (flow, stepIndex, value, priorAnswers) => {
+    const list = flow === "dealer" ? DEALER_STEPS : CUSTOMER_STEPS;
+    const step = list[stepIndex];
+    const nextAnswers = { ...priorAnswers, [step.id]: value };
+    setRkAnswers(nextAnswers);
+    setSelection((prev) => ({
+      ...prev,
+      name: nextAnswers.name || prev?.name,
+      type: flow === "dealer" ? "dealer" : "customer",
+    }));
+
+    if (stepIndex >= list.length - 1) {
+      finishRkFlow(flow, nextAnswers);
+      return;
+    }
+
+    const nextIndex = stepIndex + 1;
+    setRkStep(nextIndex);
+    setScreen(nextIndex > 3 ? "route" : "qualify");
+    pushBot(list[nextIndex].ask);
+  };
+
+  const handleRkMessage = (text) => {
+    const q = text.toLowerCase().trim();
+
+    if (/^(restart|reset|start over)$/i.test(text.trim())) {
+      resetAll();
+      pushBot(
+        "No problem — starting fresh. Are you looking to buy / test ride a Road King EV, or apply for a dealership?"
+      );
+      return;
+    }
+
+    // Already in a qualification interview
+    if (rkFlow && currentStep) {
+      let value = null;
+      if (currentStep.type === "choice") {
+        value = matchChoice(text, currentStep.options);
+        if (!value) {
+          pushBot(
+            `${currentStep.invalid || "Please choose one of the options below."}`
+          );
+          return;
+        }
+      } else {
+        value = currentStep.parse ? currentStep.parse(text) : text.trim();
+        if (!value) {
+          pushBot(currentStep.invalid || "Please share a valid answer.");
+          return;
+        }
+      }
+      advanceRkAnswer(rkFlow, rkStep, value, rkAnswers);
+      return;
+    }
+
+    // Start a flow
+    const detected = detectRoadKingFlow(text);
+    if (detected) {
+      beginRkFlow(detected);
+      return;
+    }
+
+    if (/dealer|dealership|franchise|partner/.test(q)) {
+      beginRkFlow("dealer");
+      return;
+    }
+    if (/panther|muso|raptor|ibra|r99|gen beta|test ride|price|buy/.test(q)) {
+      beginRkFlow("customer");
+      return;
+    }
+
+    pushBot(
+      "I can help with two things:\n1) Customer purchase / test ride / pricing\n2) Dealership partnership application\n\nWhich one should we start?"
+    );
   };
 
   const onSelect = (item) => {
     setSelection(item);
     setScreen("inbox");
-    if (theme === "roadking") {
-      setPersona(item.type === "dealer" ? "dealer" : "customer");
-    } else {
+    if (theme === "padel") {
       setPersona(item.type === "event" ? "event" : "player");
     }
   };
 
   const onAction = (action) => {
     if (action === "reset") {
-      resetFlow();
+      resetAll();
       return;
     }
-    if (action === "qualify") {
-      setScreen("qualify");
-      return;
-    }
-    if (action === "route") {
-      setScreen("route");
-      return;
-    }
-    if (action === "followup") {
-      setScreen("followup");
-      return;
-    }
-    if (action === "slots") {
-      setScreen("slots");
-      return;
-    }
-    if (action === "confirm") {
-      setScreen("confirm");
-      return;
-    }
-    if (action === "done") {
+    if (action === "qualify") setScreen("qualify");
+    else if (action === "route") setScreen("route");
+    else if (action === "followup") setScreen("followup");
+    else if (action === "slots") setScreen("slots");
+    else if (action === "confirm") setScreen("confirm");
+    else if (action === "done") {
       setScreen("done");
-      if (theme === "roadking") {
-        pushBot(
-          selection?.type === "dealer"
-            ? "Thanks — your dealership inquiry is with our partnerships team. They’ll contact you shortly with next steps."
-            : "Thanks — your request is with our sales team. You’ll hear from us on WhatsApp with pricing and test-ride options."
-        );
-      } else if (selection?.type === "event") {
-        pushBot("Thanks — our events team has your sponsorship request and will follow up soon.");
-      } else if (slot && court) {
-        pushBot(
-          `You’re all set — Court ${court}, tomorrow at ${slot}. WhatsApp confirmation is on the way. See you at Padel Chase Inn.`
-        );
+      if (theme === "padel") {
+        if (selection?.type === "event") {
+          pushBot("Thanks — our events team has your sponsorship request and will follow up soon.");
+        } else if (slot && court) {
+          pushBot(
+            `You’re all set — Court ${court}, tomorrow at ${slot}. WhatsApp confirmation is on the way. See you at Padel Chase Inn.`
+          );
+        }
       }
     }
   };
@@ -710,15 +617,21 @@ function AutomationDemo({ study }) {
     setDraft("");
     setMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: "user", text }]);
 
-    const result = botReply({
-      theme,
-      text,
-      persona,
-      slot,
-      court,
-    });
+    if (theme === "roadking") {
+      handleRkMessage(text);
+      return;
+    }
 
-    syncPhoneFromChat(result);
+    const result = padelReply({ text, persona, slot, court });
+    if (result.persona) setPersona(result.persona);
+    if (result.selectionHint === "sara") {
+      setSelection({ id: "sara", type: "player", name: "Sara K." });
+    } else if (result.selectionHint === "event") {
+      setSelection({ id: "event", type: "event", name: "Brand collab" });
+    }
+    if (result.slot) setSlot(result.slot);
+    if (result.court) setCourt(result.court);
+    if (result.advance) setScreen(result.advance);
     pushBot(result.reply);
   };
 
@@ -734,9 +647,9 @@ function AutomationDemo({ study }) {
             {theme === "roadking" ? (
               <RoadKingScreen
                 screen={screen}
-                selection={selection}
-                onSelect={onSelect}
-                onAction={onAction}
+                lead={selection}
+                answers={rkAnswers}
+                verdict={rkVerdict}
               />
             ) : (
               <PadelScreen
@@ -765,23 +678,27 @@ function AutomationDemo({ study }) {
 
           <div className="auto-demo__chat-log" ref={listRef} role="log" aria-relevant="additions">
             {messages.map((m) => (
-              <div
-                key={m.id}
-                className={`auto-demo__bubble auto-demo__bubble--${m.role}`}
-              >
-                {m.text}
+              <div key={m.id} className={`auto-demo__bubble auto-demo__bubble--${m.role}`}>
+                {m.text.split("\n").map((line, i) => (
+                  <span key={`${m.id}-${i}`}>
+                    {i > 0 ? <br /> : null}
+                    {line}
+                  </span>
+                ))}
               </div>
             ))}
             {typing ? (
               <div className="auto-demo__bubble auto-demo__bubble--bot auto-demo__bubble--typing">
-                <i /><i /><i />
+                <i />
+                <i />
+                <i />
               </div>
             ) : null}
           </div>
 
           <div className="auto-demo__prompts">
             {prompts.map((p) => (
-              <button key={p} type="button" onClick={() => sendChat(p)}>
+              <button key={p} type="button" onClick={() => sendChat(p)} disabled={typing}>
                 {p}
               </button>
             ))}
@@ -795,14 +712,19 @@ function AutomationDemo({ study }) {
             }}
           >
             <label className="sr-only" htmlFor={`${chatId}-input`}>
-              Message the AI bot
+              Message support
             </label>
             <input
               id={`${chatId}-input`}
-              ref={inputRef}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Type a message…"
+              placeholder={
+                currentStep?.type === "choice"
+                  ? "Type or tap an option…"
+                  : currentStep
+                    ? "Type your answer…"
+                    : "Type a message…"
+              }
               autoComplete="off"
             />
             <button type="submit" className="auto-demo__btn" disabled={!draft.trim() || typing}>
@@ -810,7 +732,9 @@ function AutomationDemo({ study }) {
             </button>
           </form>
           <p className="auto-demo__chat-note">
-            Chat as a customer or partner. The phone shows the live automation desk updating as you go — you can also tap it directly.
+            {theme === "roadking"
+              ? "Full qualification interview for customers and dealership leads. Serious profiles are forwarded to the city RSM."
+              : "Chat as a guest or sponsor. The phone desk updates as you go."}
           </p>
         </section>
       </div>

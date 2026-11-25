@@ -9,7 +9,7 @@ export const roadKingCaseStudy = {
   subheadline:
     "How Alpha Nine helped Road King connect customer acquisition, dealership lead generation and sales operations through an integrated marketing and lead management system.",
   demoPitch:
-    "Chat with Road King support like a real customer or dealer lead. The phone shows the live sales automation desk.",
+    "Chat through a full customer or dealership qualification. Serious leads are scored and forwarded to the city RSM.",
   result: {
     value: "PKR 2 Crore+",
     label: "Reported sales in the first month",
