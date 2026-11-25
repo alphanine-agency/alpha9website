@@ -9,7 +9,7 @@ export const roadKingCaseStudy = {
   subheadline:
     "How Alpha Nine helped Road King connect customer acquisition, dealership lead generation and sales operations through an integrated marketing and lead management system.",
   demoPitch:
-    "Chat with the AI bot or tap the phone yourself — Meta lead → qualify → route → follow-up.",
+    "Chat with Road King support like a real customer or dealer lead. The phone shows the live sales automation desk.",
   result: {
     value: "PKR 2 Crore+",
     label: "Reported sales in the first month",
@@ -78,7 +78,7 @@ export const padelChaseCaseStudy = {
   subheadline:
     "How Alpha Nine helped Padel Chase Inn grow through social marketing, Meta advertising, event promotions, influencer collaborations, tournament sponsorships, customer engagement and operational storytelling around their booking-first platform.",
   demoPitch:
-    "Chat with the booking AI or tap the phone yourself — inquiry → classify → slots → confirm.",
+    "Chat with Padel Chase Inn support to book a court or ask about sponsorship. The phone shows the live booking desk.",
   result: {
     value: "Booking-first growth",
     label: "Social → inquiry → court session journey",

@@ -368,7 +368,7 @@ function Portfolio() {
         eyebrow: "AI Automation",
         title: "Try the systems — not just read about them.",
         description:
-          "Live interactive demos — chat with the AI bot and tap the phone screens to run each automation flow yourself.",
+          "Live support demos — chat as a real customer or partner while the phone shows the automation desk. You can tap the screens too.",
         items: [],
         caseStudy: true,
       },
