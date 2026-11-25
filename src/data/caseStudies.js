@@ -78,7 +78,7 @@ export const padelChaseCaseStudy = {
   subheadline:
     "How Alpha Nine helped Padel Chase Inn grow through social marketing, Meta advertising, event promotions, influencer collaborations, tournament sponsorships, customer engagement and operational storytelling around their booking-first platform.",
   demoPitch:
-    "Chat with Padel Chase Inn support to book a court or ask about sponsorship. The phone shows the live booking desk.",
+    "Chat through a full court booking or sponsorship qualification. Decisions appear on the live ops dashboard.",
   result: {
     value: "Booking-first growth",
     label: "Social → inquiry → court session journey",
