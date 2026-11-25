@@ -285,7 +285,7 @@ export function detectRoadKingFlow(text) {
 }
 
 export function startDealerMessage() {
-  return "Perfect — I can help with a Road King dealership application. I’ll ask a few short qualifying questions, then our Regional Sales Manager for your city will take serious applications forward.";
+  return "Perfect — I can help with a Road King dealership application. I’ll ask a few short questions, then connect you with the right regional team for your city.";
 }
 
 export function startCustomerMessage() {
@@ -295,34 +295,30 @@ export function startCustomerMessage() {
 export function completeDealer(answers) {
   const { score, serious } = scoreDealer(answers);
   const rsm = resolveRsm(answers.city);
-  const summary = [
-    `Name: ${answers.name}`,
-    `Phone: ${answers.phone}`,
-    `City: ${answers.city}`,
-    `Investment: ${labelFor(DEALER_STEPS, "investment_range", answers.investment_range)}`,
-    `Funding: ${labelFor(DEALER_STEPS, "funding_source", answers.funding_source)}`,
-    `Location: ${labelFor(DEALER_STEPS, "dealership_location", answers.dealership_location)}`,
-    `Experience: ${labelFor(DEALER_STEPS, "business_experience", answers.business_experience)}`,
-    `Start: ${labelFor(DEALER_STEPS, "when_can_you_start", answers.when_can_you_start)}`,
-    `Role: ${labelFor(DEALER_STEPS, "decision_role", answers.decision_role)}`,
-  ].join("\n");
-
-  if (serious) {
-    return {
-      reply: `Thank you, ${answers.name}. Based on your answers you’re a strong dealership prospect (fit score ${score}/100).\n\nI’ve forwarded your profile to ${rsm.name} (${rsm.region}) for ${answers.city}. They’ll contact you on ${answers.phone} shortly.\n\nSummary:\n${summary}`,
-      score,
-      serious: true,
-      rsm,
-      summaryLines: summary.split("\n"),
-    };
-  }
+  const rows = [
+    ["Name", answers.name],
+    ["Phone", answers.phone],
+    ["City", answers.city],
+    ["Investment", labelFor(DEALER_STEPS, "investment_range", answers.investment_range)],
+    ["Funding", labelFor(DEALER_STEPS, "funding_source", answers.funding_source)],
+    ["Location", labelFor(DEALER_STEPS, "dealership_location", answers.dealership_location)],
+    ["Experience", labelFor(DEALER_STEPS, "business_experience", answers.business_experience)],
+    ["Start", labelFor(DEALER_STEPS, "when_can_you_start", answers.when_can_you_start)],
+    ["Role", labelFor(DEALER_STEPS, "decision_role", answers.decision_role)],
+  ];
 
   return {
-    reply: `Thank you, ${answers.name}. We’ve saved your dealership inquiry (fit score ${score}/100).\n\nBecause you’re still early-stage / exploring, our partnerships desk will nurture this for now rather than an immediate RSM call. We’ll reach out on ${answers.phone} when a fit opens in ${answers.city}.\n\nSummary:\n${summary}`,
+    // Customer-facing chat only — no scores / internal routing jargon
+    reply: serious
+      ? `Thank you, ${answers.name}. Our regional team for ${answers.city} will contact you shortly on ${answers.phone} about the dealership next steps. You’re all set for now — feel free to ask anything else.`
+      : `Thank you, ${answers.name}. We’ve saved your dealership interest for ${answers.city}. Our partnerships team will follow up on ${answers.phone} when the timing is right. Anything else I can help with?`,
     score,
-    serious: false,
+    serious,
     rsm,
-    summaryLines: summary.split("\n"),
+    kind: "dealer",
+    title: serious ? "Serious dealer · forward to RSM" : "Nurture · partnerships desk",
+    subtitle: `${answers.city || "—"} · Dealership`,
+    rows,
   };
 }
 
@@ -330,33 +326,28 @@ export function completeCustomer(answers) {
   const { score, serious } = scoreCustomer(answers);
   const rsm = resolveRsm(answers.city);
   const model = labelFor(CUSTOMER_STEPS, "model", answers.model);
-  const summary = [
-    `Name: ${answers.name}`,
-    `Phone: ${answers.phone}`,
-    `City: ${answers.city}`,
-    `Model: ${model}`,
-    `Intent: ${labelFor(CUSTOMER_STEPS, "intent", answers.intent)}`,
-    `Payment: ${labelFor(CUSTOMER_STEPS, "payment", answers.payment)}`,
-    `Timeline: ${labelFor(CUSTOMER_STEPS, "timeline", answers.timeline)}`,
-  ].join("\n");
-
-  if (serious) {
-    return {
-      reply: `Thanks, ${answers.name}. You’re a serious buyer for ${model} in ${answers.city} (intent score ${score}/100).\n\nI’ve shared your lead with ${rsm.name}. Expect a call / WhatsApp on ${answers.phone} for pricing and ${
-        answers.intent === "test_ride" ? "test-ride scheduling" : "next purchase steps"
-      }.\n\nSummary:\n${summary}`,
-      score,
-      serious: true,
-      rsm,
-      summaryLines: summary.split("\n"),
-    };
-  }
+  const rows = [
+    ["Name", answers.name],
+    ["Phone", answers.phone],
+    ["City", answers.city],
+    ["Model", model],
+    ["Intent", labelFor(CUSTOMER_STEPS, "intent", answers.intent)],
+    ["Payment", labelFor(CUSTOMER_STEPS, "payment", answers.payment)],
+    ["Timeline", labelFor(CUSTOMER_STEPS, "timeline", answers.timeline)],
+  ];
 
   return {
-    reply: `Thanks, ${answers.name}. I’ve logged your interest in ${model} (intent score ${score}/100).\n\nOur ${answers.city} team has your details and will follow up on ${answers.phone} with information. If you want a faster path, tell me you’d like a test ride this week.\n\nSummary:\n${summary}`,
+    reply: serious
+      ? `Thanks, ${answers.name}. A Road King specialist will reach you on ${answers.phone} about your ${model} interest in ${answers.city}${
+          answers.intent === "test_ride" ? " and help schedule a test ride" : ""
+        }. You’re all set — message me if you need anything else.`
+      : `Thanks, ${answers.name}. I’ve noted your interest in the ${model}. Our ${answers.city} team will share details on ${answers.phone}. If you’d like, I can also help you book a test ride.`,
     score,
-    serious: false,
+    serious,
     rsm,
-    summaryLines: summary.split("\n"),
+    kind: "customer",
+    title: serious ? "Serious buyer · forward to RSM" : "Nurture · city sales desk",
+    subtitle: `${model} · ${answers.city || "—"}`,
+    rows,
   };
 }

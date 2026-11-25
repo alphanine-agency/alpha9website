@@ -139,7 +139,7 @@ function RoadKingScreen({ screen, lead, answers, verdict }) {
     return (
       <div className="auto-demo__ui">
         <header className="auto-demo__ui-bar">
-          <span>Lead Inbox</span>
+          <span>Ops dashboard</span>
           <em>AI live</em>
         </header>
         <article className={`auto-demo__card${lead?.type === "customer" ? " is-selected auto-demo__card--pulse" : ""}`}>
@@ -152,7 +152,7 @@ function RoadKingScreen({ screen, lead, answers, verdict }) {
           <h4>{isDealer ? answers.name || "New dealer lead" : "Waiting…"}</h4>
           <p>Investment · location · RSM route</p>
         </article>
-        <p className="auto-demo__hint">Chat starts qualification · desk updates live</p>
+        <p className="auto-demo__hint">Internal desk · chat stays customer-facing</p>
       </div>
     );
   }
@@ -182,16 +182,16 @@ function RoadKingScreen({ screen, lead, answers, verdict }) {
           <span>{isDealer ? "Dealer qualify" : "Buyer qualify"}</span>
           <em>{filled} fields</em>
         </header>
-        <div className="auto-demo__score">
-          <strong>{verdict?.score ?? "—"}</strong>
-          <span>{isDealer ? "Dealer fit" : "Buyer intent"}</span>
+        <div className="auto-demo__score auto-demo__score--soft">
+          <strong>…</strong>
+          <span>Scoring in progress</span>
         </div>
         <ul className="auto-demo__list">
           {rows
             .filter(([, v]) => v)
             .slice(0, 5)
             .map(([k, v]) => (
-              <li key={k}>
+              <li key={k} className="auto-demo__list-item--in">
                 <span>{k}</span>
                 <b>{v}</b>
               </li>
@@ -203,23 +203,55 @@ function RoadKingScreen({ screen, lead, answers, verdict }) {
   }
 
   const rsm = verdict?.rsm || resolveRsm(answers.city);
+  const score = verdict?.score ?? 0;
+
   return (
-    <div className="auto-demo__ui auto-demo__ui--done">
+    <div className={`auto-demo__ui auto-demo__ui--verdict${verdict?.serious ? " is-serious" : " is-nurture"}`}>
       <header className="auto-demo__ui-bar">
-        <span>{verdict?.serious ? "Sent to RSM" : "Nurture queue"}</span>
-        <em>{verdict?.score ?? "—"}</em>
+        <span>AI decision</span>
+        <em className="auto-demo__pulse-label">{verdict?.serious ? "FORWARD" : "NURTURE"}</em>
       </header>
-      <div className="auto-demo__done-mark" aria-hidden>
-        {verdict?.serious ? "✓" : "·"}
+
+      <div className="auto-demo__verdict-score" aria-label={`Intent score ${score}`}>
+        <svg className="auto-demo__ring" viewBox="0 0 72 72" aria-hidden>
+          <circle className="auto-demo__ring-track" cx="36" cy="36" r="30" />
+          <circle
+            className="auto-demo__ring-value"
+            cx="36"
+            cy="36"
+            r="30"
+            style={{ strokeDashoffset: 188 - (188 * score) / 100 }}
+          />
+        </svg>
+        <div className="auto-demo__verdict-score-num">
+          <strong>{score}</strong>
+          <span>/100</span>
+        </div>
       </div>
-      <h4>{answers.name || lead?.name || "Lead"}</h4>
-      <p>
-        {answers.city || "—"} · {isDealer ? "Dealership" : answers.model || "Customer"}
+
+      <p className={`auto-demo__verdict-badge${verdict?.serious ? " is-on" : ""}`}>
+        {verdict?.title || (verdict?.serious ? "Serious buyer · forward to RSM" : "Nurture queue")}
       </p>
-      <div className="auto-demo__confirm-box" style={{ marginTop: "0.45rem", textAlign: "left" }}>
-        <p style={{ fontSize: "0.62rem" }}>{rsm.name}</p>
-        <span>{rsm.region}</span>
+      <h4 className="auto-demo__verdict-name">{answers.name || lead?.name || "Lead"}</h4>
+      <p className="auto-demo__verdict-sub">{verdict?.subtitle || "—"}</p>
+
+      <div className="auto-demo__rsm-card">
+        <p className="auto-demo__badge">{verdict?.serious ? "Routed now" : "Hold / nurture"}</p>
+        <h4>{rsm.name}</h4>
+        <p>{rsm.region}</p>
       </div>
+
+      <ul className="auto-demo__list auto-demo__list--compact">
+        {(verdict?.rows || [])
+          .filter(([, v]) => v)
+          .slice(0, 4)
+          .map(([k, v], i) => (
+            <li key={k} style={{ animationDelay: `${0.12 + i * 0.06}s` }}>
+              <span>{k}</span>
+              <b>{v}</b>
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }
@@ -637,7 +669,9 @@ function AutomationDemo({ study }) {
 
   return (
     <div
-      className={`auto-demo auto-demo--${theme} auto-demo--live`}
+      className={`auto-demo auto-demo--${theme} auto-demo--live${
+        theme === "roadking" && rkVerdict ? " auto-demo--decisive" : ""
+      }`}
       style={{ "--auto-accent": study.accent }}
     >
       <div className="auto-demo__stage">
