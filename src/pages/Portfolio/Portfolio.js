@@ -8,6 +8,7 @@ import {
   portfolioFilters,
   automationCaseStudies,
 } from "../../data/caseStudies";
+import AutomationDemo from "../../components/AutomationDemo/AutomationDemo";
 import "./Portfolio.css";
 
 const PADEL_ROW_IDS = new Set([
@@ -259,48 +260,45 @@ function PortfolioAiAutomationCard({ study }) {
   return (
     <ScrollSection
       as="article"
-      className={`portfolio-case-card${
+      className={`portfolio-case-card portfolio-case-card--demo${
         isPadel ? " portfolio-case-card--padel" : ""
       }${isRoadKing ? " portfolio-case-card--roadking" : ""}`}
     >
-      <div className="portfolio-case-card__media">
-        <img
-          className="portfolio-case-card__poster"
-          src={study.poster}
-          alt=""
-          width="640"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        />
-        <div className="portfolio-case-card__media-veil" aria-hidden />
-        <img
-          className={`portfolio-case-card__logo${
-            isPadel ? " portfolio-case-card__logo--padel" : ""
-          }${isRoadKing ? " portfolio-case-card__logo--roadking" : ""}`}
-          src={study.logo}
-          alt={`${study.client} logo`}
-          width={isRoadKing ? 120 : 240}
-          height={isRoadKing ? 120 : 82}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
       <div className="portfolio-case-card__body">
-        <p className="portfolio-case-card__eyebrow">{study.tagline}</p>
-        <h3 className="portfolio-case-card__title">
-          {study.client}
-        </h3>
-        <p className="portfolio-case-card__copy">{study.subheadline}</p>
+        <div className="portfolio-case-card__brand">
+          <img
+            className={`portfolio-case-card__logo${
+              isPadel ? " portfolio-case-card__logo--padel" : ""
+            }${isRoadKing ? " portfolio-case-card__logo--roadking" : ""}`}
+            src={study.logo}
+            alt=""
+            width={isRoadKing ? 56 : 140}
+            height={isRoadKing ? 56 : 48}
+            loading="lazy"
+            decoding="async"
+          />
+          <div>
+            <p className="portfolio-case-card__eyebrow">{study.tagline}</p>
+            <h3 className="portfolio-case-card__title">{study.client}</h3>
+          </div>
+        </div>
+        <p className="portfolio-case-card__copy">
+          {study.demoPitch || study.subheadline}
+        </p>
         <div className="portfolio-case-card__meta">
           <span>{study.industry}</span>
           <span>{study.result.label}</span>
         </div>
+      </div>
+      <div className="portfolio-case-card__demo">
+        <AutomationDemo study={study} />
+      </div>
+      <div className="portfolio-case-card__footer">
         <Link
           to={`/portfolio/${study.slug}`}
           className="portfolio-case-card__cta theme-btn-primary"
         >
-          View case study
+          Full case study
         </Link>
       </div>
     </ScrollSection>
@@ -368,9 +366,9 @@ function Portfolio() {
       {
         id: "ai-automation",
         eyebrow: "AI Automation",
-        title: "Intelligent systems that turn attention into opportunity.",
+        title: "Try the systems — not just read about them.",
         description:
-          "Case studies on lead systems, booking-led sports growth, and operational storytelling — not just creatives.",
+          "Interactive mobile demos of our AI automation flows. Tap through leads, routing, bookings, and follow-ups for each client.",
         items: [],
         caseStudy: true,
       },

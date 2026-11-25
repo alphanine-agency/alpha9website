@@ -99,7 +99,8 @@
 
 @media (min-width: 980px) {
   .portfolio-case-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    max-width: 52rem;
   }
 }
 
@@ -113,6 +114,39 @@
     radial-gradient(ellipse 70% 80% at 12% 18%, rgba(57, 255, 20, 0.12), transparent 55%),
     linear-gradient(160deg, #121212 0%, #0a0a0a 100%);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.portfolio-case-card--demo {
+  grid-template-rows: auto 1fr auto;
+}
+
+.portfolio-case-card__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.portfolio-case-card--demo .portfolio-case-card__logo {
+  width: 3.25rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+}
+
+.portfolio-case-card--demo .portfolio-case-card__logo--padel {
+  width: 7.5rem;
+}
+
+.portfolio-case-card--demo .portfolio-case-card__logo--roadking {
+  width: 3.25rem;
+  border-radius: 50%;
+}
+
+.portfolio-case-card__demo {
+  padding: 0 1.15rem 0.35rem;
+}
+
+.portfolio-case-card__footer {
+  padding: 0 1.5rem 1.45rem;
 }
 
 .portfolio-case-card--roadking {
